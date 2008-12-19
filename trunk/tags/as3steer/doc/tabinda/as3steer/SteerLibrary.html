@@ -1,0 +1,1825 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../print.css" type="text/css" media="print">
+<meta content="SteerLibrary,tabinda.as3steer.SteerLibrary,WanderSide,WanderUp,gaudyPursuitAnnotation,hisPositionAtNearestApproach,ourPositionAtNearestApproach,randomGenerator,annotateAvoidCloseNeighbor,annotateAvoidNeighbor,annotateAvoidObstacle,annotatePathFollowing,annotationLine,computeNearestApproachPositions,findNextIntersectionWithSphere,frandom01,inBoidNeighborhood,intervalComparison,isAhead1,isAhead2,isAside1,isAside2,isBehind1,isBehind2,predictNearestApproachTime,resetSteering,scalarRandomWalk,square,steerForAlignment,steerForCohesion,steerForEvasion,steerForFlee,steerForPursuit,steerForSeek,steerForSeparation,steerForTargetSpeed,steerForWander,steerToAvoidCloseNeighbors,steerToAvoidNeighbors,steerToAvoidObstacle,steerToAvoidObstacles,steerToFollowPath,steerToStayOnPath,truncateLength,xxxsteerForFlee,xxxsteerForSeek" name="keywords">
+<title>tabinda.as3steer.SteerLibrary</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'SteerLibrary - API Documentation';
+				var baseRef = '../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">AS3Steer - Pure ActionScript 3 Port</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../all-classes.html')" href="../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../all-classes.html')" href="../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../index-list.html')" href="../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../index.html?tabinda/as3steer/SteerLibrary.html&amp;tabinda/as3steer/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;SteerLibrary</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class SteerLibrary"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">tabinda.as3steer</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class SteerLibrary</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">SteerLibrary <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../images/inherit-arrow.gif"> <a href="AbstractVehicle.html">AbstractVehicle</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../images/inherit-arrow.gif"> <a href="LocalSpace.html">LocalSpace</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../images/inherit-arrow.gif"> flash.display.Sprite</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Subclasses</td><td><a href="../as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+</table>
+<p></p> This mixin class with the super class adds the "steering library"
+ functionality to a given base class.  SteerLibraryMixin assumes its base
+ class supports the AbstractVehicle interface.
+ <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#gaudyPursuitAnnotation">gaudyPursuitAnnotation</a> : Boolean<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#hisPositionAtNearestApproach">hisPositionAtNearestApproach</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ourPositionAtNearestApproach">ourPositionAtNearestApproach</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#randomGenerator">randomGenerator</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#WanderSide">WanderSide</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#WanderUp">WanderUp</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedMethod" id="hideInheritedMethod">
+<a onclick="javascript:setInheritedVisible(false,'Method');" href="#methodSummary" class="showHideLink"><img src="../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Methods</a>
+</div>
+<div class="showInheritedMethod" id="showInheritedMethod">
+<a onclick="javascript:setInheritedVisible(true,'Method');" href="#methodSummary" class="showHideLink"><img src="../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Methods</a>
+</div>
+</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#annotateAvoidCloseNeighbor()">annotateAvoidCloseNeighbor</a>(otherVehicle:<a href="AbstractVehicle.html">AbstractVehicle</a>, seperationDistance:Number):void</div>
+<div class="summaryTableDescription">
+   called when steerToAvoidCloseNeighbors decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#annotateAvoidNeighbor()">annotateAvoidNeighbor</a>(vehicle:<a href="AbstractVehicle.html">AbstractVehicle</a>, steer:Number, position:<a href="Vector3.html">Vector3</a>, threatPosition:<a href="Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">
+   called when steerToAvoidNeighbors decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#annotateAvoidObstacle()">annotateAvoidObstacle</a>(minDistanceToCollision:Number):void</div>
+<div class="summaryTableDescription">
+    called when steerToAvoidObstacles decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#annotatePathFollowing()">annotatePathFollowing</a>(future:<a href="Vector3.html">Vector3</a>, onPath:<a href="Vector3.html">Vector3</a>, target:<a href="Vector3.html">Vector3</a>, outside:Number):void</div>
+<div class="summaryTableDescription">
+    called when steerToFollowPath decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#annotationLine()">annotationLine</a>(startPoint:<a href="Vector3.html">Vector3</a>, endPoint:<a href="Vector3.html">Vector3</a>, color:<a href="Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#computeNearestApproachPositions()">computeNearestApproachPositions</a>(other:<a href="AbstractVehicle.html">AbstractVehicle</a>, time:Number):Number</div>
+<div class="summaryTableDescription">
+   Given the time until nearest approach (predictNearestApproachTime)
+   determine position of each vehicle at that time, and the distance
+   between them
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#findNextIntersectionWithSphere()">findNextIntersectionWithSphere</a>(obs:<a href="SphericalObstacle.html">SphericalObstacle</a>, intersection:<a href="PathIntersection.html">PathIntersection</a>):void</div>
+<div class="summaryTableDescription">
+   xxx experiment cwr 9-6-02
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#forward()">forward</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#frandom01()">frandom01</a>():Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#globalizeDirection()">globalizeDirection</a>(localDirection:<a href="../as3steer/Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a direction in local space to its equivalent in global space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#globalizePosition()">globalizePosition</a>(localPosition:<a href="../as3steer/Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a point in local space to its equivalent in global space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#globalRotateForwardToSide()">globalRotateForwardToSide</a>(globalForward:<a href="../as3steer/Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   not currently used, just added for completeness
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#inBoidNeighborhood()">inBoidNeighborhood</a>(other:<a href="AbstractVehicle.html">AbstractVehicle</a>, minDistance:Number, maxDistance:Number, cosMaxAngle:Number):Boolean</div>
+<div class="summaryTableDescription">
+   used by boid behaviors: is a given vehicle within this boid's neighborhood?
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#intervalComparison()">intervalComparison</a>(x:Number, lowerBound:Number, upperBound:Number):int</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isAhead1()">isAhead1</a>(target:<a href="Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isAhead2()">isAhead2</a>(target:<a href="Vector3.html">Vector3</a>, cosThreshold:Number):*</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isAside1()">isAside1</a>(target:<a href="Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isAside2()">isAside2</a>(target:<a href="Vector3.html">Vector3</a>, cosThreshold:Number):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isBehind1()">isBehind1</a>(target:<a href="Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isBehind2()">isBehind2</a>(target:<a href="Vector3.html">Vector3</a>, cosThreshold:Number):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#localizeDirection()">localizeDirection</a>(globalDirection:<a href="../as3steer/Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a direction in global space to its equivalent in local space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#localizePosition()">localizePosition</a>(globalPosition:<a href="../as3steer/Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> transform a point in global space to its equivalent in local space
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#localRotateForwardToSide()">localRotateForwardToSide</a>(v:<a href="../as3steer/Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    rotate, in the canonical direction, a vector pointing in the
+   "forward" (+Z) direction to the "side" (+/-X) direction
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#mass()">mass</a>():Number</div>
+<div class="summaryTableDescription"> mass (defaults to unity so acceleration=force)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#maxForce()">maxForce</a>():Number</div>
+<div class="summaryTableDescription"> ----------------------------------------------------------------------
+   XXX this vehicle-model-specific functionality functionality seems out
+   XXX of place on the abstract base class, but for now it is expedient
+   the maximum steering force this vehicle can apply
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#maxSpeed()">maxSpeed</a>():Number</div>
+<div class="summaryTableDescription"> the maximum speed this vehicle is allowed to move
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#Position()">Position</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#predictFuturePosition()">predictFuturePosition</a>(predictionTime:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">predict position of this vehicle at some time in the future
+   (assumes velocity remains constant)
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#predictNearestApproachTime()">predictNearestApproachTime</a>(other:<a href="AbstractVehicle.html">AbstractVehicle</a>):Number</div>
+<div class="summaryTableDescription">
+   Given two vehicles, based on their current positions and velocities,
+   determine the time until nearest approach
+      <p/>XXX should this return zero if they are already in contact?
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#radius()">radius</a>():Number</div>
+<div class="summaryTableDescription"> size of bounding sphere, for obstacle avoidance, etc.</div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#regenerateOrthonormalBasis()">regenerateOrthonormalBasis</a>(... args):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#regenerateOrthonormalBasisUF()">regenerateOrthonormalBasisUF</a>(newUnitForward:<a href="../as3steer/Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">
+   regenerate the orthonormal basis vectors given a new forward
+   (which is expected to have unit length)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#resetLocalSpace()">resetLocalSpace</a>():void</div>
+<div class="summaryTableDescription"> 
+   reset transform: set local space to its identity state, equivalent to a
+   4x4 homogeneous transform like this:
+      <p/>    [ X 0 0 0 ]
+   <p/>    [ 0 1 0 0 ]
+   <p/>    [ 0 0 1 0 ]
+   <p/>    [ 0 0 0 1 ]
+      where X is 1 for a left-handed system and -1 for a right-handed system.</div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#resetSteering()">resetSteering</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#rightHanded()">rightHanded</a>():Boolean</div>
+<div class="summaryTableDescription">
+   use right-(or left-)handed coordinate space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#scalarRandomWalk()">scalarRandomWalk</a>(initial:Number, walkspeed:Number, min:Number, max:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#setForward()">setForward</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#setMass()">setMass</a>(mass:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#setMaxForce()">setMaxForce</a>(max:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#setMaxSpeed()">setMaxSpeed</a>(max:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#setPosition()">setPosition</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#setRadius()">setRadius</a>(radius:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#setSide()">setSide</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#setSpeed()">setSpeed</a>(speed:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#setUnitSideFromForwardAndUp()">setUnitSideFromForwardAndUp</a>():void</div>
+<div class="summaryTableDescription">
+   set "side" basis vector to normalized cross product of forward and up
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#setUp()">setUp</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#side()">side</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#speed()">speed</a>():Number</div>
+<div class="summaryTableDescription"> speed of vehicle  (may be faster than taking magnitude of velocity)
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#square()">square</a>(x:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForAlignment()">steerForAlignment</a>(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    Alignment behavior: steer to head in same direction as neighbors
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForCohesion()">steerForCohesion</a>(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">Cohesion behavior: to to move toward center of neighbors
+   
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForEvasion()">steerForEvasion</a>(menace:<a href="AbstractVehicle.html">AbstractVehicle</a>, maxPredictionTime:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   evasion of another vehicle
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForFlee()">steerForFlee</a>(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Flee behavior
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForPursuit()">steerForPursuit</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   pursuit of another vehicle (& version with ceiling on prediction time)
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForSeek()">steerForSeek</a>(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForSeparation()">steerForSeparation</a>(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">Separation behavior: steer away from neighbors
+   
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForTargetSpeed()">steerForTargetSpeed</a>(targetSpeed:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   tries to maintain a given speed, returns a maxForce-clipped steering force along the forward/backward axis
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerForWander()">steerForWander</a>(dt:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerToAvoidCloseNeighbors()">steerToAvoidCloseNeighbors</a>(minSeparationDistance:Number, others:Array):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   avoidance of "close neighbors" -- used only by steerToAvoidNeighbors
+      <p/>XXX  Does a hard steer away from any other agent who comes withing a
+   XXX  critical distance.</div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerToAvoidNeighbors()">steerToAvoidNeighbors</a>(minTimeToCollision:Number, others:Array):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Unaligned collision avoidance behavior: avoid colliding with other nearby
+   vehicles moving in unconstrained directions.</div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerToAvoidObstacle()">steerToAvoidObstacle</a>(minTimeToCollision:Number, obstacle:<a href="Obstacle.html">Obstacle</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Obstacle Avoidance behavior
+      <p/>Returns a steering force to avoid a given obstacle.</div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerToAvoidObstacles()">steerToAvoidObstacles</a>(minTimeToCollision:Number, obstacles:Array):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    this version avoids all of the obstacles in an ObstacleGroup
+       <p/>XXX 9-12-03: note this does NOT use the Obstacle::steerToAvoid protocol
+    XXX like the older steerToAvoidObstacle does/did.</div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerToFollowPath()">steerToFollowPath</a>(direction:int, predictionTime:Number, path:<a href="Pathway.html">Pathway</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#steerToStayOnPath()">steerToStayOnPath</a>(predictionTime:Number, path:<a href="Pathway.html">Pathway</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Path Following behaviors
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#truncateLength()">truncateLength</a>(tVector:<a href="Vector3.html">Vector3</a>, maxLength:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="LocalSpace.html#up()">up</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AbstractVehicle.html#velocity()">velocity</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> velocity of vehicle
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#xxxsteerForFlee()">xxxsteerForFlee</a>(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   xxx proposed, experimental new seek/flee [cwr 9-16-02]
+   </div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#xxxsteerForSeek()">xxxsteerForSeek</a>(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">SteerLibrary</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="gaudyPursuitAnnotation"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">gaudyPursuitAnnotation</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var gaudyPursuitAnnotation:Boolean</code>
+</div>
+<a name="hisPositionAtNearestApproach"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">hisPositionAtNearestApproach</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var hisPositionAtNearestApproach:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="ourPositionAtNearestApproach"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ourPositionAtNearestApproach</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var ourPositionAtNearestApproach:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="randomGenerator"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">randomGenerator</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var randomGenerator:Number</code>
+</div>
+<a name="WanderSide"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">WanderSide</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var WanderSide:Number</code>
+</div>
+<a name="WanderUp"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">WanderUp</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var WanderUp:Number</code>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="annotateAvoidCloseNeighbor()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">annotateAvoidCloseNeighbor</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function annotateAvoidCloseNeighbor(otherVehicle:<a href="AbstractVehicle.html">AbstractVehicle</a>, seperationDistance:Number):void</code><p>
+   called when steerToAvoidCloseNeighbors decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">otherVehicle</span>:<a href="AbstractVehicle.html">AbstractVehicle</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">seperationDistance</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="annotateAvoidNeighbor()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">annotateAvoidNeighbor</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function annotateAvoidNeighbor(vehicle:<a href="AbstractVehicle.html">AbstractVehicle</a>, steer:Number, position:<a href="Vector3.html">Vector3</a>, threatPosition:<a href="Vector3.html">Vector3</a>):void</code><p>
+   called when steerToAvoidNeighbors decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vehicle</span>:<a href="AbstractVehicle.html">AbstractVehicle</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">steer</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">position</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">threatPosition</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="annotateAvoidObstacle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">annotateAvoidObstacle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function annotateAvoidObstacle(minDistanceToCollision:Number):void</code><p>
+    called when steerToAvoidObstacles decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">minDistanceToCollision</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="annotatePathFollowing()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">annotatePathFollowing</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function annotatePathFollowing(future:<a href="Vector3.html">Vector3</a>, onPath:<a href="Vector3.html">Vector3</a>, target:<a href="Vector3.html">Vector3</a>, outside:Number):void</code><p>
+    called when steerToFollowPath decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">future</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">onPath</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">outside</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="annotationLine()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">annotationLine</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function annotationLine(startPoint:<a href="Vector3.html">Vector3</a>, endPoint:<a href="Vector3.html">Vector3</a>, color:<a href="Vector3.html">Vector3</a>):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">startPoint</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">endPoint</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">color</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="computeNearestApproachPositions()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">computeNearestApproachPositions</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function computeNearestApproachPositions(other:<a href="AbstractVehicle.html">AbstractVehicle</a>, time:Number):Number</code><p>
+   Given the time until nearest approach (predictNearestApproachTime)
+   determine position of each vehicle at that time, and the distance
+   between them
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">other</span>:<a href="AbstractVehicle.html">AbstractVehicle</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">time</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="findNextIntersectionWithSphere()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">findNextIntersectionWithSphere</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function findNextIntersectionWithSphere(obs:<a href="SphericalObstacle.html">SphericalObstacle</a>, intersection:<a href="PathIntersection.html">PathIntersection</a>):void</code><p>
+   xxx experiment cwr 9-6-02
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">obs</span>:<a href="SphericalObstacle.html">SphericalObstacle</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">intersection</span>:<a href="PathIntersection.html">PathIntersection</a></code></td>
+</tr>
+</table>
+</div>
+<a name="frandom01()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">frandom01</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function frandom01():Number</code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="inBoidNeighborhood()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">inBoidNeighborhood</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function inBoidNeighborhood(other:<a href="AbstractVehicle.html">AbstractVehicle</a>, minDistance:Number, maxDistance:Number, cosMaxAngle:Number):Boolean</code><p>
+   used by boid behaviors: is a given vehicle within this boid's neighborhood?
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">other</span>:<a href="AbstractVehicle.html">AbstractVehicle</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">minDistance</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">maxDistance</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosMaxAngle</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="intervalComparison()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">intervalComparison</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function intervalComparison(x:Number, lowerBound:Number, upperBound:Number):int</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">lowerBound</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">upperBound</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>int</code></td>
+</tr>
+</table>
+</div>
+<a name="isAhead1()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isAhead1</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function isAhead1(target:<a href="Vector3.html">Vector3</a>):Boolean</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="isAhead2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isAhead2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function isAhead2(target:<a href="Vector3.html">Vector3</a>, cosThreshold:Number):*</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosThreshold</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>*</code></td>
+</tr>
+</table>
+</div>
+<a name="isAside1()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isAside1</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function isAside1(target:<a href="Vector3.html">Vector3</a>):Boolean</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="isAside2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isAside2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function isAside2(target:<a href="Vector3.html">Vector3</a>, cosThreshold:Number):Boolean</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosThreshold</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="isBehind1()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isBehind1</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function isBehind1(target:<a href="Vector3.html">Vector3</a>):Boolean</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="isBehind2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isBehind2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function isBehind2(target:<a href="Vector3.html">Vector3</a>, cosThreshold:Number):Boolean</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosThreshold</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="predictNearestApproachTime()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">predictNearestApproachTime</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function predictNearestApproachTime(other:<a href="AbstractVehicle.html">AbstractVehicle</a>):Number</code><p>
+   Given two vehicles, based on their current positions and velocities,
+   determine the time until nearest approach
+      <p/>XXX should this return zero if they are already in contact?
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">other</span>:<a href="AbstractVehicle.html">AbstractVehicle</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="resetSteering()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">resetSteering</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function resetSteering():void</code>
+</div>
+<a name="scalarRandomWalk()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">scalarRandomWalk</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function scalarRandomWalk(initial:Number, walkspeed:Number, min:Number, max:Number):Number</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">initial</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">walkspeed</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">min</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">max</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="square()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">square</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function square(x:Number):Number</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="steerForAlignment()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForAlignment</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForAlignment(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+    Alignment behavior: steer to head in same direction as neighbors
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">maxDistance</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosMaxAngle</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">flock</span>:Array</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForCohesion()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForCohesion</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForCohesion(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="../as3steer/Vector3.html">Vector3</a></code><p>Cohesion behavior: to to move toward center of neighbors
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">maxDistance</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosMaxAngle</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">flock</span>:Array</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForEvasion()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForEvasion</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForEvasion(menace:<a href="AbstractVehicle.html">AbstractVehicle</a>, maxPredictionTime:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   evasion of another vehicle
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">menace</span>:<a href="AbstractVehicle.html">AbstractVehicle</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">maxPredictionTime</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForFlee()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForFlee</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForFlee(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   Flee behavior
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForPursuit()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForPursuit</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForPursuit(... args):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   pursuit of another vehicle (& version with ceiling on prediction time)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForSeek()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForSeek</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForSeek(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForSeparation()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForSeparation</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForSeparation(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="../as3steer/Vector3.html">Vector3</a></code><p>Separation behavior: steer away from neighbors
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">maxDistance</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosMaxAngle</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">flock</span>:Array</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForTargetSpeed()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForTargetSpeed</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForTargetSpeed(targetSpeed:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   tries to maintain a given speed, returns a maxForce-clipped steering force along the forward/backward axis
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">targetSpeed</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerForWander()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerForWander</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerForWander(dt:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">dt</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerToAvoidCloseNeighbors()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerToAvoidCloseNeighbors</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerToAvoidCloseNeighbors(minSeparationDistance:Number, others:Array):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   avoidance of "close neighbors" -- used only by steerToAvoidNeighbors
+      <p/>XXX  Does a hard steer away from any other agent who comes withing a
+   XXX  critical distance.  Ideally this should be replaced with a call
+   XXX  to steerForSeparation.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">minSeparationDistance</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">others</span>:Array</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerToAvoidNeighbors()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerToAvoidNeighbors</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerToAvoidNeighbors(minTimeToCollision:Number, others:Array):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   Unaligned collision avoidance behavior: avoid colliding with other nearby
+   vehicles moving in unconstrained directions.  Determine which (if any)
+   other other vehicle we would collide with first, then steers to avoid the
+   site of that potential collision.  Returns a steering force vector, which
+   is zero length if there is no impending collision.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">minTimeToCollision</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">others</span>:Array</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerToAvoidObstacle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerToAvoidObstacle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerToAvoidObstacle(minTimeToCollision:Number, obstacle:<a href="Obstacle.html">Obstacle</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   Obstacle Avoidance behavior
+      <p/>Returns a steering force to avoid a given obstacle.  The purely lateral
+   steering force will turn our vehicle towards a silhouette edge of the
+   obstacle.  Avoidance is required when (1) the obstacle intersects the
+   vehicle's current path, (2) it is in front of the vehicle, and (3) is
+   within minTimeToCollision seconds of travel at the vehicle's current
+   velocity.  Returns a zero vector value (Vector3::zero) when no avoidance is
+   required.
+      <p/>XXX The current (4-23-03) scheme is to dump all the work on the various
+   XXX Obstacle classes, making them provide a "steer vehicle to avoid me"
+   XXX method.  This may well change.
+      <p/>XXX 9-12-03: this routine is probably obsolete: its name is too close to
+   XXX the new steerToAvoidObstacles and the arguments are reversed
+   XXX (perhaps there should be another version of steerToAvoidObstacles
+   XXX whose second arg is "const Obstacle& obstacle" just in case we want
+   XXX to avoid a non-grouped obstacle)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">minTimeToCollision</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">obstacle</span>:<a href="Obstacle.html">Obstacle</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerToAvoidObstacles()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerToAvoidObstacles</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerToAvoidObstacles(minTimeToCollision:Number, obstacles:Array):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+    this version avoids all of the obstacles in an ObstacleGroup
+       <p/>XXX 9-12-03: note this does NOT use the Obstacle::steerToAvoid protocol
+    XXX like the older steerToAvoidObstacle does/did.  It needs to be fixed
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">minTimeToCollision</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">obstacles</span>:Array</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerToFollowPath()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerToFollowPath</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerToFollowPath(direction:int, predictionTime:Number, path:<a href="Pathway.html">Pathway</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">direction</span>:int</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">predictionTime</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">path</span>:<a href="Pathway.html">Pathway</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="steerToStayOnPath()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">steerToStayOnPath</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function steerToStayOnPath(predictionTime:Number, path:<a href="Pathway.html">Pathway</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   Path Following behaviors
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">predictionTime</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">path</span>:<a href="Pathway.html">Pathway</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="truncateLength()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">truncateLength</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function truncateLength(tVector:<a href="Vector3.html">Vector3</a>, maxLength:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">tVector</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">maxLength</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="xxxsteerForFlee()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xxxsteerForFlee</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function xxxsteerForFlee(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   xxx proposed, experimental new seek/flee [cwr 9-16-02]
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="xxxsteerForSeek()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">xxxsteerForSeek</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function xxxsteerForSeek(target:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
