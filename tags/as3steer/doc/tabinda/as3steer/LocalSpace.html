@@ -1,0 +1,629 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../print.css" type="text/css" media="print">
+<meta content="LocalSpace,tabinda.as3steer.LocalSpace,Position,forward,globalRotateForwardToSide,globalizeDirection,globalizePosition,localRotateForwardToSide,localizeDirection,localizePosition,regenerateOrthonormalBasis,regenerateOrthonormalBasisUF,resetLocalSpace,rightHanded,setForward,setPosition,setSide,setUnitSideFromForwardAndUp,setUp,side,up" name="keywords">
+<title>tabinda.as3steer.LocalSpace</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'LocalSpace - API Documentation';
+				var baseRef = '../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">AS3Steer - Pure ActionScript 3 Port</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../all-classes.html')" href="../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../all-classes.html')" href="../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../index-list.html')" href="../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../index.html?tabinda/as3steer/LocalSpace.html&amp;tabinda/as3steer/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;LocalSpace</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class LocalSpace"); titleBar_setSubNav(false,false,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">tabinda.as3steer</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class LocalSpace</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">LocalSpace <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../images/inherit-arrow.gif"> flash.display.Sprite</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Subclasses</td><td><a href="../as3steer/AbstractVehicle.html">AbstractVehicle</a></td>
+</tr>
+</table>
+<p></p> LocalSpace: a local coordinate system for 3d space
+  <p/>Provide functionality such as transforming from local space to global
+ space and vice versa.  Also regenerates a valid space from a perturbed
+ "forward vector" which is the basis of abnstract vehicle turning.
+  <p/>These are comparable to a 4x4 homogeneous transformation matrix where the
+ 3x3 (R) portion is constrained to be a pure rotation (no shear or scale).
+ The rows of the 3x3 R matrix are the basis vectors of the space.  They are
+ all constrained to be mutually perpendicular and of unit length.  The top
+ ("x") row is called "side", the middle ("y") row is called "up" and the
+ bottom ("z") row is called forward.  The translation vector is called
+ "position".  Finally the "homogeneous column" is always [0 0 0 1].
+  <p/>    [ R R R  0 ]      [ Sx Sy Sz  0 ]
+ <p/>    [ R R R  0 ]      [ Ux Uy Uz  0 ]
+ <p/>    [ R R R  0 ]  ->  [ Fx Fy Fz  0 ]
+ <p/>    [          ]      [             ]
+ <p/>    [ T T T  1 ]      [ Tx Ty Tz  1 ]
+ ----------------------------------------------------------------------------
+ <p></p>
+<br>
+<hr>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#forward()">forward</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#globalizeDirection()">globalizeDirection</a>(localDirection:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a direction in local space to its equivalent in global space
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#globalizePosition()">globalizePosition</a>(localPosition:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a point in local space to its equivalent in global space
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#globalRotateForwardToSide()">globalRotateForwardToSide</a>(globalForward:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   not currently used, just added for completeness
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#localizeDirection()">localizeDirection</a>(globalDirection:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a direction in global space to its equivalent in local space
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#localizePosition()">localizePosition</a>(globalPosition:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> transform a point in global space to its equivalent in local space
+   
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#localRotateForwardToSide()">localRotateForwardToSide</a>(v:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    rotate, in the canonical direction, a vector pointing in the
+   "forward" (+Z) direction to the "side" (+/-X) direction
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Position()">Position</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#regenerateOrthonormalBasis()">regenerateOrthonormalBasis</a>(... args):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#regenerateOrthonormalBasisUF()">regenerateOrthonormalBasisUF</a>(newUnitForward:<a href="Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">
+   regenerate the orthonormal basis vectors given a new forward
+   (which is expected to have unit length)
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#resetLocalSpace()">resetLocalSpace</a>():void</div>
+<div class="summaryTableDescription"> 
+   reset transform: set local space to its identity state, equivalent to a
+   4x4 homogeneous transform like this:
+      <p/>    [ X 0 0 0 ]
+   <p/>    [ 0 1 0 0 ]
+   <p/>    [ 0 0 1 0 ]
+   <p/>    [ 0 0 0 1 ]
+      where X is 1 for a left-handed system and -1 for a right-handed system.</div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#rightHanded()">rightHanded</a>():Boolean</div>
+<div class="summaryTableDescription">
+   use right-(or left-)handed coordinate space
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setForward()">setForward</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setPosition()">setPosition</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setSide()">setSide</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setUnitSideFromForwardAndUp()">setUnitSideFromForwardAndUp</a>():void</div>
+<div class="summaryTableDescription">
+   set "side" basis vector to normalized cross product of forward and up
+   </div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setUp()">setUp</a>(... args):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#side()">side</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#up()">up</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">LocalSpace</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="forward()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">forward</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function forward():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="globalizeDirection()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">globalizeDirection</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function globalizeDirection(localDirection:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   transform a direction in local space to its equivalent in global space
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">localDirection</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="globalizePosition()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">globalizePosition</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function globalizePosition(localPosition:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   transform a point in local space to its equivalent in global space
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">localPosition</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="globalRotateForwardToSide()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">globalRotateForwardToSide</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function globalRotateForwardToSide(globalForward:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   not currently used, just added for completeness
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">globalForward</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="localizeDirection()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">localizeDirection</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function localizeDirection(globalDirection:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   transform a direction in global space to its equivalent in local space
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">globalDirection</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="localizePosition()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">localizePosition</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function localizePosition(globalPosition:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p> transform a point in global space to its equivalent in local space
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">globalPosition</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="localRotateForwardToSide()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">localRotateForwardToSide</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function localRotateForwardToSide(v:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+    rotate, in the canonical direction, a vector pointing in the
+   "forward" (+Z) direction to the "side" (+/-X) direction
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">v</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="Position()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Position</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Position():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="regenerateOrthonormalBasis()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">regenerateOrthonormalBasis</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function regenerateOrthonormalBasis(... args):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+</div>
+<a name="regenerateOrthonormalBasisUF()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">regenerateOrthonormalBasisUF</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function regenerateOrthonormalBasisUF(newUnitForward:<a href="Vector3.html">Vector3</a>):void</code><p>
+   regenerate the orthonormal basis vectors given a new forward
+   (which is expected to have unit length)
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">newUnitForward</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="resetLocalSpace()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">resetLocalSpace</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function resetLocalSpace():void</code><p> 
+   reset transform: set local space to its identity state, equivalent to a
+   4x4 homogeneous transform like this:
+      <p/>    [ X 0 0 0 ]
+   <p/>    [ 0 1 0 0 ]
+   <p/>    [ 0 0 1 0 ]
+   <p/>    [ 0 0 0 1 ]
+      where X is 1 for a left-handed system and -1 for a right-handed system.
+   </p></div>
+<a name="rightHanded()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">rightHanded</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function rightHanded():Boolean</code><p>
+   use right-(or left-)handed coordinate space
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="setForward()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setForward</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setForward(... args):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="setPosition()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setPosition</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setPosition(... args):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="setSide()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setSide</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setSide(... args):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="setUnitSideFromForwardAndUp()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setUnitSideFromForwardAndUp</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setUnitSideFromForwardAndUp():void</code><p>
+   set "side" basis vector to normalized cross product of forward and up
+   </p></div>
+<a name="setUp()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setUp</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function setUp(... args):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="side()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">side</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function side():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="up()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">up</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function up():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

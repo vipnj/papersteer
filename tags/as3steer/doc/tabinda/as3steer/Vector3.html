@@ -1,0 +1,1213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../print.css" type="text/css" media="print">
+<meta content="Vector3,tabinda.as3steer.Vector3,NEGATIVE_UNIT_X,NEGATIVE_UNIT_Y,NEGATIVE_UNIT_Z,UNIT_SCALE,UNIT_X,UNIT_Y,UNIT_Z,ZERO,x,CrossProduct,DotProduct,Equality,InEquality,Invert,IsZeroLength,Length,MakeCeil,MakeFloor,MidPoint,Normalise,NormalisedCopy,Perpendicular,Reflect,ScalarAddition1,ScalarAddition2,ScalarDivision,ScalarMultiplication1,ScalarMultiplication2,ScalarSubtraction1,ScalarSubtraction2,SingleVectorSubtraction,SquaredLength,VectorAddition,VectorDivision,VectorMultiplication,VectorSubtraction,isgreater,islesser,tostring" name="keywords">
+<title>tabinda.as3steer.Vector3</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'Vector3 - API Documentation';
+				var baseRef = '../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">AS3Steer - Pure ActionScript 3 Port</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../all-classes.html')" href="../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../all-classes.html')" href="../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../index-list.html')" href="../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../index.html?tabinda/as3steer/Vector3.html&amp;tabinda/as3steer/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Vector3</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class Vector3"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">tabinda.as3steer</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class Vector3</td>
+</tr>
+</table>
+<p></p> Standard 3-dimensional vector.
+       A direction in 3D space represented as distances along the 3
+       orthoganal axes (x, y, z). Note that positions, directions and
+       scaling factors can be represented by a vector, depending on how
+       you interpret the values.
+    <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#NEGATIVE_UNIT_X">NEGATIVE_UNIT_X</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#NEGATIVE_UNIT_Y">NEGATIVE_UNIT_Y</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#NEGATIVE_UNIT_Z">NEGATIVE_UNIT_Z</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#UNIT_SCALE">UNIT_SCALE</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#UNIT_X">UNIT_X</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#UNIT_Y">UNIT_Y</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#UNIT_Z">UNIT_Z</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#x">x</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ZERO">ZERO</a> : <a href="../as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Vector3()">Vector3</a>(... args)</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#CrossProduct()">CrossProduct</a>(rkVector:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> Calculates the cross-product of 2 vectors, i.e.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#DotProduct()">DotProduct</a>(vec:<a href="Vector3.html">Vector3</a>):Number</div>
+<div class="summaryTableDescription"> Calculates the dot (scalar) product of this vector with another.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Equality()">Equality</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#InEquality()">InEquality</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):*</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Invert()">Invert</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#isgreater()">isgreater</a>(lvec:<a href="Vector3.html">Vector3</a>, rhs:<a href="Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription">[static] Returns true if the vector's scalar components are all smaller
+           that the ones of the vector it is compared against.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#islesser()">islesser</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription">[static] Returns true if the vector's scalar components are all greater
+          that the ones of the vector it is compared against.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#IsZeroLength()">IsZeroLength</a>():Boolean</div>
+<div class="summaryTableDescription"> Returns true if this vector is zero length.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Length()">Length</a>():Number</div>
+<div class="summaryTableDescription"> Returns the length (magnitude) of the vector.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#MakeCeil()">MakeCeil</a>(cmp:<a href="Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription"> Sets this vector's components to the maximum of its own and the
+           ones of the passed in vector.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#MakeFloor()">MakeFloor</a>(cmp:<a href="Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">Sets this vector's components to the minimum of its own and the
+           ones of the passed in vector.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#MidPoint()">MidPoint</a>(vec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Returns a vector at a point half way between this and the passed
+           in vector.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Normalise()">Normalise</a>():Number</div>
+<div class="summaryTableDescription"> Normalises the vector.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#NormalisedCopy()">NormalisedCopy</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> As normalise, except that this vector is unaffected and the
+          normalised vector is returned as a copy.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Perpendicular()">Perpendicular</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> Generates a vector perpendicular to this vector (eg an 'up' vector).</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Reflect()">Reflect</a>(normal:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> Calculates a reflection vector to the plane with the given normal .</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarAddition1()">ScalarAddition1</a>(lvec:<a href="Vector3.html">Vector3</a>, rhs:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarAddition2()">ScalarAddition2</a>(lhs:Number, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarDivision()">ScalarDivision</a>(lvec:<a href="Vector3.html">Vector3</a>, fScalar:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarMultiplication1()">ScalarMultiplication1</a>(lvec:<a href="Vector3.html">Vector3</a>, fScalar:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarMultiplication2()">ScalarMultiplication2</a>(fScalar:Number, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarSubtraction1()">ScalarSubtraction1</a>(lvec:<a href="Vector3.html">Vector3</a>, rhs:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#ScalarSubtraction2()">ScalarSubtraction2</a>(lhs:Number, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#SingleVectorSubtraction()">SingleVectorSubtraction</a>(vec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#SquaredLength()">SquaredLength</a>():Number</div>
+<div class="summaryTableDescription"> Returns the square of the length(magnitude) of the vector.</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#tostring()">tostring</a>():String</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#VectorAddition()">VectorAddition</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#VectorDivision()">VectorDivision</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#VectorMultiplication()">VectorMultiplication</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#VectorSubtraction()">VectorSubtraction</a>(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Vector3</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="NEGATIVE_UNIT_X"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">NEGATIVE_UNIT_X</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var NEGATIVE_UNIT_X:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="NEGATIVE_UNIT_Y"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">NEGATIVE_UNIT_Y</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var NEGATIVE_UNIT_Y:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="NEGATIVE_UNIT_Z"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">NEGATIVE_UNIT_Z</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var NEGATIVE_UNIT_Z:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="UNIT_SCALE"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">UNIT_SCALE</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var UNIT_SCALE:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="UNIT_X"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">UNIT_X</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var UNIT_X:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="UNIT_Y"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">UNIT_Y</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var UNIT_Y:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="UNIT_Z"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">UNIT_Z</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var UNIT_Z:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="x"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">x</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var x:Number</code>
+</div>
+<a name="ZERO"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ZERO</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var ZERO:<a href="../as3steer/Vector3.html">Vector3</a></code>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="Vector3()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Vector3</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Vector3(... args)</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code>... <span class="label">args</span></code></td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="CrossProduct()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">CrossProduct</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function CrossProduct(rkVector:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p> Calculates the cross-product of 2 vectors, i.e. the vector that
+           lies perpendicular to them both.
+    
+           <p/>    The cross-product is normally used to calculate the normal
+               vector of a plane, by calculating the cross-product of 2
+               non-equivalent vectors which lie on the plane (e.g. 2 edges
+               of a triangle).
+           </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">rkVector</span>:<a href="Vector3.html">Vector3</a></code> &mdash; Vector which, together with this one, will be used to calculate the cross-product.
+           </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code> &mdash; 
+                                       A vector which is the result of the cross-product. This
+               vector will <b>NOT</b> be normalised, to maximise efficiency
+               - call Vector3::normalise on the result if you wish this to
+               be done. As for which side the resultant vector will be on, the
+               returned vector will be on the side from which the arc from 'this'
+               to rkVector is anticlockwise, e.g. UNIT_Y.CrossProduct(UNIT_Z)
+               = UNIT_X, whilst UNIT_Z.CrossProduct(UNIT_Y) = -UNIT_X.
+     This is because OGRE uses a right-handed coordinate system.
+           <p/>
+               For a clearer explanation, look a the left and the bottom edges
+               of your monitor's screen. Assume that the first vector is the
+               left edge and the second vector is the bottom edge, both of
+               them starting from the lower-left corner of the screen. The
+               resulting vector is going to be perpendicular to both of them
+               and will go <i>inside</i> the screen, towards the cathode tube
+               (assuming you're using a CRT monitor, of course).
+        
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="DotProduct()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">DotProduct</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function DotProduct(vec:<a href="Vector3.html">Vector3</a>):Number</code><p> Calculates the dot (scalar) product of this vector with another.
+           
+       The dot product can be used to calculate the angle between 2
+               vectors. If both are unit vectors, the dot product is the
+               cosine of the angle; otherwise the dot product must be
+               divided by the product of the lengths of both vectors to get
+               the cosine of the angle. This result can further be used to
+               calculate the distance of a point from a plane.
+           </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vec</span>:<a href="Vector3.html">Vector3</a></code> &mdash; Vector with which to calculate the dot product (together
+               with this one).
+           </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash;                A float representing the dot product value.
+        </td>
+</tr>
+</table>
+</div>
+<a name="Equality()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Equality</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function Equality(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):Boolean</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="InEquality()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">InEquality</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function InEquality(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):*</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>*</code></td>
+</tr>
+</table>
+</div>
+<a name="Invert()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Invert</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Invert():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="isgreater()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isgreater</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function isgreater(lvec:<a href="Vector3.html">Vector3</a>, rhs:<a href="Vector3.html">Vector3</a>):Boolean</code><p> Returns true if the vector's scalar components are all smaller
+           that the ones of the vector it is compared against.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rhs</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="islesser()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">islesser</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function islesser(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):Boolean</code><p> Returns true if the vector's scalar components are all greater
+          that the ones of the vector it is compared against.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="IsZeroLength()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">IsZeroLength</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function IsZeroLength():Boolean</code><p> Returns true if this vector is zero length. </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
+<a name="Length()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Length</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Length():Number</code><p> Returns the length (magnitude) of the vector.
+               This operation requires a square root and is expensive in
+               terms of CPU operations. If you don't need to know the exact
+               length (e.g. for just comparing lengths) use squaredLength()
+               instead.
+        </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="MakeCeil()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">MakeCeil</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function MakeCeil(cmp:<a href="Vector3.html">Vector3</a>):void</code><p> Sets this vector's components to the maximum of its own and the
+           ones of the passed in vector.
+          
+           <p/>    'Maximum' in this case means the combination of the highest
+               value of x, y and z from both vectors. Highest is taken just
+               numerically, not magnitude, so 1 > -3.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">cmp</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="MakeFloor()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">MakeFloor</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function MakeFloor(cmp:<a href="Vector3.html">Vector3</a>):void</code><p>Sets this vector's components to the minimum of its own and the
+           ones of the passed in vector.
+              p/>'Minimum' in this case means the combination of the lowest
+               value of x, y and z from both vectors. Lowest is taken just
+               numerically, not magnitude, so -1 < 0.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">cmp</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="MidPoint()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">MidPoint</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function MidPoint(vec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>
+   Returns a vector at a point half way between this and the passed
+           in vector.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="Normalise()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Normalise</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Normalise():Number</code><p> Normalises the vector.
+               This method normalises the vector such that it's
+               length / magnitude is 1. The result is called a unit vector.
+               This function will not crash for zero-sized vectors, but there
+               will be no changes made to their components.
+           </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The previous length of the vector.
+        </td>
+</tr>
+</table>
+</div>
+<a name="NormalisedCopy()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">NormalisedCopy</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function NormalisedCopy():<a href="../as3steer/Vector3.html">Vector3</a></code><p> As normalise, except that this vector is unaffected and the
+          normalised vector is returned as a copy. 
+  </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="Perpendicular()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Perpendicular</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Perpendicular():<a href="../as3steer/Vector3.html">Vector3</a></code><p> Generates a vector perpendicular to this vector (eg an 'up' vector).
+          </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="Reflect()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Reflect</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Reflect(normal:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p> Calculates a reflection vector to the plane with the given normal .
+         NB assumes 'this' is pointing AWAY FROM the plane, invert if it is not.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">normal</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarAddition1()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarAddition1</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarAddition1(lvec:<a href="Vector3.html">Vector3</a>, rhs:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rhs</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarAddition2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarAddition2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarAddition2(lhs:Number, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lhs</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarDivision()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarDivision</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarDivision(lvec:<a href="Vector3.html">Vector3</a>, fScalar:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">fScalar</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarMultiplication1()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarMultiplication1</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarMultiplication1(lvec:<a href="Vector3.html">Vector3</a>, fScalar:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">fScalar</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarMultiplication2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarMultiplication2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarMultiplication2(fScalar:Number, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">fScalar</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarSubtraction1()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarSubtraction1</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarSubtraction1(lvec:<a href="Vector3.html">Vector3</a>, rhs:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rhs</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="ScalarSubtraction2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ScalarSubtraction2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ScalarSubtraction2(lhs:Number, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lhs</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="SingleVectorSubtraction()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">SingleVectorSubtraction</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function SingleVectorSubtraction(vec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">vec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="SquaredLength()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">SquaredLength</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function SquaredLength():Number</code><p> Returns the square of the length(magnitude) of the vector.
+                  This  method is for efficiency - calculating the actual
+               length of a vector requires a square root, which is expensive
+               in terms of the operations required. This method returns the
+               square of the length of the vector, i.e. the same as the
+               length but before the square root is taken. Use this if you
+               want to find the longest / shortest vector without incurring
+               the square root.
+        </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="tostring()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">tostring</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function tostring():String</code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>String</code></td>
+</tr>
+</table>
+</div>
+<a name="VectorAddition()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">VectorAddition</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function VectorAddition(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="VectorDivision()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">VectorDivision</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function VectorDivision(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="VectorMultiplication()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">VectorMultiplication</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function VectorMultiplication(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="VectorSubtraction()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">VectorSubtraction</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function VectorSubtraction(lvec:<a href="Vector3.html">Vector3</a>, rvec:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">lvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">rvec</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
