@@ -1,0 +1,552 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../print.css" type="text/css" media="print">
+<meta content="Utility,tabinda.as3steer.Utility,RandomUnitVector,RandomUnitVectorOnXZPlane,RandomVectorInUnitRadiusSphere,blendIntoAccumulator,blendIntoAccumulator2,clip,interpolate,interpolate2,limitMaxDeviationAngle,parallelComponent,perpendicularComponent,sphericalWrapAround,vecLimitDeviationAngleUtility" name="keywords">
+<title>tabinda.as3steer.Utility</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'Utility - API Documentation';
+				var baseRef = '../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">AS3Steer - Pure ActionScript 3 Port</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../all-classes.html')" href="../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../all-classes.html')" href="../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../index-list.html')" href="../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../index.html?tabinda/as3steer/Utility.html&amp;tabinda/as3steer/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Utility</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class Utility"); titleBar_setSubNav(false,false,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">tabinda.as3steer</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class Utility</td>
+</tr>
+</table>
+<p></p> A utility class implementing functions for steering
+  
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#blendIntoAccumulator()">blendIntoAccumulator</a>(smoothRate:Number, newValue:<a href="Vector3.html">Vector3</a>, smoothedAccumulator:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#blendIntoAccumulator2()">blendIntoAccumulator2</a>(smoothRate:Number, newValue:Number, smoothedAccumulator:Number):Number</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#clip()">clip</a>(x:Number, min:Number, max:Number):Number</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#interpolate()">interpolate</a>(alpha:Number, x0:<a href="Vector3.html">Vector3</a>, x1:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#interpolate2()">interpolate2</a>(alpha:Number, x0:Number, x1:Number):Number</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#limitMaxDeviationAngle()">limitMaxDeviationAngle</a>(source:<a href="Vector3.html">Vector3</a>, cosineOfConeAngle:Number, basis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#parallelComponent()">parallelComponent</a>(source:<a href="Vector3.html">Vector3</a>, unitBasis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#perpendicularComponent()">perpendicularComponent</a>(source:<a href="Vector3.html">Vector3</a>, unitBasis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]return component of vector perpendicular to a unit basis vector
+        (IMPORTANT NOTE: assumes "basis" has unit magnitude (length==1))
+        
+        </div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#RandomUnitVector()">RandomUnitVector</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#RandomUnitVectorOnXZPlane()">RandomUnitVectorOnXZPlane</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#RandomVectorInUnitRadiusSphere()">RandomVectorInUnitRadiusSphere</a>():<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#sphericalWrapAround()">sphericalWrapAround</a>(source:<a href="Vector3.html">Vector3</a>, center:<a href="Vector3.html">Vector3</a>, radius:Number):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#vecLimitDeviationAngleUtility()">vecLimitDeviationAngleUtility</a>(insideOrOutside:Boolean, source:<a href="Vector3.html">Vector3</a>, cosineOfConeAngle:Number, basis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Utility</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="blendIntoAccumulator()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">blendIntoAccumulator</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function blendIntoAccumulator(smoothRate:Number, newValue:<a href="Vector3.html">Vector3</a>, smoothedAccumulator:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">smoothRate</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">newValue</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">smoothedAccumulator</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="blendIntoAccumulator2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">blendIntoAccumulator2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function blendIntoAccumulator2(smoothRate:Number, newValue:Number, smoothedAccumulator:Number):Number</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">smoothRate</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">newValue</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">smoothedAccumulator</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="clip()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">clip</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function clip(x:Number, min:Number, max:Number):Number</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">min</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">max</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="interpolate()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">interpolate</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function interpolate(alpha:Number, x0:<a href="Vector3.html">Vector3</a>, x1:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">alpha</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">x0</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">x1</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="interpolate2()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">interpolate2</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function interpolate2(alpha:Number, x0:Number, x1:Number):Number</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">alpha</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">x0</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">x1</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
+<a name="limitMaxDeviationAngle()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">limitMaxDeviationAngle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function limitMaxDeviationAngle(source:<a href="Vector3.html">Vector3</a>, cosineOfConeAngle:Number, basis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">source</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosineOfConeAngle</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">basis</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="parallelComponent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">parallelComponent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function parallelComponent(source:<a href="Vector3.html">Vector3</a>, unitBasis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">source</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">unitBasis</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="perpendicularComponent()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">perpendicularComponent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function perpendicularComponent(source:<a href="Vector3.html">Vector3</a>, unitBasis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><p>return component of vector perpendicular to a unit basis vector
+        (IMPORTANT NOTE: assumes "basis" has unit magnitude (length==1))
+        
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">source</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">unitBasis</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="RandomUnitVector()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">RandomUnitVector</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function RandomUnitVector():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="RandomUnitVectorOnXZPlane()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">RandomUnitVectorOnXZPlane</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function RandomUnitVectorOnXZPlane():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="RandomVectorInUnitRadiusSphere()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">RandomVectorInUnitRadiusSphere</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function RandomVectorInUnitRadiusSphere():<a href="../as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="sphericalWrapAround()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">sphericalWrapAround</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function sphericalWrapAround(source:<a href="Vector3.html">Vector3</a>, center:<a href="Vector3.html">Vector3</a>, radius:Number):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">source</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">center</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">radius</span>:Number</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="vecLimitDeviationAngleUtility()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">vecLimitDeviationAngleUtility</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function vecLimitDeviationAngleUtility(insideOrOutside:Boolean, source:<a href="Vector3.html">Vector3</a>, cosineOfConeAngle:Number, basis:<a href="Vector3.html">Vector3</a>):<a href="../as3steer/Vector3.html">Vector3</a></code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">insideOrOutside</span>:Boolean</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">source</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">cosineOfConeAngle</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">basis</span>:<a href="Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

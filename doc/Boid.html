@@ -1,0 +1,1234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="print.css" type="text/css" media="print">
+<meta content="Boid,AvoidancePredictTime,AvoidancePredictTimeMax,AvoidancePredictTimeMin,boundaryCondition,neighbors,proximityToken,worldRadius,Draw,HandleBoundary,NewPD,NextBoundaryCondition,RegenerateLocalSpace,Reset,SteerToFlock,Update" name="keywords">
+<title>Boid</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="asdoc.js"></script><script type="text/javascript" language="javascript" src="cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'Boid - API Documentation';
+				var baseRef = '';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">AS3Steer - Pure ActionScript 3 Port</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('all-classes.html')" href="package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('all-classes.html')" href="class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('index-list.html')" href="all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="index.html?Boid.html&amp;class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;Boid</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class Boid"); titleBar_setSubNav(true,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">Top Level</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class Boid</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">Boid <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="images/inherit-arrow.gif"> <a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="images/inherit-arrow.gif"> <a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="images/inherit-arrow.gif"> <a href="../tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="images/inherit-arrow.gif"> <a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="images/inherit-arrow.gif"> flash.display.Sprite</td>
+</tr>
+</table>
+<p></p>
+<p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProperty" id="hideInheritedProperty">
+<a onclick="javascript:setInheritedVisible(false,'Property');" href="#propertySummary" class="showHideLink"><img src="images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Properties</a>
+</div>
+<div class="showInheritedProperty" id="showInheritedProperty">
+<a onclick="javascript:setInheritedVisible(true,'Property');" href="#propertySummary" class="showHideLink"><img src="images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Properties</a>
+</div>
+</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#AvoidancePredictTime">AvoidancePredictTime</a> : Number = 0.9<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#boundaryCondition">boundaryCondition</a> : int = 0<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_curvature">_curvature</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#gaudyPursuitAnnotation">gaudyPursuitAnnotation</a> : Boolean<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#hisPositionAtNearestApproach">hisPositionAtNearestApproach</a> : <a href="tabinda/as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_lastForward">_lastForward</a> : <a href="tabinda/as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_lastPosition">_lastPosition</a> : <a href="tabinda/as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_mass">_mass</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_maxForce">_maxForce</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_maxSpeed">_maxSpeed</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#neighbors">neighbors</a> : Array<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#ourPositionAtNearestApproach">ourPositionAtNearestApproach</a> : <a href="tabinda/as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#proximityToken">proximityToken</a> : <a href="tabinda/as3steer/AbstractTokenForProximityDatabase.html">AbstractTokenForProximityDatabase</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_radius">_radius</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#randomGenerator">randomGenerator</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#serialNumber">serialNumber</a> : int<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#serialNumberCounter">serialNumberCounter</a> : int = 0<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_smoothedAcceleration">_smoothedAcceleration</a> : <a href="tabinda/as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_smoothedCurvature">_smoothedCurvature</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_smoothedPosition">_smoothedPosition</a> : <a href="tabinda/as3steer/Vector3.html">Vector3</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#_speed">_speed</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#WanderSide">WanderSide</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#WanderUp">WanderUp</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedMethod" id="hideInheritedMethod">
+<a onclick="javascript:setInheritedVisible(false,'Method');" href="#methodSummary" class="showHideLink"><img src="images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Methods</a>
+</div>
+<div class="showInheritedMethod" id="showInheritedMethod">
+<a onclick="javascript:setInheritedVisible(true,'Method');" href="#methodSummary" class="showHideLink"><img src="images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Methods</a>
+</div>
+</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Boid()">Boid</a>(pd:<a href="../tabinda/as3steer/AbstractProximityDatabase.html">AbstractProximityDatabase</a>)</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#adjustRawSteeringForce()">adjustRawSteeringForce</a>(force:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    From CPP
+  ----------------------------------------------------------------------------
+  adjust the steering force passed to applySteeringForce.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#annotateAvoidCloseNeighbor()">annotateAvoidCloseNeighbor</a>(otherVehicle:<a href="tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a>, seperationDistance:Number):void</div>
+<div class="summaryTableDescription">
+   called when steerToAvoidCloseNeighbors decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#annotateAvoidNeighbor()">annotateAvoidNeighbor</a>(vehicle:<a href="tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a>, steer:Number, position:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, threatPosition:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">
+   called when steerToAvoidNeighbors decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#annotateAvoidObstacle()">annotateAvoidObstacle</a>(minDistanceToCollision:Number):void</div>
+<div class="summaryTableDescription">
+    called when steerToAvoidObstacles decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#annotatePathFollowing()">annotatePathFollowing</a>(future:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, onPath:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, outside:Number):void</div>
+<div class="summaryTableDescription">
+    called when steerToFollowPath decides steering is required
+   (default action is to do nothing, layered classes can overload it)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#annotationLine()">annotationLine</a>(startPoint:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, endPoint:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, color:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#annotationVelocityAcceleration()">annotationVelocityAcceleration</a>(maxLengthA:Number, maxLengthV:Number):void</div>
+<div class="summaryTableDescription">
+   draw lines from vehicle's position showing its velocity and acceleration
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#applyBrakingForce()">applyBrakingForce</a>(rate:Number, deltaTime:Number):void</div>
+<div class="summaryTableDescription">
+  xxx experimental 9-6-02
+    <p/>apply a given braking force (for a given dt) to our momentum.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#applySteeringForce()">applySteeringForce</a>(force:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, elapsedTime:Number):void</div>
+<div class="summaryTableDescription">
+    apply a given steering force to our momentum,
+    adjusting our orientation to maintain velocity-alignment.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#computeNearestApproachPositions()">computeNearestApproachPositions</a>(other:<a href="tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a>, time:Number):Number</div>
+<div class="summaryTableDescription">
+   Given the time until nearest approach (predictNearestApproachTime)
+   determine position of each vehicle at that time, and the distance
+   between them
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#curvature()">curvature</a>():Number</div>
+<div class="summaryTableDescription">
+    get instantaneous curvature (since last update)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Draw()">Draw</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#findNextIntersectionWithSphere()">findNextIntersectionWithSphere</a>(obs:<a href="tabinda/as3steer/SphericalObstacle.html">SphericalObstacle</a>, intersection:<a href="tabinda/as3steer/PathIntersection.html">PathIntersection</a>):void</div>
+<div class="summaryTableDescription">
+   xxx experiment cwr 9-6-02
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#forward()">forward</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#frandom01()">frandom01</a>():Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#globalizeDirection()">globalizeDirection</a>(localDirection:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a direction in local space to its equivalent in global space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#globalizePosition()">globalizePosition</a>(localPosition:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a point in local space to its equivalent in global space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#globalRotateForwardToSide()">globalRotateForwardToSide</a>(globalForward:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   not currently used, just added for completeness
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#HandleBoundary()">HandleBoundary</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#inBoidNeighborhood()">inBoidNeighborhood</a>(other:<a href="tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a>, minDistance:Number, maxDistance:Number, cosMaxAngle:Number):Boolean</div>
+<div class="summaryTableDescription">
+   used by boid behaviors: is a given vehicle within this boid's neighborhood?
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#intervalComparison()">intervalComparison</a>(x:Number, lowerBound:Number, upperBound:Number):int</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#isAhead1()">isAhead1</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#isAhead2()">isAhead2</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, cosThreshold:Number):*</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#isAside1()">isAside1</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#isAside2()">isAside2</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, cosThreshold:Number):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#isBehind1()">isBehind1</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#isBehind2()">isBehind2</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, cosThreshold:Number):Boolean</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#localizeDirection()">localizeDirection</a>(globalDirection:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   transform a direction in global space to its equivalent in local space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#localizePosition()">localizePosition</a>(globalPosition:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"> transform a point in global space to its equivalent in local space
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#localRotateForwardToSide()">localRotateForwardToSide</a>(v:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    rotate, in the canonical direction, a vector pointing in the
+   "forward" (+Z) direction to the "side" (+/-X) direction
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#mass()">mass</a>():Number</div>
+<div class="summaryTableDescription">
+   get/set mass
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#maxForce()">maxForce</a>():Number</div>
+<div class="summaryTableDescription">
+   get/set maxForce
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#maxSpeed()">maxSpeed</a>():Number</div>
+<div class="summaryTableDescription">
+   get/set maxSpeed
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#measurePathCurvature()">measurePathCurvature</a>(elapsedTime:Number):void</div>
+<div class="summaryTableDescription">
+   measure path curvature (1/turning-radius), maintain smoothed version
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#NewPD()">NewPD</a>(pd:<a href="../tabinda/as3steer/AbstractProximityDatabase.html">AbstractProximityDatabase</a>):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#NextBoundaryCondition()">NextBoundaryCondition</a>():void</div>
+<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#Position()">Position</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#predictFuturePosition()">predictFuturePosition</a>(predictionTime:Number):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+      predict position of this vehicle at some time in the future
+   (assumes velocity remains constant, hence path is a straight line)
+      <p/>XXX Want to encapsulate this since eventually I want to investigate
+   XXX non-linear predictors.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#predictNearestApproachTime()">predictNearestApproachTime</a>(other:<a href="tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a>):Number</div>
+<div class="summaryTableDescription">
+   Given two vehicles, based on their current positions and velocities,
+   determine the time until nearest approach
+      <p/>XXX should this return zero if they are already in contact?
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#radius()">radius</a>():Number</div>
+<div class="summaryTableDescription">
+   size of bounding sphere, for obstacle avoidance, etc.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#randomizeHeadingOnXZPlane()">randomizeHeadingOnXZPlane</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#regenerateLocalSpace()">regenerateLocalSpace</a>(newVelocity:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">
+    the default version: keep FORWARD parallel to velocity, change UP as
+    little as possible.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#RegenerateLocalSpace()">RegenerateLocalSpace</a>(newVelocity:<a href="../tabinda/as3steer/Vector3.html">Vector3</a>, elapsedTime:Number):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#regenerateLocalSpaceForBanking()">regenerateLocalSpaceForBanking</a>(newVelocity:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, elapsedTime:Number):void</div>
+<div class="summaryTableDescription">
+    alternate version: keep FORWARD parallel to velocity, adjust UP according
+  to a no-basis-in-reality "banking" behavior, something like what birds and
+  airplanes do
+
+   XXX experimental cwr 6-5-03
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#regenerateOrthonormalBasis()">regenerateOrthonormalBasis</a>(... args):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#regenerateOrthonormalBasisUF()">regenerateOrthonormalBasisUF</a>(newUnitForward:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):void</div>
+<div class="summaryTableDescription">
+   regenerate the orthonormal basis vectors given a new forward
+   (which is expected to have unit length)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#reset()">reset</a>():void</div>
+<div class="summaryTableDescription">
+   Reset vehicle state
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Reset()">Reset</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#resetLocalSpace()">resetLocalSpace</a>():void</div>
+<div class="summaryTableDescription"> 
+   reset transform: set local space to its identity state, equivalent to a
+   4x4 homogeneous transform like this:
+      <p/>    [ X 0 0 0 ]
+   <p/>    [ 0 1 0 0 ]
+   <p/>    [ 0 0 1 0 ]
+   <p/>    [ 0 0 0 1 ]
+      where X is 1 for a left-handed system and -1 for a right-handed system.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#resetSmoothedAcceleration()">resetSmoothedAcceleration</a>(value:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#resetSmoothedCurvature()">resetSmoothedCurvature</a>(value:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#resetSmoothedPosition()">resetSmoothedPosition</a>(value:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#resetSteering()">resetSteering</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#rightHanded()">rightHanded</a>():Boolean</div>
+<div class="summaryTableDescription">
+   use right-(or left-)handed coordinate space
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#scalarRandomWalk()">scalarRandomWalk</a>(initial:Number, walkspeed:Number, min:Number, max:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#setForward()">setForward</a>(... args):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#setMass()">setMass</a>(m:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#setMaxForce()">setMaxForce</a>(mf:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#setMaxSpeed()">setMaxSpeed</a>(ms:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#setPosition()">setPosition</a>(... args):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#setRadius()">setRadius</a>(m:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#setSide()">setSide</a>(... args):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#setSpeed()">setSpeed</a>(s:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#setUnitSideFromForwardAndUp()">setUnitSideFromForwardAndUp</a>():void</div>
+<div class="summaryTableDescription">
+   set "side" basis vector to normalized cross product of forward and up
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#setUp()">setUp</a>(... args):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#side()">side</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#smoothedAcceleration()">smoothedAcceleration</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#smoothedCurvature()">smoothedCurvature</a>():Number</div>
+<div class="summaryTableDescription">
+   get/reset smoothedCurvature, smoothedAcceleration and smoothedPosition
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#smoothedPosition()">smoothedPosition</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#speed()">speed</a>():Number</div>
+<div class="summaryTableDescription">
+   get/set speed of vehicle  (may be faster than taking mag of velocity)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#square()">square</a>(x:Number):Number</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForAlignment()">steerForAlignment</a>(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    Alignment behavior: steer to head in same direction as neighbors
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForCohesion()">steerForCohesion</a>(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">Cohesion behavior: to to move toward center of neighbors
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForEvasion()">steerForEvasion</a>(menace:<a href="tabinda/as3steer/AbstractVehicle.html">AbstractVehicle</a>, maxPredictionTime:Number):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   evasion of another vehicle
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForFlee()">steerForFlee</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Flee behavior
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForPursuit()">steerForPursuit</a>(... args):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   pursuit of another vehicle (& version with ceiling on prediction time)
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForSeek()">steerForSeek</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForSeparation()">steerForSeparation</a>(maxDistance:Number, cosMaxAngle:Number, flock:Array):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">Separation behavior: steer away from neighbors
+   
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForTargetSpeed()">steerForTargetSpeed</a>(targetSpeed:Number):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   tries to maintain a given speed, returns a maxForce-clipped steering force along the forward/backward axis
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerForWander()">steerForWander</a>(dt:Number):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerToAvoidCloseNeighbors()">steerToAvoidCloseNeighbors</a>(minSeparationDistance:Number, others:Array):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   avoidance of "close neighbors" -- used only by steerToAvoidNeighbors
+      <p/>XXX  Does a hard steer away from any other agent who comes withing a
+   XXX  critical distance.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerToAvoidNeighbors()">steerToAvoidNeighbors</a>(minTimeToCollision:Number, others:Array):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Unaligned collision avoidance behavior: avoid colliding with other nearby
+   vehicles moving in unconstrained directions.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerToAvoidObstacle()">steerToAvoidObstacle</a>(minTimeToCollision:Number, obstacle:<a href="tabinda/as3steer/Obstacle.html">Obstacle</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Obstacle Avoidance behavior
+      <p/>Returns a steering force to avoid a given obstacle.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerToAvoidObstacles()">steerToAvoidObstacles</a>(minTimeToCollision:Number, obstacles:Array):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+    this version avoids all of the obstacles in an ObstacleGroup
+       <p/>XXX 9-12-03: note this does NOT use the Obstacle::steerToAvoid protocol
+    XXX like the older steerToAvoidObstacle does/did.</div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#SteerToFlock()">SteerToFlock</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerToFollowPath()">steerToFollowPath</a>(direction:int, predictionTime:Number, path:<a href="tabinda/as3steer/Pathway.html">Pathway</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#steerToStayOnPath()">steerToStayOnPath</a>(predictionTime:Number, path:<a href="tabinda/as3steer/Pathway.html">Pathway</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   Path Following behaviors
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#truncateLength()">truncateLength</a>(tVector:<a href="tabinda/as3steer/Vector3.html">Vector3</a>, maxLength:Number):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/LocalSpace.html#up()">up</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/LocalSpace.html">LocalSpace</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#Update()">Update</a>(currentTime:Number, elapsedTime:Number):void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SimpleVehicle.html#velocity()">velocity</a>():<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   get velocity of vehicle
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SimpleVehicle.html">SimpleVehicle</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#xxxsteerForFlee()">xxxsteerForFlee</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription">
+   xxx proposed, experimental new seek/flee [cwr 9-16-02]
+   </div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../tabinda/as3steer/SteerLibrary.html#xxxsteerForSeek()">xxxsteerForSeek</a>(target:<a href="tabinda/as3steer/Vector3.html">Vector3</a>):<a href="tabinda/as3steer/Vector3.html">Vector3</a>
+</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="../tabinda/as3steer/SteerLibrary.html">SteerLibrary</a></td>
+</tr>
+</table>
+</div>
+<a name="constantSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Constants</div>
+<table id="summaryTableConstant" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#AvoidancePredictTimeMax">AvoidancePredictTimeMax</a> : Number = 2<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#AvoidancePredictTimeMin">AvoidancePredictTimeMin</a> : Number = 0.9<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#worldRadius">worldRadius</a> : Number = 50.0<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">Boid</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="AvoidancePredictTime"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">AvoidancePredictTime</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var AvoidancePredictTime:Number = 0.9</code>
+</div>
+<a name="boundaryCondition"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">boundaryCondition</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var boundaryCondition:int = 0</code>
+</div>
+<a name="neighbors"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">neighbors</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var neighbors:Array</code>
+</div>
+<a name="proximityToken"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">proximityToken</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var proximityToken:<a href="tabinda/as3steer/AbstractTokenForProximityDatabase.html">AbstractTokenForProximityDatabase</a></code>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="Boid()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Boid</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Boid(pd:<a href="../tabinda/as3steer/AbstractProximityDatabase.html">AbstractProximityDatabase</a>)</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">pd</span>:<a href="../tabinda/as3steer/AbstractProximityDatabase.html">AbstractProximityDatabase</a></code></td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="Draw()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Draw</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Draw():void</code>
+</div>
+<a name="HandleBoundary()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">HandleBoundary</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function HandleBoundary():<a href="tabinda/as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="tabinda/as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="NewPD()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">NewPD</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function NewPD(pd:<a href="../tabinda/as3steer/AbstractProximityDatabase.html">AbstractProximityDatabase</a>):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">pd</span>:<a href="../tabinda/as3steer/AbstractProximityDatabase.html">AbstractProximityDatabase</a></code></td>
+</tr>
+</table>
+</div>
+<a name="NextBoundaryCondition()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">NextBoundaryCondition</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function NextBoundaryCondition():void</code>
+</div>
+<a name="RegenerateLocalSpace()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">RegenerateLocalSpace</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function RegenerateLocalSpace(newVelocity:<a href="../tabinda/as3steer/Vector3.html">Vector3</a>, elapsedTime:Number):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">newVelocity</span>:<a href="../tabinda/as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">elapsedTime</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="Reset()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Reset</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Reset():void</code>
+</div>
+<a name="SteerToFlock()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">SteerToFlock</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function SteerToFlock():<a href="tabinda/as3steer/Vector3.html">Vector3</a></code>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="tabinda/as3steer/Vector3.html">Vector3</a></code></td>
+</tr>
+</table>
+</div>
+<a name="Update()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">Update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function Update(currentTime:Number, elapsedTime:Number):void</code><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">currentTime</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">elapsedTime</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="constantDetail"></a>
+<div class="detailSectionHeader">Constant detail</div>
+<a name="AvoidancePredictTimeMax"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">AvoidancePredictTimeMax</td><td class="detailHeaderType">constant</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const AvoidancePredictTimeMax:Number = 2</code>
+</div>
+<a name="AvoidancePredictTimeMin"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">AvoidancePredictTimeMin</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const AvoidancePredictTimeMin:Number = 0.9</code>
+</div>
+<a name="worldRadius"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">worldRadius</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const worldRadius:Number = 50.0</code>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
