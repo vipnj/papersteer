@@ -60,7 +60,7 @@ package tabinda.as3steer
 		private var _side:Vector3;//    side-pointing unit basis vector
 		private var _up:Vector3;//  upward-pointing unit basis vector
 		private var _forward:Vector3;// forward-pointing unit basis vector
-		private static  var _position:Vector3;// origin of local space
+		private var _position:Vector3;// origin of local space
 
 
 		public function side():Vector3
