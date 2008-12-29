@@ -32,7 +32,6 @@
 
 package tabinda.as3steer
 {
-	import flash.display.Sprite;
 	
 	/** LocalSpace: a local coordinate system for 3d space
 	*
@@ -55,7 +54,7 @@ package tabinda.as3steer
 	*     [ T T T  1 ]      [ Tx Ty Tz  1 ]
 	* ----------------------------------------------------------------------------
 	*/
-	public class LocalSpace extends Sprite
+	public class LocalSpace
 	{
 		private var _side:Vector3;//    side-pointing unit basis vector
 		private var _up:Vector3;//  upward-pointing unit basis vector
