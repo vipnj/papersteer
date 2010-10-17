@@ -425,7 +425,7 @@ package tabinda.papersteer
 		}
 		
 		// Prints the Vector 
-		public function tostring():String
+		public function toString():String
 		{
 			return("x= " + x + " y= " + y + " z= " + z);
 		}

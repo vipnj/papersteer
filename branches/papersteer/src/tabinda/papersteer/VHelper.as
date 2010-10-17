@@ -73,30 +73,42 @@ package tabinda.papersteer
 		// receives vector:Vector3, angle:Number, sin:Number, cos:Number
 		public static function RotateAboutGlobalY(...args):Array
 		{
-			trace("VHelper.RotateAboutGlobalY",args[0] is Number, args[1] is Number, args[2] is Number, args[3] is Number);
+			//trace("VHelper.RotateAboutGlobalY",args[0] is Vector3, args[1] is Number, args[2] is Number, args[3] is Number);
+			
+			var vec:Vector3;
+			var angle:Number;
+			var sin:Number;
+			var cos:Number;
 			
 			if (args.length == 4)
 			{
-				// is both are zero, they have not be initialized yet
-				if (args[2] == 0 && args[3] == 0)
+				vec = args[0];
+				angle = args[1];
+				sin = args[2];
+				cos = args[3];
+				
+				// is both are zero, they have not been initialized yet
+				if (sin == 0 && cos == 0)
 				{
-					args[2] = Number(Math.sin(args[1]));
-					args[3] = Number(Math.cos(args[1]));
+					sin = Number(Math.sin(angle));
+					cos = Number(Math.cos(angle));
 				}
 				var temp:Array = new Array();
-				temp.push(args[2]);
-				temp.push(args[3]);
-				temp.push(new Vector3((args[0].x * c) + (args[0].z * s), (args[0].y), (args[0].z * c) - (args[0].x * s)));
+				temp.push(sin);
+				temp.push(cos);
+				temp.push(new Vector3((vec.x * cos) + (vec.z * sin), (vec.y), (vec.z * cos) - (vec.x * sin)));
 				return temp;
 			}
 			else
 			{
-				var s:Number = Number(Math.sin(args[1]));
-				var c:Number = Number(Math.cos(args[1]));
+				vec = args[0];
+				angle = args[1];
+				sin = Number(Math.sin(angle));
+				cos = Number(Math.cos(angle));
 				temp = new Array();
-				temp.push(args[2]);
-				temp.push(args[3]);
-				temp.push(new Vector3((args[0].x * c) + (args[0].z * s), (args[0].y), (args[0].z * c) - (args[0].x * s)));
+				temp.push(sin);
+				temp.push(cos);
+				temp.push(new Vector3((vec.x * cos) + (vec.z * sin), (vec.y), (vec.z * cos) - (vec.x * sin)));
 				return temp;
 			}
 		}

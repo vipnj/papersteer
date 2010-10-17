@@ -42,7 +42,6 @@ package tabinda.demo
 	import flash.text.TextField;
 	import flash.system.System;
 	
-	
 	// Papervision3D Imports
 	import org.papervision3d.render.*;
 	import org.papervision3d.scenes.*;
@@ -68,8 +67,8 @@ package tabinda.demo
 	public class Demo extends Sprite
 	{
 		// Used to get Display Window Width and Height
-		private static var WindowWidth:int = 1024;
-		private static var WindowHeight:int = 640;
+		public static var WindowWidth:int = 1024;
+		public static var WindowHeight:int = 640;
 		
 		// Papervision3D essential vars
 		public static var viewport:Viewport3D;
@@ -102,14 +101,14 @@ package tabinda.demo
 		private static var smoothedTimerOverhead:Number = 0.0;
 
 		// All the 2D text fields on the demo window showing different stats
-		private var strField:TextField;				// Camera mode
-		private var strField2:TextField;			// Current Plugin
-		private var strField3:TextField;			// Update
-		private var strField4:TextField;			// Draw
-		private var strField5:TextField;			// Other
-		private var strField6:TextField;			// Clock
+		private var cameraMode:TextField;			// Camera mode
+		private var currentPlugin:TextField;		// Current Plugin
+		private var updateInfo:TextField;			// Update
+		private var drawInfo:TextField;				// Draw
+		private var otherInfo:TextField;			// Other
+		private var clockInfo:TextField;			// Clock
 		private var strCam:TextField;				// PV3D Camera Information
-		private static var textEntry:TextField; 	// Plugin options
+		private static var pluginOptions:TextField; // Plugin options
 		private var strFormat:TextFormat;			// TextFormat Common for all Text
 		
 		// currently selected plug-in (user can choose or cycle through them)
@@ -141,24 +140,25 @@ package tabinda.demo
 			camera = new PSCamera(viewport);
 			
 			scene.addChild(Drawing.lines);
+			//scene.addChild(Drawing.shapes);
 			
-			strField = new TextField();
-			strField2 = new TextField();
-			strField3 = new TextField();
-			strField4 = new TextField();
-			strField5 = new TextField();
-			strField6 = new TextField();
+			cameraMode = new TextField();
+			currentPlugin = new TextField();
+			updateInfo = new TextField();
+			drawInfo = new TextField();
+			otherInfo = new TextField();
+			clockInfo = new TextField();
 			strCam = new TextField();
-			textEntry = new TextField();
+			pluginOptions = new TextField();
 			strFormat = new TextFormat();
-			addChild(strField);
-			addChild(strField2);
-			addChild(strField3);
-			addChild(strField4);
-			addChild(strField5);
-			addChild(strField6);
+			addChild(cameraMode);
+			addChild(currentPlugin);
+			addChild(updateInfo);
+			addChild(drawInfo);
+			addChild(otherInfo);
+			addChild(clockInfo);
 			addChild(strCam);
-			addChild(textEntry);
+			addChild(pluginOptions);
 
 			//TODO: Fix here
 			Annotation.drawer = new Drawing();
@@ -759,6 +759,7 @@ package tabinda.demo
 			var lookAt:Vector3 = camera.Target;
 			var up:Vector3 = camera.Up;
 			
+			//Drawing.shapes.graphics.clear();
 			Drawing.lines.geometry.faces = [];
             Drawing.lines.geometry.vertices = [];
             Drawing.lines.removeAllLines();
@@ -803,60 +804,60 @@ package tabinda.demo
 			strCam.text = String("PV3D Camera Info:\nX: " + Math.round(camera.pv3dcamera.x) + " Y: " + Math.round(camera.pv3dcamera.y) + " Z: " + Math.round(camera.pv3dcamera.z)
 								+" RotX: " + Math.round(camera.pv3dcamera.rotationX) + " RotY: " + Math.round(camera.pv3dcamera.rotationY) + " RotZ: " + Math.round(camera.pv3dcamera.rotationZ));
 			
-			strField.x = screenLocation.x;
-			strField.y = screenLocation.y;
-			strField.autoSize = TextFieldAutoSize.LEFT;
-			strField.alpha = 1.0;
-			strField.selectable = false;
-			strField.defaultTextFormat = strFormat;
-			strField.text = "Camera: " + camera.ModeName;
+			cameraMode.x = screenLocation.x;
+			cameraMode.y = screenLocation.y;
+			cameraMode.autoSize = TextFieldAutoSize.LEFT;
+			cameraMode.alpha = 1.0;
+			cameraMode.selectable = false;
+			cameraMode.defaultTextFormat = strFormat;
+			cameraMode.text = "Camera: " + camera.ModeName;
 			
 			screenLocation.y += lh;
-			strField2.x = screenLocation.x;
-			strField2.y = screenLocation.y;
-			strField2.autoSize = TextFieldAutoSize.LEFT;
-			strField2.alpha = 1.0;
-			strField2.selectable = false;
-			strField2.defaultTextFormat = strFormat;
-			strField2.text = "PlugIn: "+ SelectedPlugIn.Name;
+			currentPlugin.x = screenLocation.x;
+			currentPlugin.y = screenLocation.y;
+			currentPlugin.autoSize = TextFieldAutoSize.LEFT;
+			currentPlugin.alpha = 1.0;
+			currentPlugin.selectable = false;
+			currentPlugin.defaultTextFormat = strFormat;
+			currentPlugin.text = "PlugIn: "+ SelectedPlugIn.Name;
 			
 			screenLocation = new Point(lh, WindowHeight - 5.5 * lh);
 
-			strField3.x = screenLocation.x;
-			strField3.y = screenLocation.y;
-			strField3.autoSize =TextFieldAutoSize.LEFT;
-			strField3.alpha = 1.0;
-			strField3.selectable = false;
-			strField3.defaultTextFormat = strFormat;
-			strField3.text = "Update: "+ GetPhaseTimerFps(smoothedTimerUpdate);
+			updateInfo.x = screenLocation.x;
+			updateInfo.y = screenLocation.y;
+			updateInfo.autoSize =TextFieldAutoSize.LEFT;
+			updateInfo.alpha = 1.0;
+			updateInfo.selectable = false;
+			updateInfo.defaultTextFormat = strFormat;
+			updateInfo.text = "Update: "+ GetPhaseTimerFps(smoothedTimerUpdate);
 				
 			screenLocation.y += lh;
-			strField4.x = screenLocation.x;
-			strField4.y = screenLocation.y;
-			strField4.autoSize = TextFieldAutoSize.LEFT;
-			strField4.alpha = 1.0;
-			strField4.selectable = false;
-			strField4.defaultTextFormat = strFormat;
-			strField4.text = "Draw:   "+ GetPhaseTimerFps(smoothedTimerDraw);
+			drawInfo.x = screenLocation.x;
+			drawInfo.y = screenLocation.y;
+			drawInfo.autoSize = TextFieldAutoSize.LEFT;
+			drawInfo.alpha = 1.0;
+			drawInfo.selectable = false;
+			drawInfo.defaultTextFormat = strFormat;
+			drawInfo.text = "Draw:   "+ GetPhaseTimerFps(smoothedTimerDraw);
 			
 			screenLocation.y += lh;
 			
-			strField5.x = screenLocation.x;
-			strField5.y = screenLocation.y;
-			strField5.autoSize = TextFieldAutoSize.LEFT;
-			strField5.alpha = 1.0;
-			strField5.selectable = false;
-			strField5.defaultTextFormat = strFormat;
-			strField5.text = "Other: "+ GetPhaseTimerFps(smoothedTimerOverhead);
+			otherInfo.x = screenLocation.x;
+			otherInfo.y = screenLocation.y;
+			otherInfo.autoSize = TextFieldAutoSize.LEFT;
+			otherInfo.alpha = 1.0;
+			otherInfo.selectable = false;
+			otherInfo.defaultTextFormat = strFormat;
+			otherInfo.text = "Other: "+ GetPhaseTimerFps(smoothedTimerOverhead);
 			
 			screenLocation.y += 1.5 * lh;
 
-			strField6.x = screenLocation.x;
-			strField6.y = screenLocation.y;
-			strField6.autoSize = TextFieldAutoSize.LEFT;
-			strField6.alpha = 1.0;
-			strField6.selectable = false;
-			strField6.defaultTextFormat = strFormat;
+			clockInfo.x = screenLocation.x;
+			clockInfo.y = screenLocation.y;
+			clockInfo.autoSize = TextFieldAutoSize.LEFT;
+			clockInfo.alpha = 1.0;
+			clockInfo.selectable = false;
+			clockInfo.defaultTextFormat = strFormat;
 
 			// target and recent average frame rates
 			var targetFPS:int = clock.FixedFrameRate;
@@ -883,10 +884,10 @@ package tabinda.demo
 
 					// create usage description character string
 					sb +="usage: "+clock.SmoothedUsage.toPrecision(1)+"% ";
-					strField6.text = sb;
+					clockInfo.text = sb;
 					var xp:Number = screenLocation.x + sb.length * cw;
 
-					for (var i:int = 0; i < strField6.length; i++)
+					for (var i:int = 0; i < clockInfo.length; i++)
 					{
 						sb +=" ";
 					}
@@ -897,12 +898,12 @@ package tabinda.demo
 					var usage:Number = clock.Usage;
 					var color:uint = (usage >= 100) ? Colors.Red : Colors.White;
 					
-					strField6.x = xp;
-					strField6.y = screenLocation.y;
-					strField6.text = sb;
+					clockInfo.x = xp;
+					clockInfo.y = screenLocation.y;
+					clockInfo.text = sb;
 					}
 			}
-			strField6.text = sb;
+			clockInfo.text = sb;
 			renderer.renderScene(scene,camera.pv3dcamera,viewport);
 		}
 
@@ -970,13 +971,13 @@ package tabinda.demo
 			strFormat.font = "Arial";
 			strFormat.color = color;
 			
-			textEntry.defaultTextFormat = strFormat;
-			textEntry.selectable = false;
-			textEntry.x = location.x;
-			textEntry.y = location.y;
-			textEntry.alpha = 1.0;
-			textEntry.text = text;
-			textEntry.autoSize = TextFieldAutoSize.LEFT;
+			pluginOptions.defaultTextFormat = strFormat;
+			pluginOptions.selectable = false;
+			pluginOptions.x = location.x;
+			pluginOptions.y = location.y;
+			pluginOptions.alpha = 1.0;
+			pluginOptions.text = text;
+			pluginOptions.autoSize = TextFieldAutoSize.LEFT;
 		}
 	}
 }

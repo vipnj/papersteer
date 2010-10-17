@@ -141,7 +141,7 @@ package tabinda.papersteer
 		// Takes param1=up, param2=forward, param3=position, param4=side=can be null
 		public function LocalSpace (...args):void
 		{
-			trace("LocalSpace.constructor", args[0] is Vector3, args[1] is Vector3, args[2] is Vector3, args[3] is Vector3);
+			//trace("LocalSpace.constructor", args[0] is Vector3, args[1] is Vector3, args[2] is Vector3, args[3] is Vector3);
 			if (args.length == 4)
 			{
 				up = args[0];
