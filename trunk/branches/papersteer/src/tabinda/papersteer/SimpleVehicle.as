@@ -35,34 +35,34 @@ package tabinda.papersteer
 	public class SimpleVehicle extends SteerLibrary
 	{
 		// give each vehicle a unique number
-		public var SerialNumber:int;
-		static var serialNumberCounter=0;
+		private var _SerialNumber:int;
+		private static var serialNumberCounter:int =0;
 
 		// Mass (defaults to unity so acceleration=force)
-		var mass:Number;
+		private var mass:Number;
 
 		// size of bounding sphere, for obstacle avoidance, etc.
-		var radius:Number;
+		private var radius:Number;
 
 		// speed along Forward direction. Because local space is
 		// velocity-aligned, velocity = Forward * Speed
-		var speed:Number;
+		private var speed:Number;
 
 		// the maximum steering force this vehicle can apply
 		// (steering force is clipped to this magnitude)
-		var maxForce:Number;
+		private var maxForce:Number;
 
 		// the maximum speed this vehicle is allowed to move
 		// (velocity is clipped to this magnitude)
-		var maxSpeed:Number;
+		private var maxSpeed:Number;
 
-		var curvature:Number;
-		var lastForward:Vector3;
-		var lastPosition:Vector3;
-		var smoothedPosition:Vector3;
-		var smoothedCurvature:Number;
+		private var curvature:Number;
+		private var lastForward:Vector3;
+		private var lastPosition:Vector3;
+		private var smoothedPosition:Vector3;
+		private var smoothedCurvature:Number;
 		// The acceleration is smoothed
-		var acceleration:Vector3;
+		private var acceleration:Vector3;
 
 		// constructor
 		public function SimpleVehicle ()
@@ -71,7 +71,7 @@ package tabinda.papersteer
 			Reset ();
 
 			// maintain unique serial numbers
-			SerialNumber=serialNumberCounter++;
+			_SerialNumber=serialNumberCounter++;
 		}
 
 		// reset vehicle state
@@ -307,6 +307,9 @@ package tabinda.papersteer
 		{
 			return acceleration;
 		}
+		
+		public function get SerialNumber():int { return _SerialNumber; }
+		
 		public function ResetAcceleration ():Vector3
 		{
 			return ResetAcceleration2(Vector3.Zero);
@@ -331,7 +334,7 @@ package tabinda.papersteer
 
 		// set a random "2D" heading: set local Up to global Y, then effectively
 		// rotate about it by a random angle (pick random forward, derive side).
-		public function RandomizeHeadingOnXZPlane ()
+		public function RandomizeHeadingOnXZPlane ():void
 		{
 			Up=Vector3.Up;
 			Forward=VHelper.RandomUnitVectorOnXZPlane();
@@ -339,7 +342,7 @@ package tabinda.papersteer
 		}
 
 		// measure path curvature (1/turning-radius), maintain smoothed version
-		function MeasurePathCurvature (elapsedTime:Number)
+		private function MeasurePathCurvature (elapsedTime:Number):void
 		{
 			if (elapsedTime > 0)
 			{

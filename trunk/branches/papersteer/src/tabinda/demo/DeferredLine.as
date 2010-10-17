@@ -34,29 +34,24 @@ package tabinda.demo
 {
 	import tabinda.papersteer.*;
 	
+	/**
+	 * Deferred Buffer for drawing circles
+	 * @author Mohammad Haseeb
+	 * @see Demo
+	 */
+		
 	public class DeferredLine
-	{
-		var startPoint:Vector3;
-		var endPoint:Vector3;
-		var color:uint;
-
-		static var index:int = 0;
-		static var size:int = 3000;
-		static var deferredLineArray:Vector.<DeferredLine> = new Vector.<DeferredLine>(size);
-		
-		public function DeferredLine()
+	{		
+		/* static block */
 		{
-		}
-		
-				
-		public static function init():void
-		{
-			for (var i:int = 0; i < size; i++)
+			deferredLineArray = new Vector.<DeferredLine>(size);
+			private static var i:int = 0;
+			for (i = 0; i < size; i++)
 			{
 				deferredLineArray[i] = new DeferredLine();
 			}
 		}
-
+			
 		public static function AddToBuffer(s:Vector3, e:Vector3, c:uint):void
 		{
 			if (index < size)
@@ -84,5 +79,13 @@ package tabinda.demo
 			// reset buffer index
 			index = 0;
 		}
+		
+		private var startPoint:Vector3;
+		private var endPoint:Vector3;
+		private var color:uint;
+
+		private static var index:int = 0;
+		private static const size:int = 3000;
+		private static var deferredLineArray:Vector.<DeferredLine>;
 	}
 }

@@ -34,7 +34,7 @@ package tabinda.papersteer
 {
 	public class Utilities
 	{
-		static var rng:Number=Math.random();
+		private static var rng:Number=Math.random();
 
 		public static  function Interpolate (alpha:Number,x0:Number,x1:Number):Number
 		{

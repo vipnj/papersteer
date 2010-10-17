@@ -37,10 +37,10 @@ package tabinda.papersteer
 	{
 		// This array stores a list of all PlugIns.  It is manipulated by the
 		// constructor and destructor, and used in findByName and applyToAll.
-		static const totalSizeOfRegistry:int = 1000;
-		static var itemsInRegistry:int = 0;
-		static var registry:Vector.<PlugIn> = new Vector.<PlugIn>(totalSizeOfRegistry);
-		var name:String;
+		private static const totalSizeOfRegistry:int = 1000;
+		private static var itemsInRegistry:int = 0;
+		private static var registry:Vector.<PlugIn> = new Vector.<PlugIn>(totalSizeOfRegistry);
+		private var name:String;
 		
 		public function Open():void
 		{}
@@ -198,7 +198,7 @@ package tabinda.papersteer
 		}
 
 		// save this instance in the class's registry of instances
-		function AddToRegistry():void
+		private function AddToRegistry():void
 		{
 			// save this instance in the registry
 			registry[itemsInRegistry++] = this;

@@ -70,6 +70,8 @@ package tabinda.papersteer
 		// takes _pointCount:int,_points:Array,_radius:Number,_cyclic:Boolean
 		public function PolylinePathway(...args):void
 		{
+			trace("PolylinePathway.constructor",args[0] is int, args[1] is Array, args[2] is Number,args[3] is Boolean);
+			
 			if(args.length == 3)
 			{
 				Initialize (args[0],args[1],args[2],args[3]);

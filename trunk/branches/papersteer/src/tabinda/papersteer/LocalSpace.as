@@ -45,10 +45,10 @@ package tabinda.papersteer
 		// origin of the local space.  These correspond to the "rows" of
 		// a 3x4 transformation matrix with [0 0 0 1] as the final column
 
-        var side:Vector3;     //    side-pointing unit basis vector
-        var up:Vector3;       //  upward-pointing unit basis vector
-        var forward:Vector3;  // forward-pointing unit basis vector
-        var position:Vector3; // origin of local space
+        private var side:Vector3;     // side-pointing unit basis vector
+        private var up:Vector3;       // upward-pointing unit basis vector
+        private var forward:Vector3;  // forward-pointing unit basis vector
+        private var position:Vector3; // origin of local space
 		
 		/// <summary>
 		/// Gets or sets the side.
@@ -141,6 +141,7 @@ package tabinda.papersteer
 		// Takes param1=up, param2=forward, param3=position, param4=side=can be null
 		public function LocalSpace (...args):void
 		{
+			trace("LocalSpace.constructor", args[0] is Vector3, args[1] is Vector3, args[2] is Vector3, args[3] is Vector3);
 			if (args.length == 4)
 			{
 				up = args[0];

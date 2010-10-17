@@ -37,55 +37,55 @@ package tabinda.papersteer
 	public class Clock
 	{		
 		// run as fast as possible, simulation time is based on real time
-		var variableFrameRateMode:Boolean;
+		private var variableFrameRateMode:Boolean;
 
 		// fixed frame rate (ignored when in variable frame rate mode) in
 		// real-time mode this is a "target", in animation mode it is absolute
-		var fixedFrameRate:int;
+		private var fixedFrameRate:int;
 
 		// used for offline, non-real-time applications
-		var animationMode:Boolean;
+		private var animationMode:Boolean;
 
 		// is simulation running or paused?
-		var paused:Boolean;
+		private var paused:Boolean;
 		
 		// clock keeps track of "smoothed" running average of recent frame rates.
 		// When a fixed frame rate is used, a running average of "CPU load" is
 		// kept (aka "non-wait time", the percentage of each frame time (time
 		// step) that the CPU is busy).
-		var smoothedFPS:Number;
-		var smoothedUsage:Number;
+		private var smoothedFPS:Number;
+		private var smoothedUsage:Number;
 		
 		// clock state member variables and public accessors for them
 
 		// real "wall clock" time since launch
-		var totalRealTime:Number;
+		private var totalRealTime:Number;
 
 		// total time simulation has run
-		var totalSimulationTime:Number;
+		private var totalSimulationTime:Number;
 
 		// total time spent paused
-		var totalPausedTime:Number;
+		private var totalPausedTime:Number;
 
 		// sum of (non-realtime driven) advances to simulation time
-		var totalAdvanceTime:Number;
+		private var totalAdvanceTime:Number;
 
 		// interval since last simulation time
 		// (xxx does this need to be stored in the instance? xxx)
-		var elapsedSimulationTime:Number;
+		private var elapsedSimulationTime:Number;
 
 		// interval since last clock update time 
 		// (xxx does this need to be stored in the instance? xxx)
-		var elapsedRealTime:Number;
+		private var elapsedRealTime:Number;
 
 		// interval since last clock update,
 		// exclusive of time spent waiting for frame boundary when targetFPS>0
-		var elapsedNonWaitRealTime:Number;
+		private var elapsedNonWaitRealTime:Number;
 		
 		// "manually" advance clock by this amount on next update
-		var newAdvanceTime:Number;
+		private var newAdvanceTime:Number;
 		
-		var instance:Number;
+		private var instance:Number;
 
 		// constructor
 		public function Clock()
@@ -206,7 +206,7 @@ package tabinda.papersteer
 
 		// force simulation time ahead, ignoring passage of real time.
 		// Used for OpenSteerDemo's "single step forward" and animation mode
-		function AdvanceSimulationTimeOneFrame():Number
+		private function AdvanceSimulationTimeOneFrame():Number
 		{
 			// decide on what frame time is (use fixed rate, average for variable rate)
 			var fps:Number = (VariableFrameRateMode ? SmoothedFPS : FixedFrameRate);
@@ -219,7 +219,7 @@ package tabinda.papersteer
 			return frameTime;
 		}
 
-		function AdvanceSimulationTime(seconds:Number):void
+		private function AdvanceSimulationTime(seconds:Number):void
 		{
 			if (seconds < 0)
 				throw new ArgumentError("Negative argument to advanceSimulationTime." + " seconds");
@@ -228,7 +228,7 @@ package tabinda.papersteer
 		}
 
 		// "wait" until next frame time
-		function FrameRateSync():void
+		private function FrameRateSync():void
 		{
 			// when in real time fixed frame rate mode
 			// (not animation mode and not variable frame rate mode)
@@ -254,7 +254,7 @@ package tabinda.papersteer
 			return fixedFrameRate;
 		}
 		
-		public function set FixedFrameRate(val:int)
+		public function set FixedFrameRate(val:int):void
 		{
 			fixedFrameRate = val;
 		}
@@ -264,7 +264,7 @@ package tabinda.papersteer
 			return animationMode; 
 		}
 		
-		public function set AnimationMode(val:Boolean)
+		public function set AnimationMode(val:Boolean):void
 		{
 			animationMode = val; 
 		}
@@ -274,7 +274,7 @@ package tabinda.papersteer
 			return variableFrameRateMode; 
 		}
 		
-		public function set VariableFrameRateMode(val:Boolean)
+		public function set VariableFrameRateMode(val:Boolean):void
 		{
 			variableFrameRateMode = val; 
 		}
@@ -289,12 +289,12 @@ package tabinda.papersteer
 			return paused;
 		}
 		
-		public function set PausedState(val:Boolean)
+		public function set PausedState(val:Boolean):void
 		{
 			paused = val; 
 		}
 
-		function UpdateSmoothedRegisters():void
+		private function UpdateSmoothedRegisters():void
 		{
 			var rate:Number = SmoothingRate;
 			if (elapsedRealTime > 0)

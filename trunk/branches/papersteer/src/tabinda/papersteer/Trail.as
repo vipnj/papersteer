@@ -32,29 +32,33 @@
 
 package tabinda.papersteer
 {
-	/// <summary>
-	/// Provides support to visualize the recent path of a vehicle.
-	/// </summary>
+	/**
+	 * Provides support to visualize the recent path of a vehicle.
+	 */
 	public class Trail
 	{
-		var currentIndex:int;			// Array index of most recently recorded point
-		var duration:Number;				// Duration (in seconds) of entire trail
-		var sampleInterval:Number;		// Desired interval between taking samples
-		var lastSampleTime:Number;		// Global time when lat sample was taken
-		var dottedPhase:int;			// Dotted line: draw segment or not
-		var currentPosition:Vector3;	// Last reported position of vehicle
-		var vertices:Vector.<Vector3>;			// Array (ring) of recent points along trail
-		var flags:Vector.<int>;				// Array (ring) of flag bits for trail points
-		var trailColor:uint;			// Color of the trail
-		var tickColor:uint;			// Color of the ticks
-
-		/// <summary>
-		/// Initializes a new instance of Trail.
-		/// </summary>
-		/// <param name="duration">The amount of time the trail represents.</param>
-		/// <param name="vertexCount">The number of smaples along the trails length.</param>
+		private var currentIndex:int;			// Array index of most recently recorded point
+		private var duration:Number;			// Duration (in seconds) of entire trail
+		private var sampleInterval:Number;		// Desired interval between taking samples
+		private var lastSampleTime:Number;		// Global time when lat sample was taken
+		private var dottedPhase:int;			// Dotted line: draw segment or not
+		private var currentPosition:Vector3;	// Last reported position of vehicle
+		private var vertices:Vector.<Vector3>;	// Array (ring) of recent points along trail
+		private var flags:Vector.<int>;			// Array (ring) of flag bits for trail points
+		private var trailColor:uint;			// Color of the trail
+		private var tickColor:uint;				// Color of the ticks
+		
+		/**
+		 * Initializes a new instance of Trail
+		 *
+		 * @param ...args
+		 * @param duration The amount of time the trail represents.
+		 * @param vertexCount The number of samples along the trails length
+		 */
 		public function Trail(...args):void
 		{
+			//trace("Trail.constructor",args[0] is Number, args[1] is int);
+			
 			if (args.length == 2)
 			{
 				this.duration = args[0];
@@ -91,37 +95,37 @@ package tabinda.papersteer
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the color of the trail.
-		/// </summary>
+		/**
+		 * Gets or sets the color of the trail.
+		 */
 		public function get TrailColor():uint
 		{
 			return trailColor;
 		}
 		
-		public function set TrailColor(val:uint)
+		public function set TrailColor(val:uint):void
 		{
 			trailColor = val;
 		}
 
-		/// <summary>
-		/// Gets or sets the color of the ticks.
-		/// </summary>
+		/**
+		 * Gets or sets the color of the ticks.
+		 */
 		public function get TickColor():uint
 		{
 			return tickColor;
 		}
 		
-		public function set TickColor(val:uint)
+		public function set TickColor(val:uint):void
 		{
 			tickColor = val;
 		}
 
-		/// <summary>
-		/// Records a position for the current time, called once per update.
-		/// </summary>
-		/// <param name="currentTime"></param>
-		/// <param name="position"></param>
+		/**
+		 * Records a position for the current time, called once per update.
+		 * @param	currentTime
+		 * @param	position
+		 */
 		public function Record(currentTime:Number, position:Vector3):void
 		{
 			var timeSinceLastTrailSample:Number = currentTime - lastSampleTime;
@@ -137,9 +141,10 @@ package tabinda.papersteer
 			currentPosition = position;
 		}
 
-		/// <summary>
-		/// Draws the trail as a dotted line, fading away with age.
-		/// </summary>
+		/**
+		 * Draws the trail as a dotted line, fading away with age.
+		 * @param	drawer
+		 */
 		public function Draw(drawer:IDraw):void
 		{
 			var index:int = currentIndex;
@@ -172,10 +177,10 @@ package tabinda.papersteer
 				index = next;
 			}
 		}
-
-		/// <summary>
-		/// Clear trail history. Used to prevent long streaks due to teleportation.
-		/// </summary>
+		
+		/**
+		 * Clear trail history. Used to prevent long streaks due to teleportation.
+		 */
 		public function Clear():void
 		{
 			currentIndex = 0;

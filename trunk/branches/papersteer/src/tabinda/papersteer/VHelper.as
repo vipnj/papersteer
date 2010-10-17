@@ -73,6 +73,8 @@ package tabinda.papersteer
 		// receives vector:Vector3, angle:Number, sin:Number, cos:Number
 		public static function RotateAboutGlobalY(...args):Array
 		{
+			trace("VHelper.RotateAboutGlobalY",args[0] is Number, args[1] is Number, args[2] is Number, args[3] is Number);
+			
 			if (args.length == 4)
 			{
 				// is both are zero, they have not be initialized yet

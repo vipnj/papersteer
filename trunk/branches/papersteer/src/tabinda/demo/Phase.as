@@ -32,6 +32,11 @@
 
 package tabinda.demo 
 {
+	/**
+	 * Animation Phase Enumeration
+	 * @author Mohammad Haseeb
+	 * @see Demo
+	 */
 	public final class Phase
 	{
 		public static const Overhead:int = 0;

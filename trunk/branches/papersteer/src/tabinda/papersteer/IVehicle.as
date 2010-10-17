@@ -31,7 +31,7 @@
 // ----------------------------------------------------------------------------
 
 package tabinda.papersteer
-{
+{	
 	public interface IVehicle extends ILocalSpace
 	{	
 		// mass (defaults to unity so acceleration=force)

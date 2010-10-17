@@ -32,18 +32,21 @@
 
 package tabinda.papersteer
 {
-	/** This class adds OpenSteerDemo-based graphical annotation functionality to a 
+	/** 
+	 *  This class adds OpenSteerDemo-based graphical annotation functionality to a 
 	 *  given base class, which is typically something that supports the AbstractVehicle interface.
+	 *  @author Mohammad Haseeb
 	 */
 	public class Annotation implements IAnnotationService
 	{
-		var trails:Vector.<Trail>;
-		var isenabled:Boolean;
+		private var trails:Vector.<Trail>;
+		private var isenabled:Boolean;
 
 		//HACK: change the IDraw to a IDrawService
 		public static  var drawer:IDraw;
 
-		/** constructor
+		/** 
+		 * constructor
 		 */
 		public function Annotation ()
 		{
@@ -51,7 +54,8 @@ package tabinda.papersteer
 			trails=new Vector.<Trail>();
 		}
 
-		/** Indicates whether annotation is enabled.
+		/** 
+		 * Indicates whether annotation is enabled.
 		 * @return Boolean
 		 */
 		public function get IsEnabled ():Boolean
@@ -259,7 +263,7 @@ package tabinda.papersteer
 
 			var aScale:Number=maxLengthAcceleration / vehicle.MaxForce;
 			var vScale:Number=maxLengthVelocity / vehicle.MaxSpeed;
-			var p:Vector3=vehicle.Position;
+			var p:Vector3 = vehicle.Position;
 
 			Line (p, Vector3.VectorAddition(p,Vector3.ScalarMultiplication(vScale,vehicle.Velocity)),vColor);
 			Line (p, Vector3.VectorAddition(p,Vector3.ScalarMultiplication(aScale,vehicle.Acceleration)),aColor);
