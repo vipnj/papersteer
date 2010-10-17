@@ -58,7 +58,7 @@ package tabinda.demo.plugins.Ctf
 			textMat.doubleSided = true;
 			textFont = new Font3D();
 			text3D = new Text3D("", new Eurostile, textMat);
-			text3D.scale = 2;
+			text3D.scale = 1;
 			
 			Demo.scene.addChild(text3D);
 			

@@ -37,8 +37,11 @@ package tabinda.demo
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.display.Sprite;
+	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.core.render.command.RenderTriangle;
+	import org.papervision3d.materials.special.VectorShapeMaterial;
 	import org.papervision3d.materials.WireframeMaterial;
+	import org.papervision3d.objects.special.VectorShape3D;
 	import org.papervision3d.Papervision3D;
 	
 	import org.papervision3d.core.proto.*;
@@ -60,6 +63,8 @@ package tabinda.demo
 		// Papervision3D variables
 		public static var colMaterial : ColorMaterial = new ColorMaterial(0x000000, 1);						// Color Material
 		public static var lines:Lines3D = new Lines3D(new LineMaterial(0x000000,1), "Lines");				// Lines Object that holds all the lines
+		
+		//public static var shapes:VectorShape3D = new VectorShape3D(new VectorShapeMaterial());
 		
 		public static function init():void
 		{
@@ -89,7 +94,6 @@ package tabinda.demo
 		// Draw a single OpenGL quadrangle given four Vector3 vertices, and color.
 		private static function iDrawQuadrangle( a:Vector3,  b:Vector3,  c:Vector3, d:Vector3,  color:uint):void
 		{
-			
 			//var p:Plane = new Plane(colMaterial, 5, 5, 1, 1);
 			//p.x = v.x;
 			//p.y = v.y;
@@ -113,7 +117,7 @@ package tabinda.demo
 			DrawCircleOrDisk(radius, axis, center, color, segments, filled, in3d);
 		}
 
-		public static function  DrawLine( startPoint:Vector3,  endPoint:Vector3,  color:uint):void
+		public static function DrawLine( startPoint:Vector3,  endPoint:Vector3,  color:uint):void
 		{
 			if (Demo.IsDrawPhase == true)
 			{
@@ -149,7 +153,7 @@ package tabinda.demo
 		// whose mid-line connects two given endpoints
 		public static function DrawXZWideLine( startPoint:Vector3, endPoint:Vector3,PathMesh:TriangleMesh3D,uvArr:Array, color:uint,width:Number):void
 		{
-			var offset:Vector3 = Vector3.VectorSubtraction(endPoint , startPoint);
+			/*var offset:Vector3 = Vector3.VectorSubtraction(endPoint , startPoint);
 			offset.fNormalize();
             var perp:Vector3 = localSpace.LocalRotateForwardToSide(offset);
 			var radius:Vector3 = Vector3.ScalarDivision(perp,width / 2);
@@ -165,8 +169,70 @@ package tabinda.demo
 			PathMesh.geometry.vertices.push(d);
 			
 			PathMesh.geometry.faces.push(new Triangle3D(PathMesh, new Array(a, b, c, d), new ColorMaterial(color), uvArr));
-						
+			*/			
 			//iDrawQuadrangle(a, b, c, d, color);
+			var gridX    :Number = 1;
+			var gridY    :Number = 1;
+			var gridX1   :Number = gridX + 1;
+			var gridY1   :Number = gridY + 1;
+	
+			var vertices :Array  = PathMesh.geometry.vertices;
+			var faces    :Array  = PathMesh.geometry.faces;
+	
+			var textureX :Number = width /2;
+			var textureY :Number = width /2;
+	
+			var iW       :Number = width / gridX;
+			var iH       :Number = width / gridY;
+	
+			// Vertices
+			for( var ix:int = 0; ix < gridX + 1; ix++ )
+			{
+				for( var iy:int = 0; iy < gridY1; iy++ )
+				{
+					var x :Number = ix * iW - textureX;
+					var y :Number = iy * iH - textureY;
+	
+					vertices.push( new Vertex3D( x, y, 0 ) );
+				}
+			}
+	
+			// Faces
+			var uvA :NumberUV;
+			var uvC :NumberUV;
+			var uvB :NumberUV;
+	
+			for(  ix = 0; ix < gridX; ix++ )
+			{
+				for(  iy= 0; iy < gridY; iy++ )
+				{
+					// Triangle A
+					var a:Vertex3D = vertices[ ix     * gridY1 + iy     ];
+					var c:Vertex3D = vertices[ ix     * gridY1 + (iy+1) ];
+					var b:Vertex3D = vertices[ (ix+1) * gridY1 + iy     ];
+	
+					uvA =  new NumberUV( ix     / gridX, iy     / gridY );
+					uvC =  new NumberUV( ix     / gridX, (iy+1) / gridY );
+					uvB =  new NumberUV( (ix+1) / gridX, iy     / gridY );
+	
+					faces.push(new Triangle3D(PathMesh, [ a, b, c ], new ColorMaterial(color) , [ uvA, uvB, uvC ] ) );
+	
+					// Triangle B
+					a = vertices[ (ix+1) * gridY1 + (iy+1) ];
+					c = vertices[ (ix+1) * gridY1 + iy     ];
+					b = vertices[ ix     * gridY1 + (iy+1) ];
+	
+					uvA =  new NumberUV( (ix+1) / gridX, (iy+1) / gridY );
+					uvC =  new NumberUV( (ix+1) / gridX, iy      / gridY );
+					uvB =  new NumberUV( ix      / gridX, (iy+1) / gridY );
+					
+					faces.push(new Triangle3D(PathMesh, [ a, b, c ], new ColorMaterial(color) , [ uvA, uvB, uvC ] ) );
+					
+					PathMesh.geometry.ready = true;
+				}
+			}
+			if(Papervision3D.useRIGHTHANDED)
+			PathMesh.geometry.flipFaces();
 		}
 
 		// draw a (filled-in, polygon-based) square checkerboard grid on the XZ
@@ -377,16 +443,12 @@ package tabinda.demo
 			var d:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			var e:Vertex3D = Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			
-			CtfMesh.geometry.faces.push(new Triangle3D(CtfMesh,new Array(a,d,e), new ColorMaterial(color), uvArr));
+			triArr[0].reset(CtfMesh, new Array(a, d, e), new ColorMaterial(color), uvArr);
 			
-			/*iDrawTriangle(Vector3.VectorAddition(Vector3.VectorAddition(p , f) , u),
-						  Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)),
-						  Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)),
-						   color);
-			
+			CtfMesh.geometry.faces.push(triArr[0]);			
 
 			// draw the circular collision boundary
-			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 20);*/
+			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 20);
 			
 			CtfMesh.geometry.ready = true;
 			if (Papervision3D.useRIGHTHANDED) CtfMesh.geometry.flipFaces();
@@ -468,41 +530,116 @@ package tabinda.demo
 		// specified by "filled" argument) and handles both special case 2d circles
 		// on the XZ plane or arbitrary circles in 3d space (as specified by "in3d"
 		// argument)
-		public static function DrawCircleOrDisk(radius:Number, axis:Vector3,  center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
+		public static function DrawCircleOrDisk(radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
 		{
-			if (Demo.IsDrawPhase == true)
+			if (Demo.IsDrawPhase())
 			{
-				var ls:LocalSpace = new LocalSpace();
+				var temp : Number3D = new Number3D(radius,0,0);
+				var tempcurve:Number3D = new Number3D(0,0,0);
+				var joinends : Boolean;
+				var i:int;
+				var pointcount : int;
+
+				var angle:Number = (0-360)/segments;
+				var curveangle : Number = angle/2;
+
+				tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+				tempcurve.rotateY(curveangle+0);
+
+				if(360-0<360)
+				{
+					joinends = false;
+					pointcount = segments+1;
+				}
+			   else
+				{
+					joinends = true;
+					pointcount = segments;
+				}
+			   
+				temp.rotateY(0);
+
+				var vertices:Array = new Array();
+				var curvepoints:Array = new Array();
+
+				for(i = 0; i< pointcount;i++)
+				{
+					vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+					curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+					temp.rotateY(angle);
+					tempcurve.rotateY(angle);
+				}
+
+				for(i = 0; i < segments ;i++)
+				{
+					var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+					line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+					lines.addLine(line);
+				}
+				
+				//FIXME: Alternative 2D Drawing technique using VectorShape3D - Not Perfect
+				/*var ls:LocalSpace = new LocalSpace();
 				if (in3d)
 				{
 					// define a local space with "axis" as the Y/up direction
 					// (XXX should this be a method on  LocalSpace?)
 					var unitAxis:Vector3 = axis;
                     unitAxis.fNormalize();
-					var unitPerp:Vector3 = Vector3.FindPerpendicularIn3d(axis);
+					var unitPerp:Vector3 = VHelper.FindPerpendicularIn3d(axis);
                     unitPerp.fNormalize();
 					ls.Up = unitAxis;
 					ls.Forward = unitPerp;
 					ls.Position = (center);
 					ls.SetUnitSideFromForwardAndUp();
 				}
+				
+				shapes.graphics.lineStyle(2, color, 1);
+				// make disks visible (not culled) from both sides 
+				if (filled)
+				{
+					shapes.graphics.beginFill(color);
+					//circle.material.doubleSided = true;
+				}
 
 				// point to be rotated about the (local) Y axis, angular step size
 				var pointOnCircle:Vector3 = new Vector3(radius, 0, 0);
-				var step:Number = Number(2 * Math.PI) / Number(segments);
+				var step:Number = Number((2 * Math.PI)) / Number(segments);
 
+				// for the filled case, first emit the center point
+				if (in3d)
+				{
+					shapes.graphics.moveTo(ls.Position.x, ls.Position.y);
+				}
+                else
+				{
+					shapes.graphics.moveTo(center.x,center.y);
+				}
+				
 				// rotate p around the circle in "segments" steps
 				var sin:Number = 0;
 				var cos:Number = 0;
 				var vertexCount:int = filled ? segments + 1 : segments;
 				for (var i:int = 0; i < vertexCount; i++)
 				{
+					// emit next point on circle, either in 3d (globalized out
+					// of the local space), or in 2d (offset from the center)
+			
+					var a:Vector3 = Vector3.VectorAddition(pointOnCircle, center);
+					if (in3d)
+					{
+						shapes.graphics.lineTo(ls.GlobalizePosition(pointOnCircle).x, ls.GlobalizePosition(pointOnCircle).y);
+					}
+                    else
+					{
+						shapes.graphics.lineTo(a.x,a.y);
+					}
+
 					// rotate point one more step around circle
-                    var temp:Array = VHelper.RotateAboutGlobalY(pointOnCircle, step, sin, cos);
-					sin = temp[0];
-					cos = temp[1];
+					var temp:Array = VHelper.RotateAboutGlobalY(pointOnCircle, step, sin, cos);
 					pointOnCircle = temp[2];
 				}
+
+				if (filled) shapes.graphics.endFill();*/
 			}
 			else
 			{
@@ -549,12 +686,12 @@ package tabinda.demo
 
 		public static function GetWindowWidth():Number
 		{
-			return 1024;
+			return Demo.WindowWidth;
 		}
 
 		public static function GetWindowHeight():Number
 		{
-			return 640;
+			return Demo.WindowHeight;
 		}
 	}
 }

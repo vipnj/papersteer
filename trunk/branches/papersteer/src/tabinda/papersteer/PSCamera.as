@@ -36,6 +36,7 @@ package tabinda.papersteer
 	import org.papervision3d.cameras.DebugCamera3D;
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.view.Viewport3D;
+	import tabinda.demo.Demo;
 	
 	public class PSCamera extends LocalSpace
 	{

@@ -68,6 +68,7 @@ package tabinda.papersteer
 		public function SimpleVehicle ()
 		{
 			// set inital state
+			// set inital state
 			Reset ();
 
 			// maintain unique serial numbers
