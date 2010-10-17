@@ -35,12 +35,12 @@ package tabinda.papersteer
 	public class BruteForceProximityDatabase implements IProximityDatabase
 	{
 		// Contains all tokens in database
-		var group:Vector.<TokenType>;
+		private var _group:Vector.<TokenType>;
 
 		// constructor
 		public function BruteForceProximityDatabase():void
 		{
-			group = new Vector.<TokenType>();
+			_group = new Vector.<TokenType>();
 		}
 
 		// allocate a token to represent a given client object in this database
@@ -54,5 +54,79 @@ package tabinda.papersteer
 		{
 			return group.length;
 		}
+		
+		public function get group():Vector.<TokenType> { return _group; }
+		
+		public function set group(value:Vector.<TokenType>):void 
+		{
+			_group = value;
+		}
+	}
+}
+
+import flash.system.System;
+import tabinda.papersteer.*;
+
+class TokenType implements ITokenForProximityDatabase
+{
+	private var bfpd:BruteForceProximityDatabase;
+	private var obj:Object;
+	private var position:Vector3;
+
+	// constructor
+	public function TokenType (parentObject:Object,pd:BruteForceProximityDatabase):void
+	{
+		// store pointer to our associated database and the obj this
+		// token represents, and store this token on the database's vector
+		bfpd=pd;
+		obj=parentObject;
+		bfpd.group.push(this);
+		position = Vector3.Zero;
+	}
+
+	// destructor
+	public function Dispose ():void
+	{
+		Dispose2 (true);
+		System.gc();
+	}
+	protected function Dispose2 (disposing:Boolean):void
+	{
+		if (obj != null)
+		{
+			bfpd.group.some(check);
+			obj=null;
+		}
+	}
+	
+	private function check(item:TokenType, index:int, v:Vector.<TokenType>):Boolean
+	{
+		return item == this;
+	}
+
+	// the client obj calls this each time its position changes
+	public function UpdateForNewPosition (newPosition:Vector3):void
+	{
+		position=newPosition;
+	}
+
+	// find all neighbors within the given sphere (as center and radius)
+	public function FindNeighbors (center:Vector3,radius:Number,results:Vector.<IVehicle>):Vector.<IVehicle>
+	{
+		// loop over all tokens
+		var r2:Number=radius * radius;
+		for (var i:int=0; i < bfpd.group.length; i++)
+		{
+			//trace("BruteForceProximityDatabase.FindNeighbors",center,bfpd.group[i].obj);
+			var offset:Vector3=Vector3.VectorSubtraction(center , bfpd.group[i].position);
+			var d2:Number=offset.SquaredMagnitude();
+
+			// push onto result vector when within given radius
+			if (d2 < r2)
+			{
+				results.push (bfpd.group[i].obj);
+			}
+		}
+		return results;
 	}
 }

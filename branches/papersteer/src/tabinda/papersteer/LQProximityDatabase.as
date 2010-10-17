@@ -95,7 +95,7 @@ package tabinda.papersteer
 	/// </summary>
 	public class LQProximityDatabase implements IProximityDatabase
 	{
-		var lq:LQDatabase;
+		private var _lq:LQDatabase;
 
 		// constructor
         public function LQProximityDatabase(center:Vector3, dimensions:Vector3, divisions:Vector3):void
@@ -103,7 +103,7 @@ package tabinda.papersteer
 			var halfsize:Vector3 = Vector3.ScalarMultiplication(0.5,dimensions);
 			var origin:Vector3 = Vector3.VectorSubtraction(center, halfsize);
 
-			lq = new LQDatabase(origin, dimensions, int(Math.round(divisions.x)), int(Math.round(divisions.y)), int(Math.round(divisions.z)));
+			_lq = new LQDatabase(origin, dimensions, int(Math.round(divisions.x)), int(Math.round(divisions.y)), int(Math.round(divisions.z)));
 		}
 
 		// allocate a token to represent a given client obj in this database
@@ -119,11 +119,72 @@ package tabinda.papersteer
 			lq.MapOverAllObjects(count);
 			return count;
 		}
+		
+		public function get lq():LQDatabase { return _lq; }
+		
+		public function set lq(value:LQDatabase):void 
+		{
+			_lq = value;
+		}
 
 		public static function CounterCallBackFunction(clientObject:Object,  distanceSquared:Number,clientQueryState:Object):void
 		{
 			var counter:int = int(clientQueryState);
 			counter++;
 		}
+	}
+}
+import flash.system.System;
+import tabinda.papersteer.*;
+
+class TokenType2 implements ITokenForProximityDatabase
+{
+	private var proxy:ClientProxy;
+	private var lq:LQDatabase;
+
+	// constructor
+	public function TokenType2(parentObject:Object, lqsd:LQProximityDatabase):void
+	{
+		proxy = new ClientProxy(parentObject);
+		lq = lqsd.lq;
+	}
+
+	public function Dispose():void
+	{
+		Dispose2(true);
+		System.gc();
+	}
+	protected function Dispose2(disposing:Boolean):void
+	{
+		if (proxy != null)
+		{
+			//System.Diagnostics.Debug.Assert(disposing == true);
+
+			// remove this token from the database's vector
+			proxy = lq.RemoveFromBin(proxy);
+			proxy = null;
+		}
+	}
+
+	// the client obj calls this each time its position changes
+	public function UpdateForNewPosition(p:Vector3):void
+	{
+		proxy = lq.UpdateForNewLocation(proxy, p);
+	}
+
+	// find all neighbors within the given sphere (as center and radius)
+	public function FindNeighbors(center:Vector3, radius:Number, results:Vector.<IVehicle>):Vector.<IVehicle> 
+	{
+		lq.MapOverAllObjectsInLocality(center, radius, perNeighborCallBackFunction, results);
+		return results;
+	}
+
+	// called by LQ for each clientObject in the specified neighborhood:
+	// push that clientObject onto the ContentType vector in void*
+	// clientQueryState
+	public static function perNeighborCallBackFunction(clientObject:Object, distanceSquared:Number, clientQueryState:Object):void
+	{
+		var results:Vector = clientQueryState as Vector;
+		results.push(Object(clientObject));
 	}
 }

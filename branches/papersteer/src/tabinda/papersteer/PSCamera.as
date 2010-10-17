@@ -32,8 +32,10 @@
 
 package tabinda.papersteer
 {	
-	import org.papervision3d.cameras.FreeCamera3D;
+	import org.papervision3d.cameras.Camera3D;
+	import org.papervision3d.cameras.DebugCamera3D;
 	import org.papervision3d.core.math.Number3D;
+	import org.papervision3d.view.Viewport3D;
 	
 	public class PSCamera extends LocalSpace
 	{
@@ -42,8 +44,8 @@ package tabinda.papersteer
 		// xxx the camera view -- so as not to make the camera behave
 		// xxx differently (which is to say, correctly) during mouse adjustment.
 		
-		var ls:LocalSpace;
-		public var pv3dcamera:FreeCamera3D;
+		private var ls:LocalSpace;
+		public var pv3dcamera:Camera3D;
 		
 		// "look at" point, center of view
 		public var Target:Vector3;
@@ -84,11 +86,9 @@ package tabinda.papersteer
 		}
 
 		// constructor
-		public function PSCamera ():void
+		public function PSCamera (viewport:Viewport3D):void
 		{
-			pv3dcamera = new FreeCamera3D();
-			pv3dcamera.z = 0;
-			pv3dcamera.zoom = 15;
+			pv3dcamera = new DebugCamera3D(viewport);
 			Reset ();
 		}
 
@@ -97,10 +97,6 @@ package tabinda.papersteer
 		{
 			// reset camera's position and orientation
 			ResetLocalSpace ();
-			
-			pv3dcamera.x = 0;
-			pv3dcamera.y = 0;
-			pv3dcamera.z = 0;
 
 			ls=new LocalSpace();
 
@@ -223,8 +219,8 @@ package tabinda.papersteer
 			SmoothCameraMove (newPosition,newTarget,newUp,elapsedTime);
 
 			//TODO: set camera in draw module
-			//pv3dcamera.lookAt(Target, new Number3D(Up.x, Up.y, Up.z));
-			//FIXME: drawCameraLookAt(position(), target, up());
+			//pv3dcamera.lookAt(SimpleVehicle(v).displayObject, new Number3D(Up.x, Up.y, Up.z));
+			//drawCameraLookAt(position(), target, up());
 		}
 
 		public function callUpdate (currentTime:Number,elapsedTime:Number):void
@@ -302,6 +298,7 @@ package tabinda.papersteer
 				Target = newTarget;
 				Up=newUp;
 			}
+			pv3dcamera.position = new Number3D(Position.x, Position.y, Position.z);
 		}
 
 		public function DoNotSmoothNextMove():void

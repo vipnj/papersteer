@@ -33,6 +33,8 @@
 package tabinda.papersteer
 { 
 	import org.papervision3d.core.geom.renderables.Vertex3D;
+	import org.papervision3d.core.math.Number3D;
+	
 	public class Vector3
 	{
 		//*********************************************************************************	
@@ -46,9 +48,8 @@ package tabinda.papersteer
 		
 		// Special points in Vector Space
 		public static const Zero:Vector3 = new Vector3(0, 0, 0);
-		public static const Side:Vector3 = new Vector3(-1, 0, 0);
 		public static const Up:Vector3 = new Vector3(0, 1, 0);
-		public static const Left:Vector3 = new Vector3( -1, 0, 0);
+		public static const Left:Vector3 = new Vector3(-1, 0, 0);
 		public static const Right:Vector3 = new Vector3(1, 0, 0);
 		public static const Forward:Vector3 = new Vector3(0, 0, -1);
 		public static const Backward:Vector3 = new Vector3(0, 0, 1);
@@ -63,26 +64,11 @@ package tabinda.papersteer
 		//*********************************************************************************	
 
 		// A mutliple constructor handler
-		public function Vector3(... args) 
+		public function Vector3(_x:Number =0.0, _y:Number = 0.0, _z:Number =0.0) 
 		{
-			if(args.length == 3) 
-			{
-				x = args[0]; 
-				y = args[1]; 
-				z = args[2];
-			} 
-			else if(args.length == 2) 
-			{
-				x = args[0]; 
-				y = args[1];
-				z = 0;
-			} 
-			else 
-			{
-				x = 0; 
-				y = 0; 
-				z = 0;		
-			}
+			x = _x;
+			y = _y;
+			z = _z;
 		}
 		
 		// This serves as an alternate Constructor
@@ -175,7 +161,7 @@ package tabinda.papersteer
 		}
 		public static function isNotEqual(lvec:Vector3, rvec:Vector3):Boolean
 		{
-			return !(isEqual(lvec, rvec));
+			return (lvec.x != rvec.x) && (lvec.y != rvec.y) && (lvec.z != rvec.z);
 		}
 
 		public static function Distance(lvec:Vector3, rvec:Vector3):Number
@@ -225,6 +211,8 @@ package tabinda.papersteer
 		// takes angle:Number, sin:Number, cos:Number
 		public function RotateAboutGlobalY(...args):Vector3
 		{
+			trace("Vector3.RotateAboutGlobalY",args[0] is Number, args[1] is Number, args[2] is Number);
+			
 			if (args.length == 3)
 			{
 				// is both are zero, they have not be initialized yet
@@ -255,14 +243,14 @@ package tabinda.papersteer
 				return this;
 		}
 
-		public function ToVector3():Vector3
-		{
-			return new Vector3(this.x, this.y, this.z);
-		}
-		
 		public function ToVertex3D():Vertex3D
 		{
 			return new Vertex3D(this.x, this.y, this.z);
+		}
+		
+		public function ToNumber3D():Number3D
+		{
+			return new Number3D(this.x, this.y, this.z);
 		}
 
 		// ----------------------------------------------------------------------------

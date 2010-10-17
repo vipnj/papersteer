@@ -45,19 +45,19 @@ package tabinda.papersteer
 			return null;
 		}
 		// the origin is the super-brick corner minimum coordinates
-		var Origin:Vector3;
+		private var Origin:Vector3;
 
 		// length of the edges of the super-brick
-		var Size:Vector3;
+		private var Size:Vector3;
 
 		// number of sub-brick divisions in each direction
-		var DivX:int;
-		var DivY:int;
-		var DivZ:int;
+		private var DivX:int;
+		private var DivY:int;
+		private var DivZ:int;
 
 		// pointer to an array of pointers, one for each bin
 		// The last index is the extra bin for "everything else" (points outside super-brick)
-		var bins:Vector.<ClientProxy>;
+		private var bins:Vector.<ClientProxy>;
 
 		// extra bin for "everything else" (points outside super-brick)
 		//ClientProxy other;
@@ -259,7 +259,7 @@ package tabinda.papersteer
 							   func:Function,
 							   clientQueryState:Object,
 							   minBinX:int, minBinY:int, minBinZ:int,
-							   maxBinX:int, maxBinY:int, maxBinZ:int)
+							   maxBinX:int, maxBinY:int, maxBinZ:int):void
 		{
 			var i:int, j:int, k:int;
 			var iindex:int, jindex:int, kindex:int;
@@ -361,7 +361,7 @@ package tabinda.papersteer
 			/* Null out prev, next and bin pointers of this obj. */
 			obj.Prev = null;
 			obj.Next = null;
-			obj.Bin = null;
+			obj.Bin = 0;
 			
 			return obj;
 		}
@@ -377,7 +377,7 @@ package tabinda.papersteer
 		}
 
 		/* public helper function */
-		function RemoveAllObjectsInBin(bin:ClientProxy):void
+		private function RemoveAllObjectsInBin(bin:ClientProxy):void
 		{
 			while (bin != null)
 			{
@@ -385,7 +385,7 @@ package tabinda.papersteer
 			}
 		}
 
-		static function FindNearestHelper(clientObject:Object, distanceSquared:Number,clientQueryState:Object):void
+		private static function FindNearestHelper(clientObject:Object, distanceSquared:Number,clientQueryState:Object):void
 		{
 			var fns:FindNearestState = FindNearestState(clientQueryState);
 			

@@ -395,8 +395,8 @@ package tabinda.papersteer
 		}
 
 		/// XXX globals only for the sake of graphical annotation
-        var hisPositionAtNearestApproach:Vector3;
-        var ourPositionAtNearestApproach:Vector3;
+        private var hisPositionAtNearestApproach:Vector3;
+        private var ourPositionAtNearestApproach:Vector3;
 
 		// ------------------------------------------------------------------------
 		// avoidance of "close neighbors" -- used only by steerToAvoidNeighbors
@@ -595,8 +595,8 @@ package tabinda.papersteer
 			var p:int = Utilities.IntervalComparison(parallelness, -0.707, 0.707);
 
 			var timeFactor:Number = 0;   // to be filled in below
-			var color:uint = 0x000000;// Colors.Black; // to be filled in below (xxx just for debugging)
-
+			var color:uint = Colors.Black; // to be filled in below (xxx just for debugging)
+			
 			// Break the pursuit into nine cases, the cross product of the
 			// quarry being [ahead, aside, or behind] us and heading
 			// [parallel, perpendicular, or anti-parallel] to us.
@@ -607,15 +607,15 @@ package tabinda.papersteer
 				{
 				case +1:          // ahead, parallel
 					timeFactor = 4;
-					color = 0x000000;// Colors.Black;
+					color = Colors.Black;
 					break;
 				case 0:           // ahead, perpendicular
 					timeFactor = 1.8;
-					color = 0x999999;// Colors.Gray;
+					color = Colors.Gray;
 					break;
 				case -1:          // ahead, anti-parallel
 					timeFactor = 0.85;
-					color = 0xFFFFFF;// Colors.White;
+					color = Colors.White;
 					break;
 				}
 				break;
@@ -624,15 +624,15 @@ package tabinda.papersteer
 				{
 				case +1:          // aside, parallel
 					timeFactor = 1;
-					color = 0xFF0000;// Colors.Red;
+					color = Colors.Red;
 					break;
 				case 0:           // aside, perpendicular
 					timeFactor = 0.8;
-					color = 0xFFFF00;// Colors.Yellow;
+					color = Colors.Yellow;
 					break;
 				case -1:          // aside, anti-parallel
 					timeFactor = 4;
-					color = 0x00FF00;// Colors.Green;
+					color = Colors.Green;
 					break;
 				}
 				break;
@@ -641,15 +641,15 @@ package tabinda.papersteer
 				{
 				case +1:          // behind, parallel
 					timeFactor = 0.5;
-					color = 0x33CCCC;// Colors.Cyan;
+					color = Colors.Cyan;
 					break;
 				case 0:           // behind, perpendicular
 					timeFactor = 2;
-					color = 0x0000FF;// Colors.Blue;
+					color = Colors.Blue;
 					break;
 				case -1:          // behind, anti-parallel
 					timeFactor = 2;
-					color = 0x0000F0;// Colors.Magenta;
+					color = Colors.Magenta;
 					break;
 				}
 				break;

@@ -37,7 +37,7 @@ package tabinda.papersteer
 	 */ 
 	public class SphericalObstacle implements IObstacle
 	{
-		var seenfrom:int;
+		private var seenfrom:int;
 
 		public var Radius:Number;
         public var Center:Vector3;
@@ -45,6 +45,8 @@ package tabinda.papersteer
 		// constructor
 		public function SphericalObstacle(...args):void
 		{
+			trace("SphericalObstacle.constructor",args[0] is Number, args[1] is Vector3);
+			
 			if (args.length == 2)
 			{
 				Radius = args[0];+0.0

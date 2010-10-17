@@ -37,7 +37,9 @@ package tabinda.demo
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.display.Sprite;
+	import org.papervision3d.core.render.command.RenderTriangle;
 	import org.papervision3d.materials.WireframeMaterial;
+	import org.papervision3d.Papervision3D;
 	
 	import org.papervision3d.core.proto.*;
 	import org.papervision3d.core.math.NumberUV;
@@ -54,14 +56,19 @@ package tabinda.demo
 	{
 		public static var localSpace:LocalSpace = new LocalSpace();
 		public static var demo:Demo = null;
-	
+		
 		// Papervision3D variables
 		public static var colMaterial : ColorMaterial = new ColorMaterial(0x000000, 1);						// Color Material
-		public static var lines:Lines3D = new Lines3D(new LineMaterial(0x000000,0.1), "Lines");				// Lines Object that holds all the lines
+		public static var lines:Lines3D = new Lines3D(new LineMaterial(0x000000,1), "Lines");				// Lines Object that holds all the lines
+		
+		public static function init():void
+		{
+			
+		}
 		
 		public static function iDrawLine(startPoint:Vector3, endPoint:Vector3, color:uint ):void
 		{
-			lines.addLine(new Line3D(lines, new LineMaterial(color,1), 0.1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+			lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
 		}
 		
 		public function BeginDoubleSidedDrawing(mat:MaterialObject3D):void
@@ -74,14 +81,15 @@ package tabinda.demo
 			mat.doubleSided = false;
 		}
 
-		static function iDrawTriangle(a:Vector3, b:Vector3, c:Vector3, color:uint):void
+		private static function iDrawTriangle(a:Vector3, b:Vector3, c:Vector3, color:uint):void
 		{
-			//var tri:Triangle3D = new Triangle3D(new DisplayObject3D(), new Array([new Vertex3D(a.x, a.y, a.z), new Vertex3D(b.x, b.y, b.z), new Vertex3D(c.x, c.y, c.z)]), new MaterialObject3D());
+			//var tri:Triangle3D = new Triangle3D(new DisplayObject3D(), new Array([new Vector3(a.x, a.y, a.z), new Vector3(b.x, b.y, b.z), new Vector3(c.x, c.y, c.z)]), new MaterialObject3D());
 		}
 
 		// Draw a single OpenGL quadrangle given four Vector3 vertices, and color.
-		static function iDrawQuadrangle( a:Vector3,  b:Vector3,  c:Vector3, d:Vector3,  color:uint):void
+		private static function iDrawQuadrangle( a:Vector3,  b:Vector3,  c:Vector3, d:Vector3,  color:uint):void
 		{
+			
 			//var p:Plane = new Plane(colMaterial, 5, 5, 1, 1);
 			//p.x = v.x;
 			//p.y = v.y;
@@ -132,7 +140,7 @@ package tabinda.demo
 		}
 
 		// draw 2d lines in screen space: x and y are the relevant coordinates
-		public static function  Draw2dLine(startPoint:Vector3,  endPoint,color:uint):void
+		public static function  Draw2dLine(startPoint:Vector3,  endPoint:Vector3,color:uint):void
 		{
 			iDrawLine(startPoint, endPoint, color);
 		}
@@ -168,56 +176,71 @@ package tabinda.demo
 		// number of subsquares along each edge (for example a standard checkboard
 		// has eight), "center" is the 3d position of the center of the grid,
 		// color1 and color2 are used for alternating subsquares.)
-		public static function DrawXZCheckerboardGrid(GridMesh:TriangleMesh3D,uvArr1:Array,uvArr2:Array,size:Number, subsquares:int,  center:Vector3, color1:uint,  color2:uint):void
-		{
-			var half:Number = size / 2;
-			var spacing:Number = size / subsquares;
-
-			var flag1:Boolean = false;
-			var p:Number = -half;
-			var corner:Vector3 = new Vector3();
-		
-			for (var i:int = 0; i < subsquares; i++)
+		public static function DrawXZCheckerboardGrid(GridMesh:TriangleMesh3D,size:Number, subsquares:int,  center:Vector3, color1:uint,  color2:uint):void
+		{			
+			var gridX    :Number = subsquares;
+			var gridY    :Number = subsquares;
+			var gridX1   :Number = gridX + 1;
+			var gridY1   :Number = gridY + 1;
+	
+			var vertices :Array  = GridMesh.geometry.vertices;
+			var faces    :Array  = GridMesh.geometry.faces;
+	
+			var textureX :Number = size /2;
+			var textureY :Number = size /2;
+	
+			var iW       :Number = size / gridX;
+			var iH       :Number = size / gridY;
+	
+			// Vertices
+			for( var ix:int = 0; ix < gridX + 1; ix++ )
 			{
-				var flag2:Boolean = flag1;
-				var q:Number = -half;
-				for (var j:int = 0; j < subsquares; j++)
+				for( var iy:int = 0; iy < gridY1; iy++ )
 				{
-					corner.x = p;
-					corner.y = 0;
-					corner.z = q;
-
-					corner = Vector3.VectorAddition(corner, center);
-					
-					trace(corner.tostring(),
-													Vector3.VectorAddition(corner , new Vector3(spacing, 0, 0)).tostring(),
-													Vector3.VectorAddition(corner , new Vector3(spacing, 0, spacing)).tostring(),
-													Vector3.VectorAddition(corner , new Vector3(0, 0, spacing)).tostring());
-					GridMesh.geometry.vertices.push(corner.ToVertex3D(),
-													Vector3.VectorAddition(corner , new Vector3(spacing, 0, 0)).ToVertex3D(),
-													Vector3.VectorAddition(corner , new Vector3(spacing, 0, spacing)).ToVertex3D(),
-													Vector3.VectorAddition(corner , new Vector3(0, 0, spacing)).ToVertex3D());
-					
-					GridMesh.geometry.faces.push(new Triangle3D(GridMesh,new Array(corner.ToVertex3D(),
-									 Vector3.VectorAddition(corner , new Vector3(spacing, 0, 0)).ToVertex3D(),
-									 Vector3.VectorAddition(corner , new Vector3(spacing, 0, spacing)).ToVertex3D()), flag2 ? new ColorMaterial(color1) : new ColorMaterial(color2), uvArr1));
-					GridMesh.geometry.faces.push(new Triangle3D(GridMesh, new Array(corner.ToVertex3D(),
-									 Vector3.VectorAddition(corner , new Vector3(0, 0, spacing)).ToVertex3D(),
-									 Vector3.VectorAddition(corner , new Vector3(spacing, 0, 0)).ToVertex3D()), flag2 ? new ColorMaterial(color1) : new ColorMaterial(color2), uvArr2));
-									 
-					/*iDrawQuadrangle(corner,
-									 Vector3.VectorAddition(corner , new Vector3(spacing, 0, 0)),
-									 Vector3.VectorAddition(corner , new Vector3(spacing, 0, spacing)),
-									 Vector3.VectorAddition(corner , new Vector3(0, 0, spacing)),
-									 flag2 ? color1 : color2);*/
-					flag2 = !flag2;
-					q += spacing;
+					var x :Number = ix * iW - textureX;
+					var y :Number = iy * iH - textureY;
+	
+					vertices.push( new Vertex3D( x, y, 0 ) );
 				}
-				flag1 = !flag1;
-				p += spacing;
 			}
-			GridMesh.geometry.flipFaces();
+	
+			// Faces
+			var uvA :NumberUV;
+			var uvC :NumberUV;
+			var uvB :NumberUV;
+	
+			for(  ix = 0; ix < gridX; ix++ )
+			{
+				for(  iy= 0; iy < gridY; iy++ )
+				{
+					// Triangle A
+					var a:Vertex3D = vertices[ ix     * gridY1 + iy     ];
+					var c:Vertex3D = vertices[ ix     * gridY1 + (iy+1) ];
+					var b:Vertex3D = vertices[ (ix+1) * gridY1 + iy     ];
+	
+					uvA =  new NumberUV( ix     / gridX, iy     / gridY );
+					uvC =  new NumberUV( ix     / gridX, (iy+1) / gridY );
+					uvB =  new NumberUV( (ix+1) / gridX, iy     / gridY );
+	
+					faces.push(new Triangle3D(GridMesh, [ a, b, c ], new ColorMaterial(0x000000), [ uvA, uvB, uvC ] ) );
+	
+					// Triangle B
+					a = vertices[ (ix+1) * gridY1 + (iy+1) ];
+					c = vertices[ (ix+1) * gridY1 + iy     ];
+					b = vertices[ ix     * gridY1 + (iy+1) ];
+	
+					uvA =  new NumberUV( (ix+1) / gridX, (iy+1) / gridY );
+					uvC =  new NumberUV( (ix+1) / gridX, iy      / gridY );
+					uvB =  new NumberUV( ix      / gridX, (iy+1) / gridY );
+					
+					faces.push(new Triangle3D(GridMesh, [ a, b, c ], new ColorMaterial(0xffffff), [ uvA, uvB, uvC ] ) );
+				}
+			}
+	
 			GridMesh.geometry.ready = true;
+			
+			if(Papervision3D.useRIGHTHANDED)
+				GridMesh.geometry.flipFaces();
 		}
 
 		// draw a square grid of lines on the XZ (horizontal) plane.
@@ -330,7 +353,7 @@ package tabinda.demo
 		}
 
 		// a simple 2d vehicle on the XZ plane
-		public static function DrawBasic2dCircularVehicle(vehicle:IVehicle,CtfMesh:TriangleMesh3D,uvArr:Array, color:uint):void
+		public static function DrawBasic2dCircularVehicle(vehicle:IVehicle,CtfMesh:TriangleMesh3D,triArr:Vector.<Triangle3D>,uvArr:Array, color:uint):void
 		{
 			// "aspect ratio" of body (as seen from above)
 			var x:Number = 0.5;
@@ -347,14 +370,14 @@ package tabinda.demo
 			var b:Vector3 = Vector3.ScalarMultiplication(-y*r,vehicle.Forward);
 
 			// draw double-sided triangle (that is: no (back) face culling)
-			CtfMesh.geometry.vertices.push(u.ToVertex3D());
-			CtfMesh.geometry.vertices.push(f.ToVertex3D());
-			CtfMesh.geometry.vertices.push(s.ToVertex3D());
-			CtfMesh.geometry.vertices.push(b.ToVertex3D());
+			CtfMesh.geometry.vertices.push(u.ToVertex3D(), f.ToVertex3D(), s.ToVertex3D(), b.ToVertex3D());
 			
-			CtfMesh.geometry.faces.push(new Triangle3D(CtfMesh,new Array(Vector3.VectorAddition(Vector3.VectorAddition(p , f) , u).ToVertex3D(),
-						  Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D(),
-						  Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D()), new ColorMaterial(color), uvArr));
+			var temp:Array = new Array();
+			var a:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , f) , u).ToVertex3D();
+			var d:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
+			var e:Vertex3D = Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
+			
+			CtfMesh.geometry.faces.push(new Triangle3D(CtfMesh,new Array(a,d,e), new ColorMaterial(color), uvArr));
 			
 			/*iDrawTriangle(Vector3.VectorAddition(Vector3.VectorAddition(p , f) , u),
 						  Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)),
@@ -364,11 +387,14 @@ package tabinda.demo
 
 			// draw the circular collision boundary
 			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 20);*/
+			
+			CtfMesh.geometry.ready = true;
+			if (Papervision3D.useRIGHTHANDED) CtfMesh.geometry.flipFaces();
 		}
 
 		// a simple 3d vehicle
-		public static function  DrawBasic3dSphericalVehicle( vehicle:IVehicle, BoidMesh:TriangleMesh3D,uvArr:Array,color:uint):void
-		{
+		public static function DrawBasic3dSphericalVehicle( vehicle:IVehicle, BoidMesh:TriangleMesh3D,triArr:Vector.<Triangle3D>,uvArr:Array,color:uint):void
+		{			
 			var vColor:Vector3 = Colors.toVector(Colors.LightGray);
 			
 			// "aspect ratio" of body (as seen from above)
@@ -390,77 +416,52 @@ package tabinda.demo
 			var side1:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , s).ToVertex3D();
 			var side2:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , s).ToVertex3D();
 			var top:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , u).ToVertex3D();
-			var bottom:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u).ToVertex3D();
+			var bottom:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u).ToVertex3D();;
+			
+			/*trace("nose",nose.x, nose.y, nose.z); 
+			trace("side1",side1.x, side1.y, side1.z);
+			trace("side2",side2.x, side2.y, side2.z);
+			trace("top",top.x, top.y, top.z);
+			trace("bottom",bottom.x, bottom.y, bottom.z);*/
 			
 			// colors
 			const j:Number = +0.05;
 			const k:Number = -0.05;
 			
-			var color1:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
-			var color2:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
-			var color3:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
-			var color4:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
-			var color5:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
+			var color1:uint = 0x00FF00;// Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
+			var color2:uint = 0xFF0000;// Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
+			var color3:uint = 0x0000FF;// Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
+			var color4:uint = 0xF0F000;// Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
+			var color5:uint = 0xFF00FF;// Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
 			
-			BoidMesh.geometry.vertices.push(nose);
-			BoidMesh.geometry.vertices.push(top);
-            BoidMesh.geometry.vertices.push(side1);
-			BoidMesh.geometry.vertices.push(side2);
-			BoidMesh.geometry.vertices.push(bottom);
+			BoidMesh.geometry.vertices.push(nose,top,side1,side2,bottom);
 			
-			BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(nose, side1, top), new ColorMaterial(color1), uvArr));
+			triArr[0].reset(BoidMesh, new Array(nose, side1, top), new ColorMaterial(color1) , uvArr);
+			triArr[1].reset(BoidMesh, new Array(nose, top, side2), new ColorMaterial(color2), uvArr);
+			triArr[2].reset(BoidMesh, new Array(nose, bottom, side1), new ColorMaterial(color3), uvArr);
+			triArr[3].reset(BoidMesh, new Array(nose, side2, bottom), new ColorMaterial(color4), uvArr);
+			triArr[4].reset(BoidMesh, new Array(side1, side2, top), new ColorMaterial(color5), uvArr);
+			triArr[5].reset(BoidMesh, new Array(side2, side1, bottom), new ColorMaterial(color5), uvArr);
+			
+			BoidMesh.geometry.faces.push(triArr[0]);
+			BoidMesh.geometry.faces.push(triArr[1]);
+			BoidMesh.geometry.faces.push(triArr[2]);
+			BoidMesh.geometry.faces.push(triArr[3]);
+			BoidMesh.geometry.faces.push(triArr[4]);
+			BoidMesh.geometry.faces.push(triArr[5]);
+			
+			/*BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(nose, side1, top), new ColorMaterial(color1), uvArr));
 			BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(nose, top, side2), new ColorMaterial(color2), uvArr));
 			BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(nose, bottom, side1), new ColorMaterial(color3), uvArr));
 			BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(nose, side2, bottom), new ColorMaterial(color4), uvArr));
 			BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(side1, side2, top), new ColorMaterial(color5), uvArr));
 			BoidMesh.geometry.faces.push(new Triangle3D(BoidMesh, new Array(side2, side1, bottom),new ColorMaterial(color5), uvArr));
+			*/
 			
+			//BoidMesh.mergeVertices();
+			//for each(var t:Triangle3D in BoidMesh.geometry.faces) t.renderCommand.create = BoidMesh.createRenderTriangle;
 			BoidMesh.geometry.ready = true;
-			BoidMesh.geometry.flipFaces();				// Because we set PV3D to use RIGHTHANDED CS - look in the local space class
-		}
-
-		// a simple sphere
-		public static function DrawBasic3dSphere(position:Vector3, radius:Number, color:uint):void
-		{
-			var vColor:Vector3 = Colors.toVector(color);
-
-			// "aspect ratio" of body (as seen from above)
-			const x:Number = 0.5;
-			var y:Number = Number(Math.sqrt(1 - (x * x)));
-
-			// radius and position of vehicle
-			var r:Number = radius;
-			var p:Vector3 = position;
-
-			// body shape parameters
-			var f:Vector3 = Vector3.ScalarMultiplication(r,Vector3.Forward);
-			var s:Vector3 = Vector3.ScalarMultiplication((r * x),Vector3.Side);
-			var u:Vector3 = Vector3.ScalarMultiplication((r * x),Vector3.Up);
-			var b:Vector3 = Vector3.ScalarMultiplication(r * -y,Vector3.Forward);
-
-			// vertex positions
-			var nose:Vector3 = Vector3.VectorAddition(p , f);
-			var side1:Vector3 = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , s);
-			var side2:Vector3 = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , s);
-			var top:Vector3 = Vector3.VectorAddition(Vector3.VectorAddition(p ,b) , u);
-			var bottom:Vector3 = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u);
-
-			// colors
-			const  j:Number = +0.05;
-			const  k:Number = -0.05;
-			var color1:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
-			var color2:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
-			var color3:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
-			var color4:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
-			var color5:uint = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
-
-			// draw body
-			iDrawTriangle(nose, side1, top, color1);  // top, side 1
-			iDrawTriangle(nose, top, side2, color2);  // top, side 2
-			iDrawTriangle(nose, bottom, side1, color3);  // bottom, side 1
-			iDrawTriangle(nose, side2, bottom, color4);  // bottom, side 2
-			iDrawTriangle(side1, side2, top, color5);  // top back
-			iDrawTriangle(side2, side1, bottom, color5);  // bottom back
+			if (Papervision3D.useRIGHTHANDED) BoidMesh.geometry.flipFaces();
 		}
 
 		// General purpose circle/disk drawing routine.  Draws circles or disks (as
