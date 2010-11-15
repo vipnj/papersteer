@@ -1,6 +1,6 @@
 ﻿// ----------------------------------------------------------------------------
 //
-// OpenSteer - Action Script 3 Port
+// PaperSteer - Papervision3D Port of OpenSteer
 // Port by Mohammad Haseeb aka M.H.A.Q.S.
 // http://www.tabinda.net
 //
@@ -29,433 +29,414 @@
 //
 //
 // ----------------------------------------------------------------------------
+ 
 package tabinda.as3steer
-{
-	/** Standard 3-dimensional vector.
-        @remarks
-            A direction in 3D space represented as distances along the 3
-            orthoganal axes (x, y, z). Note that positions, directions and
-            scaling factors can be represented by a vector, depending on how
-            you interpret the values.
-    */
+{ 
+	import flash.geom.Vector3D;
+	
 	public class Vector3
 	{
-		public var x:Number,y:Number,z:Number;
+		//*********************************************************************************	
+		// Variables
+		//*********************************************************************************	
 
-		// special points
-		public static  var ZERO:Vector3=new Vector3(0,0,0);
-		public static  var UNIT_X:Vector3=new Vector3(1,0,0);
-		public static  var UNIT_Y:Vector3=new Vector3(0,1,0);
-		public static  var UNIT_Z:Vector3=new Vector3(0,0,1);
-		public static  var NEGATIVE_UNIT_X:Vector3=new Vector3(-1,0,0);
-		public static  var NEGATIVE_UNIT_Y:Vector3=new Vector3(0,-1,0);
-		public static  var NEGATIVE_UNIT_Z:Vector3=new Vector3(0,0,-1);
-		public static  var UNIT_SCALE:Vector3=new Vector3(1,1,1);
+		// Coordinate Points in 3D Vector Space
+		public var x:Number = 0.0;
+		public var y:Number = 0.0;
+		public var z:Number = 0.0;
+		
+		// Special points in Vector Space
+		public static const ZERO:Vector3 = new Vector3(0, 0, 0);
+		public static const UP:Vector3 = new Vector3(0, 1, 0);
+		public static const LEFT:Vector3 = new Vector3(-1, 0, 0);
+		public static const RIGHT:Vector3 = new Vector3(1, 0, 0);
+		public static const FORWARD:Vector3 = new Vector3(0, 0, -1);
+		public static const BACKWARD:Vector3 = new Vector3(0, 0, 1);
+		public static const DOWN:Vector3 = new Vector3(0, -1, 0);
+		public static const UNIT_X:Vector3=new Vector3(1,0,0);
+		public static const UNIT_Y:Vector3=new Vector3(0,1,0);
+		public static const UNIT_Z:Vector3 = new Vector3(0, 0, 1);
+		public static const UNIT_VECTOR:Vector3 = new Vector3(1, 1, 1);
 
-		public function Vector3(... args)
+		//*********************************************************************************	
+		// Constructors
+		//*********************************************************************************	
+
+		// A mutliple constructor handler
+		public function Vector3(_x:Number =0.0, _y:Number = 0.0, _z:Number =0.0) 
 		{
-			if (args.length == 3)
-			{
-				x = args[0];
-				y = args[1];
-				z = args[2];
-			}
-			else if (args.length == 2)
-			{
-				x = args[0];
-				y = args[1];
-				z = 0;
-			}
-			else if (args.length == 1 && args[0] is Vector3)
-			{
-				x = args[0].x;
-				y = args[0].y;
-				z = args[0].z;
-			}
-			else if (args.length == 1 && args[0] is Number)
-			{
-				x = args[0];
-				y = args[0];
-				z = args[0];
-			}
-			else
-			{
-				x = 0;
-				y = 0;
-				z = 0;
-			}
+			x = _x;
+			y = _y;
+			z = _z;
 		}
 		
-		public function Invert():Vector3
+		// This serves as an alternate Constructor
+		// Returns a new Vector3 instance
+		public function Constructor():Vector3
 		{
-			this.x = -this.x;
-			this.y = -this.y;
-			this.z = -this.z;
-			
-			return this;
+			return new Vector3(this.x, this.y, this.z);
+		}
+		
+		// Serves as a Copy Constructor
+		public function CopyConstructor(v:Vector3):Vector3
+		{
+			return new Vector3(v.x, v.y, v.z);
 		}
 
-		public static function Equality(lvec:Vector3,rvec:Vector3):Boolean
+		// vector addition
+		public static function VectorAddition(lvec:Vector3, rvec:Vector3):Vector3
 		{
-			return (lvec.x == rvec.x && lvec.y == rvec.y && lvec.z == rvec.z);
+			return new Vector3(lvec.x + rvec.x, lvec.y + rvec.y, lvec.z + rvec.z);
 		}
 
-		public static function InEquality(lvec:Vector3,rvec:Vector3)
+		// vector subtraction
+		public static function VectorSubtraction(lvec:Vector3, rvec:Vector3):Vector3
 		{
-			return (lvec.x != rvec.x || lvec.y != rvec.y || lvec.z != rvec.z);
+			return new Vector3(lvec.x - rvec.x, lvec.y - rvec.y, lvec.z - rvec.z);
 		}
 
-		// arithmetic operations
-		public static function VectorAddition(lvec:Vector3,rvec:Vector3):Vector3
+		// unary minus
+		public static function Negate(vec:Vector3):Vector3
 		{
-			var kSum:Vector3=new Vector3();
-
-			kSum.x=lvec.x + rvec.x;
-			kSum.y=lvec.y + rvec.y;
-			kSum.z=lvec.z + rvec.z;
-
-			return kSum;
+			return new Vector3(-vec.x, -vec.y, -vec.z);
 		}
 
-		public static function VectorSubtraction(lvec:Vector3,rvec:Vector3):Vector3
+		// vector times scalar product(scale length of vector times argument)
+		public static function ScalarMultiplication(scaleFactor:Number, vec:Vector3):Vector3
 		{
-			var kDiff:Vector3=new Vector3;
-
-			kDiff.x=lvec.x - rvec.x;
-			kDiff.y=lvec.y - rvec.y;
-			kDiff.z=lvec.z - rvec.z;
-
-			return kDiff;
+			return new Vector3(vec.x * scaleFactor, vec.y * scaleFactor, vec.z * scaleFactor);
+		}
+		
+		public static function ScalarDivision(vec:Vector3, divider:Number):Vector3
+		{
+			//var fInv:Number=1.0 / divider;
+			return new Vector3(vec.x/divider, vec.y/divider, vec.z/divider);
 		}
 
-		public static function ScalarMultiplication1(lvec:Vector3,fScalar:Number):Vector3
-		{
-			var kProd:Vector3=new Vector3();
-
-			kProd.x=fScalar * lvec.x;
-			kProd.y=fScalar * lvec.y;
-			kProd.z=fScalar * lvec.z;
-
-			return kProd;
-		}
-
-		public static function ScalarMultiplication2(fScalar:Number,rvec:Vector3):Vector3
-		{
-			var kProd:Vector3=new Vector3();
-
-			kProd.x=fScalar * rvec.x;
-			kProd.y=fScalar * rvec.y;
-			kProd.z=fScalar * rvec.z;
-
-			return kProd;
-		}
-
-		public static function VectorMultiplication(lvec:Vector3,rvec:Vector3):Vector3
-		{
-			var kProd:Vector3=new Vector3;
-
-			kProd.x=lvec.x * rvec.x;
-			kProd.y=lvec.y * rvec.y;
-			kProd.z=lvec.z * rvec.z;
-
-			return kProd;
-		}
-
-		public static function ScalarDivision(lvec:Vector3,fScalar:Number):Vector3
-		{
-			var kDiv:Vector3=new Vector3;
-
-			var fInv:Number=1.0 / fScalar;
-			kDiv.x=lvec.x * fInv;
-			kDiv.y=lvec.y * fInv;
-			kDiv.z=lvec.z * fInv;
-
-			return kDiv;
-		}
-
-		public static function VectorDivision(lvec:Vector3,rvec:Vector3):Vector3
-		{
-			var kDiv:Vector3=new Vector3;
-
-			kDiv.x=lvec.x / rvec.x;
-			kDiv.y=lvec.y / rvec.y;
-			kDiv.z=lvec.z / rvec.z;
-
-			return kDiv;
-		}
-
-		public static function SingleVectorSubtraction(vec:Vector3):Vector3
-		{
-			var kNeg:Vector3=new Vector3;
-
-			kNeg.x=- vec.x;
-			kNeg.y=- vec.y;
-			kNeg.z=- vec.z;
-
-			return kNeg;
-		}
-
-		public static function ScalarAddition1(lvec:Vector3,rhs:Number):Vector3
-		{
-			var ret:Vector3=new Vector3(rhs);
-			return ret= VectorAddition(ret,lvec);
-		}
-
-		public static function ScalarAddition2(lhs:Number,rvec:Vector3):Vector3
-		{
-			var ret:Vector3=new Vector3(lhs);
-			return ret= VectorAddition(ret,rvec);
-		}
-
-		public static function ScalarSubtraction1(lvec:Vector3,rhs:Number):Vector3
-		{
-			return VectorSubtraction(lvec,new Vector3(rhs));
-		}
-
-		public static function ScalarSubtraction2(lhs:Number,rvec:Vector3):Vector3
-		{
-			var ret:Vector3=new Vector3(lhs);
-			return ret=VectorSubtraction(ret,rvec);
-		}
-
-		/** Returns the length (magnitude) of the vector.
-            @warning
-                This operation requires a square root and is expensive in
-                terms of CPU operations. If you don't need to know the exact
-                length (e.g. for just comparing lengths) use squaredLength()
-                instead.
-        */
-		public function Length():Number
-		{
-			return Number(Math.sqrt(x * x + y * y + z * z));
-		}
-
-		/** Returns the square of the length(magnitude) of the vector.
-            @remarks
-                This  method is for efficiency - calculating the actual
-                length of a vector requires a square root, which is expensive
-                in terms of the operations required. This method returns the
-                square of the length of the vector, i.e. the same as the
-                length but before the square root is taken. Use this if you
-                want to find the longest / shortest vector without incurring
-                the square root.
-        */
-		public function SquaredLength():Number
-		{
-			return x * x + y * y + z * z;
-		}
-
-		/** Calculates the dot (scalar) product of this vector with another.
-            @remarks
-                The dot product can be used to calculate the angle between 2
-                vectors. If both are unit vectors, the dot product is the
-                cosine of the angle; otherwise the dot product must be
-                divided by the product of the lengths of both vectors to get
-                the cosine of the angle. This result can further be used to
-                calculate the distance of a point from a plane.
-            @param
-                vec Vector with which to calculate the dot product (together
-                with this one).
-            @returns
-                A float representing the dot product value.
-        */
+		// dot product
 		public function DotProduct(vec:Vector3):Number
 		{
-			return x * vec.x + y * vec.y + z * vec.z;
+			return (this.x * vec.x) + (this.y * vec.y) + (this.z * vec.z);
 		}
 
-		/** Normalises the vector.
-            @remarks
-                This method normalises the vector such that it's
-                length / magnitude is 1. The result is called a unit vector.
-            @note
-                This function will not crash for zero-sized vectors, but there
-                will be no changes made to their components.
-            @returns The previous length of the vector.
-        */
-		public function Normalise():Number
+		// length
+		public function Magnitude():Number
+		{
+			return Number(Math.sqrt(SquaredMagnitude()));
+		}
+
+		// length squared
+		public function SquaredMagnitude():Number
+		{
+			return DotProduct(this);
+		}
+
+		// normalize: returns normalized version(parallel to this, length = 1)
+		public function fNormalize():Number
 		{
 			var fLength:Number=Number(Math.sqrt(x * x + y * y + z * z));
 
 			// Will also work for zero-sized vectors, but will change nothing
 			if (fLength > 1e-08)
 			{
-				var fInvLength:Number=1.0 / fLength;
-				x*= fInvLength;
-				y*= fInvLength;
-				z*= fInvLength;
+					var fInvLength:Number=1.0 / fLength;
+					x*= fInvLength;
+					y*= fInvLength;
+					z*= fInvLength;
 			}
 
 			return fLength;
 		}
 
-		/** Calculates the cross-product of 2 vectors, i.e. the vector that
-            lies perpendicular to them both.
-            @remarks
-                The cross-product is normally used to calculate the normal
-                vector of a plane, by calculating the cross-product of 2
-                non-equivalent vectors which lie on the plane (e.g. 2 edges
-                of a triangle).
-            @param
-                vec Vector which, together with this one, will be used to
-                calculate the cross-product.
-            @returns
-                A vector which is the result of the cross-product. This
-                vector will <b>NOT</b> be normalised, to maximise efficiency
-                - call Vector3::normalise on the result if you wish this to
-                be done. As for which side the resultant vector will be on, the
-                returned vector will be on the side from which the arc from 'this'
-                to rkVector is anticlockwise, e.g. UNIT_Y.CrossProduct(UNIT_Z)
-                = UNIT_X, whilst UNIT_Z.CrossProduct(UNIT_Y) = -UNIT_X.
-			This is because OGRE uses a right-handed coordinate system.
-            @par
-                For a clearer explanation, look a the left and the bottom edges
-                of your monitor's screen. Assume that the first vector is the
-                left edge and the second vector is the bottom edge, both of
-                them starting from the lower-left corner of the screen. The
-                resulting vector is going to be perpendicular to both of them
-                and will go <i>inside</i> the screen, towards the cathode tube
-                (assuming you're using a CRT monitor, of course).
-        */
-		public function CrossProduct(rkVector:Vector3):Vector3
+		public static function CrossProduct(lvec :Vector3, rvec:Vector3):Vector3
 		{
-			var kCross:Vector3=new Vector3;
-
-			kCross.x=y * rkVector.z - z * rkVector.y;
-			kCross.y=z * rkVector.x - x * rkVector.z;
-			kCross.z=x * rkVector.y - y * rkVector.x;
-
-			return kCross;
+			return new Vector3((lvec.y * rvec.z) - (lvec.z * rvec.y), (lvec.z * rvec.x) - (lvec.x * rvec.z), (lvec.x * rvec.y) - (lvec.y * rvec.x));
 		}
 
-		/** Returns a vector at a point half way between this and the passed
-            in vector.
-        */
-		public function MidPoint(vec:Vector3):Vector3
+		// set XYZ coordinates to given three floats
+		public function set_XYZ(x:Number, y:Number, z:Number):Vector3
 		{
-			return new Vector3(x + vec.x * 0.5,y + vec.y * 0.5,z + vec.z * 0.5);
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			return this;
 		}
 
-		/** Returns true if the vector's scalar components are all greater
-            that the ones of the vector it is compared against.
-        */
-		public static function islesser(lvec:Vector3,rvec:Vector3):Boolean
+		// equality/inequality
+		public static function isEqual(lvec:Vector3, rvec:Vector3):Boolean
 		{
-			if (lvec.x < rvec.x && lvec.y < rvec.y && lvec.z < rvec.z)
-			{
-				return true;
-			}
-			return false;
+			return (lvec.x == rvec.x) && (lvec.y == rvec.y) && (lvec.z == rvec.z);
+		}
+		public static function isNotEqual(lvec:Vector3, rvec:Vector3):Boolean
+		{
+			return (lvec.x != rvec.x) && (lvec.y != rvec.y) && (lvec.z != rvec.z);
 		}
 
-		/** Returns true if the vector's scalar components are all smaller
-            that the ones of the vector it is compared against.
-        */
-		public static function isgreater(lvec:Vector3,rhs:Vector3):Boolean
+		public static function Distance(lvec:Vector3, rvec:Vector3):Number
 		{
-			if (lvec.x > rhs.x && lvec.y > rhs.y && lvec.z > rhs.z)
-			{
-				return true;
-			}
-			return false;
+			return VectorSubtraction(lvec ,rvec).Magnitude();
 		}
 
-		/** Sets this vector's components to the minimum of its own and the
-            ones of the passed in vector.
-            @remarks
-                'Minimum' in this case means the combination of the lowest
-                value of x, y and z from both vectors. Lowest is taken just
-                numerically, not magnitude, so -1 < 0.
-        */
-		public function MakeFloor(cmp:Vector3):void
+		// utility member functions used in OpenSteer
+
+		// return component of vector parallel to a unit basis vector
+		// IMPORTANT NOTE: assumes "basis" has unit magnitude (length == 1)
+		public function ParallelComponent(unitBasis:Vector3):Vector3
 		{
-			if (cmp.x < x)
-			{
-				x=cmp.x;
-			}
-			if (cmp.y < y)
-			{
-				y=cmp.y;
-			}
-			if (cmp.z < z)
-			{
-				z=cmp.z;
-			}
-		}/** Sets this vector's components to the maximum of its own and the
-            ones of the passed in vector.
-            @remarks
-                'Maximum' in this case means the combination of the highest
-                value of x, y and z from both vectors. Highest is taken just
-                numerically, not magnitude, so 1 > -3.
-        */
+			var projection:Number = DotProduct(unitBasis);
+			return ScalarMultiplication(projection,unitBasis);
+		}
 
-		public function MakeCeil(cmp:Vector3):void
+		// return component of vector perpendicular to a unit basis vector
+		// IMPORTANT NOTE: assumes "basis" has unit magnitude(length==1)
+		public function PerpendicularComponent(unitBasis:Vector3):Vector3
 		{
-			if (cmp.x > x)
-			{
-				x=cmp.x;
-			}
-			if (cmp.y > y)
-			{
-				y=cmp.y;
-			}
-			if (cmp.z > z)
-			{
-				z=cmp.z;
-			}
-		}/** Generates a vector perpendicular to this vector (eg an 'up' vector).
-            @remarks
-                This method will return a vector which is perpendicular to this
-                vector. There are an infinite number of possibilities but this
-                method will guarantee to generate one of them. If you need more
-                control you should use the Quaternion class.
-        */
+			return VectorSubtraction(this , ParallelComponent(unitBasis));
+		}
 
-		public function Perpendicular():Vector3
+		// clamps the length of a given vector to maxLength.  If the vector is
+		// shorter its value is returned unaltered, if the vector is longer
+		// the value returned has length of maxLength and is paralle to the
+		// original input.
+		public function TruncateLength(maxLength:Number):Vector3
 		{
-			var fSquareZero:Number=0.000001 * 0.000001;// 1e-06 * 1e-06;
+			var maxLengthSquared:Number = maxLength * maxLength;
+			var vecLengthSquared:Number = SquaredMagnitude();
+			if (vecLengthSquared <= maxLengthSquared)
+				return this;
+			else
+				return ScalarMultiplication((maxLength / Number(Math.sqrt(vecLengthSquared))),this);
+		}
 
-			var perp:Vector3=this.CrossProduct(Vector3.UNIT_X);
+		// forces a 3d position onto the XZ (aka y=0) plane
+		//FIXME: Misleading name
+		public function SetYToZero():Vector3
+		{
+			return new Vector3(x, 0, z);
+		}
 
-			// Check length
-			if (perp.SquaredLength() < fSquareZero)
+		// rotate this vector about the global Y (up) axis by the given angle
+		// takes angle:Number, sin:Number, cos:Number
+		public function RotateAboutGlobalY(...args):Vector3
+		{
+			//trace("Vector3.RotateAboutGlobalY",args[0] is Number, args[1] is Number, args[2] is Number);
+			
+			if (args.length == 3)
 			{
-				/* This vector is the Y axis multiplied by a scalar, so we have
-  		 		to use another axis.*/
-				perp=this.CrossProduct(Vector3.UNIT_Y);
+				// is both are zero, they have not be initialized yet
+				if (args[1] == 0 && args[2] == 0)
+				{
+					args[1] = Number(Math.sin(args[0]));
+					args[2] = Number(Math.cos(args[0]));
+				}
+				return new Vector3((this.x * args[2]) + (this.z * args[1]), this.y, (this.z * args[2]) - (this.x * args[1]));
+			}
+			else
+			{
+				var s:Number = Number(Math.sin(args[0]));
+				var c:Number = Number(Math.cos(args[0]));
+				return new Vector3((this.x * c) + (this.z * s), (this.y), (this.z * c) - (this.z * s));
 			}
 
-			return perp;
+		}
+
+		// if this position is outside sphere, push it back in by one diameter
+		public function SphericalWraparound(center:Vector3, radius:Number):Vector3
+		{
+			var offset:Vector3 = VectorSubtraction(this , center);
+			var r:Number = offset.Magnitude();
+			if (r > radius)
+				return VectorAddition(this , ScalarMultiplication(radius * -2,ScalarDivision(offset,r)));
+			else
+				return this;
+		}
+
+		public function ToVector3D():Vector3D
+		{
+			return new Vector3D(this.x, this.y, this.z);
+		}
+
+		// ----------------------------------------------------------------------------
+		// Returns a position randomly distributed on a disk of unit radius
+		// on the XZ (Y=0) plane, centered at the origin.  Orientation will be
+		// random and length will range between 0 and 1
+		public static function RandomVectorOnUnitRadiusXZDisk():Vector3
+		{
+			var v:Vector3 = new Vector3();
+			do
+			{
+				v.set_XYZ((Math.random() * 2) - 1, 0, (Math.random() * 2) - 1);
+			}
+			while (v.Magnitude() >= 1);
+
+			return v;
+		}
+
+		// Returns a position randomly distributed inside a sphere of unit radius
+		// centered at the origin.  Orientation will be random and length will range
+		// between 0 and 1
+		public static function RandomVectorInUnitRadiusSphere():Vector3
+		{
+			var v:Vector3 = new Vector3();
+			do
+			{
+				v.set_XYZ((Math.random() * 2) - 1, (Math.random() * 2) - 1, (Math.random() * 2) - 1);
+			}
+			while (v.Magnitude() >= 1);
+
+			return v;
+		}
+
+		// ----------------------------------------------------------------------------
+		// Returns a position randomly distributed on the surface of a sphere
+		// of unit radius centered at the origin.  Orientation will be random
+		// and length will be 1
+		public static function RandomUnitVector():Vector3
+		{
+			var temp:Vector3 = RandomVectorInUnitRadiusSphere();
+			temp.fNormalize();
+			return temp;
+		}
+
+		// ----------------------------------------------------------------------------
+		// Returns a position randomly distributed on a circle of unit radius
+		// on the XZ (Y=0) plane, centered at the origin.  Orientation will be
+		// random and length will be 1
+		public static function RandomUnitVectorOnXZPlane():Vector3
+		{
+			var temp:Vector3 = RandomVectorInUnitRadiusSphere();
+			temp.SetYToZero();
+			temp.fNormalize();
+			return temp;
+		}
+
+		// ----------------------------------------------------------------------------
+		// used by limitMaxDeviationAngle / limitMinDeviationAngle below
+		public static function LimitDeviationAngleUtility(insideOrOutside:Boolean, source:Vector3, cosineOfConeAngle:Number, basis:Vector3):Vector3
+		{
+			// immediately return zero length input vectors
+			var sourceLength:Number = source.Magnitude();
+			if (sourceLength == 0)
+			{
+				return source;
+			}
+
+			// measure the angular diviation of "source" from "basis"
+			var direction:Vector3 = ScalarDivision(source,sourceLength);
+			var cosineOfSourceAngle:Number = direction.DotProduct(basis);
+
+			// Simply return "source" if it already meets the angle criteria.
+			// (note: we hope this top "if" gets compiled out since the flag
+			// is a constant when the function is inlined into its caller)
+			if (insideOrOutside)
+			{
+				// source vector is already inside the cone, just return it
+				if (cosineOfSourceAngle >= cosineOfConeAngle)
+				{
+					return source;
+				}
+			}
+			else
+			{
+				// source vector is already outside the cone, just return it
+				if (cosineOfSourceAngle <= cosineOfConeAngle)
+				{
+					return source;
+				}
+			}
+
+			// find the portion of "source" that is perpendicular to "basis"
+			var perp:Vector3 = source.PerpendicularComponent(basis);
+
+			// normalize that perpendicular
+			perp.fNormalize();
+			var unitPerp:Vector3 = perp;
+
+			// construct a new vector whose length equals the source vector,
+			// and lies on the intersection of a plane (formed the source and
+			// basis vectors) and a cone (whose axis is "basis" and whose
+			// angle corresponds to cosineOfConeAngle)
+			var perpDist:Number = Number(Math.sqrt(1 - (cosineOfConeAngle * cosineOfConeAngle)));
+			var c0:Vector3 = ScalarMultiplication(cosineOfConeAngle,basis);
+			var c1:Vector3 = ScalarMultiplication(perpDist,unitPerp);
+			return ScalarMultiplication(sourceLength,VectorAddition(c0 , c1));
+		}
+
+		// ----------------------------------------------------------------------------
+		// Enforce an upper bound on the angle by which a given arbitrary vector
+		// diviates from a given reference direction (specified by a unit basis
+		// vector).  The effect is to clip the "source" vector to be inside a cone
+		// defined by the basis and an angle.
+		public static function LimitMaxDeviationAngle(source:Vector3, cosineOfConeAngle:Number, basis:Vector3):Vector3
+		{
+			return LimitDeviationAngleUtility(true, // force source INSIDE cone
+				source, cosineOfConeAngle, basis);
+		}
+
+		// ----------------------------------------------------------------------------
+		// Enforce a lower bound on the angle by which a given arbitrary vector
+		// diviates from a given reference direction (specified by a unit basis
+		// vector).  The effect is to clip the "source" vector to be outside a cone
+		// defined by the basis and an angle.
+		public static function LimitMinDeviationAngle(source:Vector3, cosineOfConeAngle:Number, basis:Vector3):Vector3
+		{
+			return LimitDeviationAngleUtility(false, // force source OUTSIDE cone
+				source, cosineOfConeAngle, basis);
+		}
+
+		// ----------------------------------------------------------------------------
+		// Returns the distance between a point and a line.  The line is defined in
+		// terms of a point on the line ("lineOrigin") and a UNIT vector parallel to
+		// the line ("lineUnitTangent")
+		public static function DistanceFromLine(point:Vector3, lineOrigin:Vector3, lineUnitTangent:Vector3):Number
+		{
+			var offset:Vector3 = VectorSubtraction(point ,lineOrigin);
+			var perp:Vector3 = offset.PerpendicularComponent(lineUnitTangent);
+			return perp.Magnitude();
+		}
+
+		// ----------------------------------------------------------------------------
+		// given a vector, return a vector perpendicular to it (note that this
+		// arbitrarily selects one of the infinitude of perpendicular vectors)
+		public static function FindPerpendicularIn3d(direction:Vector3):Vector3
+		{
+			// to be filled in:
+			var quasiPerp:Vector3;  // a direction which is "almost perpendicular"
+			var result:Vector3 = new Vector3();     // the computed perpendicular to be returned
+
+			// three mutually perpendicular basis vectors
+			var i:Vector3 = new Vector3(1, 0, 0);
+			var j:Vector3 = new Vector3(0, 1, 0);
+			var k:Vector3 = new Vector3(0, 0, 1);
+
+			// measure the projection of "direction" onto each of the axes
+			var id:Number = i.DotProduct(direction);
+			var jd:Number = j.DotProduct(direction);
+			var kd:Number = k.DotProduct(direction);
+
+			// set quasiPerp to the basis which is least parallel to "direction"
+			if ((id <= jd) && (id <= kd))
+			{
+				quasiPerp = i;               // projection onto i was the smallest
+			}
+			else
+			{
+				if ((jd <= id) && (jd <= kd))
+					quasiPerp = j;           // projection onto j was the smallest
+				else
+					quasiPerp = k;           // projection onto k was the smallest
+			}
+
+			// return the cross product (direction x quasiPerp)
+			// which is guaranteed to be perpendicular to both of them
+			result = CrossProduct(direction, quasiPerp);
+			return result;
 		}
 		
-		/** Returns true if this vector is zero length. */
-		public function IsZeroLength():Boolean
+		// Prints the Vector 
+		public function toString():String
 		{
-			var sqlen:Number=x * x + y * y + z * z;
-			return (sqlen < (1e-06 * 1e-06));
-		}
-
-		/** As normalise, except that this vector is unaffected and the
-          * normalised vector is returned as a copy. 
-		*/
-		public function NormalisedCopy():Vector3
-		{
-			var ret:Vector3=new Vector3(this);
-			ret.Normalise();
-			return ret;
-		}
-
-		/** Calculates a reflection vector to the plane with the given normal .
-        @remarks NB assumes 'this' is pointing AWAY FROM the plane, invert if it is not.
-        */
-		public function Reflect(normal:Vector3):Vector3
-		{
-			return new Vector3(VectorSubtraction(this,ScalarMultiplication2(2,ScalarMultiplication2(DotProduct(normal),normal))));
-		}
-		
-		public function tostring():String
-		{
-			return this.x + " " + this.y + " " + this.z;
+			return("x= " + x + " y= " + y + " z= " + z);
 		}
 	}
 }

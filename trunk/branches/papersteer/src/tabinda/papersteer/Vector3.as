@@ -32,6 +32,7 @@
  
 package tabinda.papersteer
 { 
+	import flash.geom.Vector3D;
 	import org.papervision3d.core.geom.renderables.Vertex3D;
 	import org.papervision3d.core.math.Number3D;
 	
@@ -114,6 +115,7 @@ package tabinda.papersteer
 			return new Vector3(vec.x / divider, vec.y / divider, vec.z / divider);
 		}
 
+
 		// dot product
 		public function DotProduct(vec:Vector3):Number
 		{
@@ -132,12 +134,29 @@ package tabinda.papersteer
 			return DotProduct(this);
 		}
 
-		// normalize: returns normalized version(parallel to this, length = 1)
+		/* normalize: returns normalized version(parallel to this, length = 1)
 		public function fNormalize():Vector3
 		{
 			// skip divide if length is zero
 			var len:Number = Magnitude();
 			return len > 0 ? ScalarDivision(this,len) : this;
+		}*/
+		
+		// normalize: returns normalized version(parallel to this, length = 1)
+		public function fNormalize():Number
+		{
+			var fLength:Number=Number(Math.sqrt(x * x + y * y + z * z));
+
+			// Will also work for zero-sized vectors, but will change nothing
+			if (fLength > 1e-08)
+			{
+					var fInvLength:Number=1.0 / fLength;
+					x*= fInvLength;
+					y*= fInvLength;
+					z*= fInvLength;
+			}
+
+			return fLength;
 		}
 
 		public static function CrossProduct(lvec :Vector3, rvec:Vector3):Vector3
@@ -211,7 +230,7 @@ package tabinda.papersteer
 		// takes angle:Number, sin:Number, cos:Number
 		public function RotateAboutGlobalY(...args):Vector3
 		{
-			trace("Vector3.RotateAboutGlobalY",args[0] is Number, args[1] is Number, args[2] is Number);
+			//trace("Vector3.RotateAboutGlobalY",args[0] is Number, args[1] is Number, args[2] is Number);
 			
 			if (args.length == 3)
 			{
@@ -246,6 +265,11 @@ package tabinda.papersteer
 		public function ToVertex3D():Vertex3D
 		{
 			return new Vertex3D(this.x, this.y, this.z);
+		}
+		
+		public function ToVector3D():Vector3D
+		{
+			return new Vector3D(this.x, this.y, this.z);
 		}
 		
 		public function ToNumber3D():Number3D
@@ -290,7 +314,9 @@ package tabinda.papersteer
 		// and length will be 1
 		public static function RandomUnitVector():Vector3
 		{
-			return RandomVectorInUnitRadiusSphere().fNormalize();
+			var temp:Vector3 = RandomVectorInUnitRadiusSphere();
+			temp.fNormalize();
+			return temp;
 		}
 
 		// ----------------------------------------------------------------------------
@@ -299,7 +325,10 @@ package tabinda.papersteer
 		// random and length will be 1
 		public static function RandomUnitVectorOnXZPlane():Vector3
 		{
-			return RandomVectorInUnitRadiusSphere().SetYToZero().fNormalize();
+			var temp:Vector3 = RandomVectorInUnitRadiusSphere();
+			temp.SetYToZero();
+			temp.fNormalize();
+			return temp;
 		}
 
 		// ----------------------------------------------------------------------------
@@ -340,8 +369,9 @@ package tabinda.papersteer
 			// find the portion of "source" that is perpendicular to "basis"
 			var perp:Vector3 = source.PerpendicularComponent(basis);
 
+			perp.fNormalize();
 			// normalize that perpendicular
-			var unitPerp:Vector3 = perp.fNormalize();
+			var unitPerp:Vector3 = perp;
 
 			// construct a new vector whose length equals the source vector,
 			// and lies on the intersection of a plane (formed the source and

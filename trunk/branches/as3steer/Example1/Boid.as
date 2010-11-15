@@ -32,14 +32,18 @@
 
 package
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Shape;
+	import flash.display.Sprite;
+	import flash.geom.Matrix3D;
 	import flash.text.*;
 	import tabinda.as3steer.*;
 
 	public class Boid extends SimpleVehicle
 	{
-		public static const AvoidancePredictTimeMin:Number=0.9;
-		public static const AvoidancePredictTimeMax:Number=2.0;
+		public static const AvoidancePredictTimeMin:Number=5.9;
+		public static const AvoidancePredictTimeMax:Number=5.0;
 		public static var AvoidancePredictTime:Number = AvoidancePredictTimeMin;
 
 		// a pointer to this boid's interface object for the proximity database
@@ -47,11 +51,13 @@ package
 
 		// allocate one and share amoung instances just to save memory usage
 		// (change to per-instance allocation to be more MP-safe)
-		public static  var neighbors:Array=new Array();
-		public static  var boundaryCondition:int=0;
+		public static var neighbors:Array=new Array();
+		public static var boundaryCondition:int=0;
 		public static const worldRadius:Number = 50.0;
 		
-		public var sp:Shape;
+		public var sp:Sprite;
+		public var vertices:Vector.<Number>;
+		public var indices:Vector.<int>;
 
 		// constructor
 		public function Boid (pd:AbstractProximityDatabase)
@@ -60,11 +66,10 @@ package
 			proximityToken=null;
 			NewPD (pd);
 			
-			sp = new Shape();
-			sp.graphics.beginFill(0x000000,1);
-			sp.graphics.drawEllipse(0,0,3,3);
-			sp.graphics.endFill();
+            vertices = new Vector.<Number>();
+            indices = new Vector.<int>(); 
 		
+			sp = new Sprite();
 			// reset all boid state
 			Reset ();
 		}
@@ -76,31 +81,62 @@ package
 			super.reset();
 
 			// steering force is clipped to this magnitude
-			setMaxForce(27.0);
+			maxForce = (27.0);
 
 			// velocity is clipped to this magnitude
-			setMaxSpeed(9.0);
+			maxSpeed = (50.0);
 			
 			// initial slow speed
-			setSpeed(maxSpeed() * 0.3);
+			speed = (maxSpeed * 0.3);
 			
 			regenerateOrthonormalBasisUF(Utility.RandomUnitVector());
 			
 			// randomize initial position
-			setPosition(Vector3.ScalarMultiplication2(20.0, Utility.RandomVectorInUnitRadiusSphere()));
+			Position = Vector3.ScalarMultiplication(20.0, Utility.RandomVectorInUnitRadiusSphere());
 			
 			// notify proximity database that our position has changed
 			//FIXME: SimpleVehicle::SimpleVehicle() calls reset() before proximityToken is set
 			if (proximityToken != null)
 			{
-				proximityToken.updateForNewPosition (Position());
+				proximityToken.updateForNewPosition (Position);
 			}
 		}
 
 		// draw this boid into the scene
 		public function Draw ():void
 		{
-			// You may add your drawing routine here
+			// "aspect ratio" of body (as seen from above)
+			const x:Number = 0.5;
+			var y:Number = Number(Math.sqrt(1 - (x * x)));
+
+			// radius and position of vehicle
+			var r:Number = radius;
+			var p:Vector3 = Position;
+
+			// body shape parameters
+			var f:Vector3 = Vector3.ScalarMultiplication(r,forward);
+			var s:Vector3 = Vector3.ScalarMultiplication((r * x), side);
+			var u:Vector3 = Vector3.ScalarMultiplication((r * x * 0.5),up);
+			var b:Vector3 = Vector3.ScalarMultiplication(r * -y, forward);
+			
+			// vertex position
+			var nose:Vector3 = Vector3.VectorAddition(p , f);
+			var side1:Vector3 = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , s);
+			var side2:Vector3 = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , s);
+			var top:Vector3 = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , u);
+			var bottom:Vector3 = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u);
+			
+			vertices.length = 0;
+			indices.length = 0;
+			
+			vertices = Vector.<Number>([nose.x, nose.y, side1.x, side1.y, side2.x, side2.y, top.x, top.y, bottom.x, bottom.y]);
+			indices = Vector.<int>([0, 1, 3, 0, 3, 2, 0, 4, 1, 0, 2, 4, 1, 2, 3, 2, 1, 4]);
+			
+			sp.graphics.clear();
+			sp.graphics.beginFill(0xff0000,0.5);
+			sp.graphics.lineStyle(0.1, 0xcc0000, 0.5);
+			sp.graphics.drawTriangles(vertices,indices);
+			sp.graphics.endFill();
 		}
 
 		// per frame simulation update
@@ -109,13 +145,8 @@ package
 			// steer to flock and perhaps to stay within the spherical boundary
 			applySteeringForce(Vector3.VectorAddition(SteerToFlock() , HandleBoundary()),elapsedTime);
 			
-			// Updates to the visual objects here
-			sp.x = Position().x;
-			sp.y = Position().y;
-			sp.z = Position().z;
-			
 			// notify proximity database that our position has changed
-			proximityToken.updateForNewPosition(Position());
+			proximityToken.updateForNewPosition(Position);
 		}
 
 		// basic flocking
@@ -136,8 +167,8 @@ package
 			var maxRadius:Number=Math.max(separationRadius,Math.max(alignmentRadius,cohesionRadius));
 
 			// find all flockmates within maxRadius using proximity database
-			neighbors.splice(0);
-			proximityToken.findNeighbors (Position(),maxRadius,neighbors);
+			neighbors = [];
+			proximityToken.findNeighbors (Position,maxRadius,neighbors);
 
 			// determine each of the three component behaviors of flocking
 			var separation:Vector3=steerForSeparation(separationRadius,separationAngle,neighbors);
@@ -145,9 +176,9 @@ package
 			var cohesion:Vector3=steerForCohesion(cohesionRadius,cohesionAngle,neighbors);
 
 			// apply weights to components (save in variables for annotation)
-			var separationW:Vector3=Vector3.ScalarMultiplication2(separationWeight,separation);
-			var alignmentW:Vector3=Vector3.ScalarMultiplication2(alignmentWeight,alignment);
-			var cohesionW:Vector3 = Vector3.ScalarMultiplication2(cohesionWeight, cohesion);
+			var separationW:Vector3=Vector3.ScalarMultiplication(separationWeight,separation);
+			var alignmentW:Vector3=Vector3.ScalarMultiplication(alignmentWeight,alignment);
+			var cohesionW:Vector3 = Vector3.ScalarMultiplication(cohesionWeight, cohesion);
 			
 			return Vector3.VectorAddition(Vector3.VectorAddition(separationW,alignmentW),cohesionW);
 		}
@@ -158,7 +189,7 @@ package
 		public function HandleBoundary ():Vector3
 		{
 			// while inside the sphere do noting
-			if (Position().Length() < worldRadius)
+			if (Position.Magnitude() < worldRadius)
 			{
 				return Vector3.ZERO;
 			}
@@ -170,14 +201,14 @@ package
 					{
 						// steer back when outside
 						var seek:Vector3 = xxxsteerForSeek(Vector3.ZERO);
-						var lateral:Vector3 = Utility.perpendicularComponent(seek, forward());
+						var lateral:Vector3 = Utility.perpendicularComponent(seek, forward);
 						return lateral;
 
 					}
 				case 1 :
 					{
 						// wrap around (teleport)
-						setPosition(Utility.sphericalWrapAround(Position(), Vector3.ZERO, worldRadius));
+						Position = Utility.sphericalWrapAround(Position, Vector3.ZERO, worldRadius);
 						return Vector3.ZERO;
 					}
 			}

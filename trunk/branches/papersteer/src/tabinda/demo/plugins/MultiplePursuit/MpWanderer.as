@@ -59,7 +59,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			ApplySteeringForce (steer,elapsedTime);
 
 			// for annotation
-			//trail.Record (currentTime,Position);
+			trail.Record (currentTime,Position);
 		}
 	}
 }

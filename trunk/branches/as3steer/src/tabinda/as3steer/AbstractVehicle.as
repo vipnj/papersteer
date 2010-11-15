@@ -36,46 +36,62 @@ package tabinda.as3steer
 	 */
 	public class AbstractVehicle extends LocalSpace
 	{
+		private var _mass:Number;
+		private var _radius:Number;
+		private var _velocity:Vector3;
+		private var _speed:Number;
+		private var _maxForce:Number;
+		private var _maxSpeed:Number;
+		
 		/** mass (defaults to unity so acceleration=force)
 		 */
-		public function mass():Number
+		public function get mass():Number { return _mass; }
+		
+		public function set mass(value:Number):void 
 		{
-			return 0;
+			_mass = value;
 		}
-		public function setMass(mass:Number):Number
-		{
-			return 0;
-		}
-
+		
 		/** size of bounding sphere, for obstacle avoidance, etc.
 		 */
-		public function radius():Number
+		public function get radius():Number { return _radius; }
+		
+		public function set radius(value:Number):void 
 		{
-			return 0;
+			_radius = value;
 		}
-		public function setRadius(radius:Number):Number
-		{
-			return 0;
-		}
-
-		/** velocity of vehicle
-		 * 
-		 */ 
-		public function velocity():Vector3
-		{
-			return Vector3.ZERO;
-		}
-
+		
+		public function get velocity():Vector3 { return Vector3.ZERO; }
+		
 		/** speed of vehicle  (may be faster than taking magnitude of velocity)
 		 * 
-		 */ 
-		public function speed():Number
+		*/ 
+		public function get speed():Number { return _speed; }
+		
+		public function set speed(value:Number):void 
 		{
-			return 0;
+			_speed = value;
 		}
-		public function setSpeed(speed:Number):Number
+		
+		public function get maxForce():Number { return _maxForce; }
+		
+		public function set maxForce(value:Number):void 
 		{
-			return 0;
+			_maxForce = value;
+		}
+		
+		/** ----------------------------------------------------------------------
+		 * XXX this vehicle-model-specific functionality functionality seems out
+		 * XXX of place on the abstract base class, but for now it is expedient
+		 * the maximum steering force this vehicle can apply
+		 * 
+		 * @return
+		 */ 
+		public function get maxSpeed():Number { return _maxSpeed; }
+		
+		public function set maxSpeed(value:Number):void 
+		{
+			_maxSpeed = value;
 		}
 
 		/**predict position of this vehicle at some time in the future
@@ -87,32 +103,5 @@ package tabinda.as3steer
 			return Vector3.ZERO;
 		}
 
-		/** ----------------------------------------------------------------------
-		 * XXX this vehicle-model-specific functionality functionality seems out
-		 * XXX of place on the abstract base class, but for now it is expedient
-		 * the maximum steering force this vehicle can apply
-		 * 
-		 * @return
-		 */ 
-		public function maxForce():Number
-		{
-			return 0;
-		}
-		public function setMaxForce(max:Number):Number
-		{
-			return 0;
-		}
-
-		/** the maximum speed this vehicle is allowed to move
-		 * 
-		 */ 
-		public function maxSpeed():Number
-		{
-			return 0;
-		}
-		public function setMaxSpeed(max:Number):Number
-		{
-			return 0;
-		}
 	}
 }

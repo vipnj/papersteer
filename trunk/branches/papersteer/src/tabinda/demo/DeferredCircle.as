@@ -32,6 +32,10 @@
 
 package tabinda.demo
 {
+	import org.papervision3d.core.geom.renderables.Line3D;
+	import org.papervision3d.core.geom.renderables.Vertex3D;
+	import org.papervision3d.core.math.Number3D;
+	import org.papervision3d.materials.special.LineMaterial;
 	import tabinda.papersteer.*;
 	
 	/**
@@ -51,11 +55,12 @@ package tabinda.demo
 			}
 		}
 
-		public static function AddToBuffer(radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int,filled:Boolean, in3d:Boolean):void
+		public static function AddToBuffer(object:*,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int,filled:Boolean, in3d:Boolean):void
 		{
 			
 			if (index < size)
 			{
+				deferredCircleArray[index].object = object;
 				deferredCircleArray[index].radius = radius;
 				deferredCircleArray[index].axis = axis;
 				deferredCircleArray[index].center = center;
@@ -77,13 +82,60 @@ package tabinda.demo
 			for (var i:int = 0; i < index; i++)
 			{
 				var dc:DeferredCircle = deferredCircleArray[i];
-				Drawing.DrawCircleOrDisk(dc.radius, dc.axis, dc.center, dc.color, dc.segments, dc.filled, dc.in3d);
+				DrawCircleOrDisk(dc.object,dc.radius, dc.axis, dc.center, dc.color, dc.segments, dc.filled, dc.in3d);
 			}
 
 			// reset buffer index
 			index = 0;
 		}
 		
+		public static function DrawCircleOrDisk(object:*,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
+		{
+			var temp : Number3D = new Number3D(radius,0,0);
+			var tempcurve:Number3D = new Number3D(0,0,0);
+			var joinends : Boolean;
+			var i:int;
+			var pointcount : int;
+
+			var angle:Number = (0-360)/segments;
+			var curveangle : Number = angle/2;
+
+			tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+			tempcurve.rotateY(curveangle+0);
+
+			if(360-0<360)
+			{
+				joinends = false;
+				pointcount = segments+1;
+			}
+		    else
+			{
+				joinends = true;
+				pointcount = segments;
+			}
+		   
+			temp.rotateY(0);
+
+			var vertices:Array = new Array();
+			var curvepoints:Array = new Array();
+
+			for(i = 0; i< pointcount;i++)
+			{
+				vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+				curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+				temp.rotateY(angle);
+				tempcurve.rotateY(angle);
+			}
+
+			for(i = 0; i < segments ;i++)
+			{
+				var line:Line3D = new Line3D(object, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+				line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+				object.addLine(line);
+			}
+		}
+		
+		private var object:*;
 		private var radius:Number;
 		private var axis:Vector3;
 		private var center:Vector3;

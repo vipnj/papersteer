@@ -99,7 +99,7 @@ package tabinda.as3steer
 		//extra bin for "everything else" (points outside super-brick) 
 		public var other:lqBin;
 
-		var bincount:int;
+		private var _bincount:int;
 
 		public function locationQueryDatabase(_originx:Number,_originy:Number,_originz:Number,_sizex:Number,_sizey:Number,_sizez:Number,_divx:int,_divy:int,_divz:int)
 		{
@@ -500,6 +500,13 @@ package tabinda.as3steer
 			}
 			// We will ignore other for now. Hope that works out ok
 			return mostPopulatedBin;
+		}
+		
+		public function get bincount():int { return _bincount; }
+		
+		public function set bincount(value:int):void 
+		{
+			_bincount = value;
 		}
 	}
 }

@@ -32,16 +32,17 @@
 
 package tabinda.demo.plugins.Ctf
 {
-	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import tabinda.papersteer.*;
-	import tabinda.demo.*;
 	
-	import org.papervision3d.core.geom.TriangleMesh3D;
-	import org.papervision3d.core.math.NumberUV;
+	import org.papervision3d.core.geom.*;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.*;
 	import org.papervision3d.materials.ColorMaterial;
+	import org.papervision3d.materials.special.LineMaterial;
+	import org.papervision3d.Papervision3D;
 	
-	//using SOG = List<SphericalObstacle>;  // spherical obstacle group
+	import tabinda.demo.*;
+	import tabinda.papersteer.*;
 
 	// Capture the Flag   (a portion of the traditional game)
 	//
@@ -68,17 +69,37 @@ package tabinda.demo.plugins.Ctf
 		
 		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
 		public var GridMesh:TriangleMesh3D;
+		public var obstacleGeometry:Lines3D;
+		public var highlightGeometry:Lines3D;
 		public var colMat:ColorMaterial;
 		
+		public var count:int = 0;
+		
+		public var pluginReset:Boolean;
+		
 		public function CtfPlugIn ()
-		{
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			Demo.scene.addChild(GridMesh);
+		{			
+			initPV3D();
+			
+			pluginReset = true;
 			
 			super ();
 			all=new Vector.<CtfBase>();
+		}
+		
+		public function initPV3D():void
+		{
+			colMat = new ColorMaterial(0x000000, 1);
+			colMat.doubleSided = true;
+			colMat.interactive = false;
+			
+			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			obstacleGeometry = new Lines3D(new LineMaterial(0x000000, 1));
+			highlightGeometry= new Lines3D(new LineMaterial(0x000000, 1));
+			
+			Demo.container.addChild(obstacleGeometry);
+			Demo.container.addChild(highlightGeometry);
+			Demo.container.addChild(GridMesh);
 		}
 
 		public override  function get Name ():String
@@ -96,7 +117,9 @@ package tabinda.demo.plugins.Ctf
 			// create the seeker ("hero"/"attacker")
 			Globals.ctfSeeker=new CtfSeeker();
 			all.push (Globals.ctfSeeker);
-			Demo.scene.addChild(Globals.ctfSeeker.CtfMesh);
+			
+			Demo.container.addChild(Globals.ctfSeeker.objectMesh);
+			Demo.container.addChild(Globals.ctfSeeker.lines);
 
 			// create the specified number of enemies, 
 			// storing pointers to them in an array.
@@ -104,7 +127,8 @@ package tabinda.demo.plugins.Ctf
 			{
 				Globals.CtfEnemies[i]=new CtfEnemy();
 				all.push (Globals.CtfEnemies[i]);
-				Demo.scene.addChild(Globals.CtfEnemies[i].CtfMesh);
+				Demo.container.addChild(Globals.CtfEnemies[i].objectMesh);
+				Demo.container.addChild(Globals.CtfEnemies[i].lines);
 			}
 
 			// initialize camera
@@ -136,7 +160,7 @@ package tabinda.demo.plugins.Ctf
 			var selected:IVehicle=Demo.SelectedVehicle;
 
 			// vehicle nearest mouse (to be highlighted)
-			var nearMouse:IVehicle=null;//FIXME: Demo.vehicleNearestToMouse ();
+			var nearMouse:IVehicle = Demo.VehicleNearestToMouse();
 
 			// update camera
 			Demo.UpdateCamera (currentTime,elapsedTime,selected);
@@ -150,15 +174,34 @@ package tabinda.demo.plugins.Ctf
 			var blend:Number=Utilities.RemapIntervalClip(goalDot,1,0,0.5,0);
 			var gridCenter:Vector3=Utilities.Interpolate2(blend,selected.Position,Globals.HomeBaseCenter);
 			
-			GridMesh.geometry.faces = [];
-			GridMesh.geometry.vertices = [];
-			Demo.GridUtility(gridCenter,GridMesh);
-
 			// draw the seeker, obstacles and home base
 			Globals.ctfSeeker.Draw ();
-			DrawObstacles ();
-			DrawHomeBase ();
-
+		
+			highlightGeometry.geometry.faces = [];
+			highlightGeometry.geometry.vertices = [];
+			highlightGeometry.removeAllLines();
+				
+			// We do  this because PV3D and AS3 are not Canvas based Drawers
+			if(pluginReset)
+			{
+				obstacleGeometry.geometry.faces = [];
+				obstacleGeometry.geometry.vertices = [];
+				obstacleGeometry.removeAllLines();
+				
+				GridMesh.geometry.faces = [];
+				GridMesh.geometry.vertices = [];
+				//Demo.GridUtility(gridCenter,GridMesh);
+				Grid(gridCenter);
+			
+				// Should be drawn once per restart or obstacle insertion/removal, PV3D is clumsy on constant Redrawing
+				DrawObstacles ();
+				
+				// Should be drawn once per restart, PV3D is clumsy on constant Redrawing
+				DrawHomeBase ();
+				
+				pluginReset = false;
+			}
+			
 			// draw each enemy
 			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
 			{
@@ -166,29 +209,110 @@ package tabinda.demo.plugins.Ctf
 			}
 
 			// highlight vehicle nearest mouse
-			Demo.HighlightVehicleUtility (nearMouse);
+			//Demo.HighlightVehicleUtility (nearMouse);
+			HighlightVehicleUtility (nearMouse);
+		}
+		
+		public function Grid(gridTarget:Vector3):void
+		{		
+			var center:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
+											 Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
+										     Number(Math.round(gridTarget.z * 0.5) * 2));
+
+			// colors for checkboard
+			var gray1:uint = Colors.LightGray
+			var gray2:uint = Colors.DarkGray;
+			
+			var size:int = 500;
+			var subsquares:int = 50;
+			
+			var half:Number = size / 2;
+			var spacing:Number = size / subsquares;
+
+			var flag1:Boolean = false;
+			var p:Number = -half;
+			var corner:Vector3 = new Vector3();
+			
+			count = 0;
+			
+			for (var i:int = 0; i < subsquares; i++)
+			{
+				var flag2:Boolean = flag1;
+				var q:Number = -half;
+				for (var j:int = 0; j < subsquares; j++)
+				{
+					corner.x = p;
+					corner.y = -1;
+					corner.z = q;
+
+					corner = Vector3.VectorAddition(corner, center);
+					
+					var vertA:Vertex3D = corner.ToVertex3D();
+					var vertB:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, 0)).ToVertex3D();
+					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
+					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
+					
+					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					
+					var color:uint = flag2 ? gray1 : gray2;
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+			
+					GridMesh.geometry.faces.push(t1);
+					GridMesh.geometry.faces.push(t2);
+					
+					flag2 = !flag2;
+					q += spacing;
+				}
+				flag1 = !flag1;
+				p += spacing;
+			}
+			if (Papervision3D.useRIGHTHANDED)
+			{
+				GridMesh.geometry.flipFaces();
+			}
+			GridMesh.geometry.ready = true;
+		}
+		
+		public function HighlightVehicleUtility(vehicle:IVehicle):void
+		{
+			if (vehicle != null)
+			{
+				DrawCircleOrDisk(highlightGeometry,vehicle.Radius, Vector3.Zero, vehicle.Position, Colors.LightGray, 20, true, false );
+			}
 		}
 
 		public override  function Close ():void
 		{
 			// delete seeker
-			Demo.scene.removeChild(Globals.ctfSeeker.CtfMesh);
+			destoryPV3DObject(Globals.ctfSeeker.objectMesh);
+			destoryPV3DObject(Globals.ctfSeeker.lines);
+			
 			Globals.ctfSeeker = null;
 			
+			//Remove PV3D Grid and Lines Mesh
+			destoryPV3DObject(GridMesh);
+			destoryPV3DObject(obstacleGeometry);
+			destoryPV3DObject(highlightGeometry);
 
 			// delete each enemy
 			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
 			{
-				Demo.scene.removeChild(Globals.CtfEnemies[i].CtfMesh);
-				Globals.CtfEnemies[i] = null;
+				destoryPV3DObject(Globals.CtfEnemies[i].objectMesh);
+				destoryPV3DObject(Globals.CtfEnemies[i].lines);
 				
+				Globals.CtfEnemies[i] = null;
 			}
 			
-			//TODO: Remove scene object once the plugin closes
-			//Demo.scene.objects.splice(0);
-
 			// clear the group of all vehicles
 			all.splice(0,all.length);
+		}
+		
+		private function destoryPV3DObject(object:*):void 
+		{
+			Demo.container.removeChild(object);
+			object.material.destroy();
+			object = null;
 		}
 
 		public override  function Reset ():void
@@ -208,6 +332,8 @@ package tabinda.demo.plugins.Ctf
 
 			// make camera jump immediately to new position
 			Demo.camera.DoNotSmoothNextMove ();
+			
+			pluginReset = true;
 		}
 
 		public override  function HandleFunctionKeys (key:uint):void
@@ -216,9 +342,11 @@ package tabinda.demo.plugins.Ctf
 			{
 				case Keyboard.F1:
 					CtfBase.AddOneObstacle ();
+					pluginReset = true;
 					break;
 				case Keyboard.F2:
 					CtfBase.RemoveOneObstacle ();
+					pluginReset = true;
 					break;
 			}
 		}
@@ -237,6 +365,59 @@ package tabinda.demo.plugins.Ctf
 			var vehicles:Vector.<IVehicle> = Vector.<IVehicle>(all);
 			return vehicles;
 		}
+		
+		private function DrawCircleOrDisk(lines:Lines3D,radius:Number, axis:Vector3,center:Vector3, color:uint, segments:int,filled:Boolean,in3d:Boolean):void
+		{
+			if (Demo.IsDrawPhase())
+			{
+				var temp : Number3D = new Number3D(radius,0,0);
+				var tempcurve:Number3D = new Number3D(0,0,0);
+				var joinends : Boolean;
+				var i:int;
+				var pointcount : int;
+
+				var angle:Number = (0-360)/segments;
+				var curveangle : Number = angle/2;
+
+				tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+				tempcurve.rotateY(curveangle+0);
+
+				if(360-0<360)
+				{
+					joinends = false;
+					pointcount = segments+1;
+				}
+			   else
+				{
+					joinends = true;
+					pointcount = segments;
+				}
+			   
+				temp.rotateY(0);
+
+				var vertices:Array = new Array();
+				var curvepoints:Array = new Array();
+
+				for(i = 0; i< pointcount;i++)
+				{
+					vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+					curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+					temp.rotateY(angle);
+					tempcurve.rotateY(angle);
+				}
+
+				for(i = 0; i < segments ;i++)
+				{
+					var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+					line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+					lines.addLine(line);
+				}
+			}
+			else
+			{
+				DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+			}
+		}
 
 		public function DrawHomeBase ():void
 		{
@@ -245,8 +426,9 @@ package tabinda.demo.plugins.Ctf
 			var noColor:uint=Colors.Gray;
 			var reached:Boolean=Globals.ctfSeeker.State == SeekerState.AtGoal;
 			var baseColor:uint=reached?atColor:noColor;
-			Drawing.DrawXZDisk (Globals.HomeBaseRadius,Globals.HomeBaseCenter,baseColor,40);
-			Drawing.DrawXZDisk (Globals.HomeBaseRadius / 15,Vector3.VectorAddition(Globals.HomeBaseCenter , up),Colors.Black,20);
+			
+			DrawCircleOrDisk (obstacleGeometry,Globals.HomeBaseRadius,Vector3.Zero,Globals.HomeBaseCenter,baseColor,40,true,false);
+			DrawCircleOrDisk (obstacleGeometry,Globals.HomeBaseRadius / 15,Vector3.Zero,Vector3.VectorAddition(Globals.HomeBaseCenter , up),Colors.Black,20,true,false);
 		}
 
 		public function DrawObstacles ():void
@@ -255,7 +437,7 @@ package tabinda.demo.plugins.Ctf
 			var allSO:Vector.<SphericalObstacle>=Vector.<SphericalObstacle>(CtfBase.AllObstacles);
 			for (var so:int=0; so < allSO.length; so++)
 			{
-				Drawing.DrawXZCircle (allSO[so].Radius,allSO[so].Center,color,40);
+				DrawCircleOrDisk (obstacleGeometry,allSO[so].Radius, Vector3.Zero, allSO[so].Center, color, 40, false,false );
 			}
 		}
 	}

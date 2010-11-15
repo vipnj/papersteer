@@ -70,9 +70,9 @@ package tabinda.papersteer
 		// takes _pointCount:int,_points:Array,_radius:Number,_cyclic:Boolean
 		public function PolylinePathway(...args):void
 		{
-			trace("PolylinePathway.constructor",args[0] is int, args[1] is Array, args[2] is Number,args[3] is Boolean);
+			//trace("PolylinePathway.constructor",args[0] is int, args[1] is Vector.<Vector3>, args[2] is Number,args[3] is Boolean);
 			
-			if(args.length == 3)
+			if(args.length == 4)
 			{
 				Initialize (args[0],args[1],args[2],args[3]);
 			}
@@ -92,10 +92,11 @@ package tabinda.papersteer
 			{
 				pointCount++;
 			}
-			lengths=new Vector.<Number>(pointCount);
-			points=new Vector.<Vector3>(pointCount);
-			normals=new Vector.<Vector3>(pointCount);
-
+			
+			lengths = new Vector.<Number>(pointCount);
+			points = new Vector.<Vector3>(pointCount);
+			normals = new Vector.<Vector3>(pointCount);
+			
 			// loop over all points
 			for (var i:int=0; i < pointCount; i++)
 			{
@@ -194,11 +195,11 @@ package tabinda.papersteer
 			{
 				if (pathDistance < 0)
 				{
-					return points[0]+0.0;
+					return points[0];
 				}
 				if (pathDistance >= totalPathLength)
 				{
-					return points[pointCount - 1]+0.0;
+					return points[pointCount - 1];
 				}
 			}
 

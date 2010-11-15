@@ -38,20 +38,19 @@ package tabinda.as3steer
 	*/
 	public class SteerLibrary extends AbstractVehicle
 	{
-		// Randomiser
-		var randomGenerator:Number = Math.random();
-
 		// Wander behavior
-		var WanderSide:Number;
-		var WanderUp:Number;
+		private var wanderSide:Number;
+		private var wanderUp:Number;
 
 		/// XXX globals only for the sake of graphical annotation
-		var hisPositionAtNearestApproach:Vector3;
-		var ourPositionAtNearestApproach:Vector3;
+		private var _hisPositionAtNearestApproach:Vector3;
+		private var _ourPositionAtNearestApproach:Vector3;
 
-		var gaudyPursuitAnnotation:Boolean;
+		private var _gaudyPursuitAnnotation:Boolean;
 
-		// reset state
+		/**
+		 * reset state
+		 */
 		public function resetSteering():void
 		{
 			// initial state of wander behavior
@@ -60,67 +59,128 @@ package tabinda.as3steer
 
 			// default to non-gaudyPursuitAnnotation
 			gaudyPursuitAnnotation=false;
-
-			randomGenerator=Math.random();
 		}
 
-		function isAhead1(target:Vector3):Boolean
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
+		private function isAhead1(target:Vector3):Boolean
 		{
 			return isAhead2(target,0.707);
 		}
-		function isAside1(target:Vector3):Boolean
+		
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
+		private function isAside1(target:Vector3):Boolean
 		{
 			return isAside2(target,0.707);
 		}
-		function isBehind1(target:Vector3):Boolean
+		
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
+		private function isBehind1(target:Vector3):Boolean
 		{
 			return isBehind2(target,-0.707);
 		}
 
-		function isAhead2(target:Vector3,cosThreshold:Number)
+		/**
+		 * 
+		 * @param	target
+		 * @param	cosThreshold
+		 */
+		private function isAhead2(target:Vector3,cosThreshold:Number):Boolean
 		{
-			var targetDirection:Vector3=Vector3.VectorSubtraction(target , Position());
-			targetDirection.Normalise();
-			return (forward().DotProduct(targetDirection) > cosThreshold);
+			var targetDirection:Vector3=Vector3.VectorSubtraction(target , Position);
+			targetDirection.fNormalize();
+			return (forward.DotProduct(targetDirection) > cosThreshold);
 		}
-		function isAside2(target:Vector3,cosThreshold:Number):Boolean
+		
+		/**
+		 * 
+		 * @param	target
+		 * @param	cosThreshold
+		 * @return
+		 */
+		private function isAside2(target:Vector3,cosThreshold:Number):Boolean
 		{
-			var targetDirection:Vector3=Vector3.VectorSubtraction(target , Position());
-			targetDirection.Normalise();
-			var dp:Number=forward().DotProduct(targetDirection);
+			var targetDirection:Vector3=Vector3.VectorSubtraction(target , Position);
+			targetDirection.fNormalize();
+			var dp:Number=forward.DotProduct(targetDirection);
 			return dp < cosThreshold && dp > - cosThreshold;
 		}
-		function isBehind2(target:Vector3,cosThreshold:Number):Boolean
+		
+		/**
+		 * 
+		 * @param	target
+		 * @param	cosThreshold
+		 * @return
+		 */
+		private function isBehind2(target:Vector3,cosThreshold:Number):Boolean
 		{
-			var targetDirection:Vector3=Vector3.VectorSubtraction(target , Position());
-			targetDirection.Normalise();
-			return forward().DotProduct(targetDirection) < cosThreshold;
+			var targetDirection:Vector3=Vector3.VectorSubtraction(target , Position);
+			targetDirection.fNormalize();
+			return forward.DotProduct(targetDirection) < cosThreshold;
 		}
 
-		// called when steerToAvoidObstacles decides steering is required
-		// (default action is to do nothing, layered classes can overload it)
+		/** 
+		 * called when steerToAvoidObstacles decides steering is required
+		 * (default action is to do nothing, layered classes can overload it)
+		 * @param	minDistanceToCollision
+		 */
 		public function annotateAvoidObstacle(minDistanceToCollision:Number):void
 		{
 		}
 
 		// called when steerToFollowPath decides steering is required
 		// (default action is to do nothing, layered classes can overload it)
+		/**
+		 * 
+		 * @param	future
+		 * @param	onPath
+		 * @param	target
+		 * @param	outside
+		 */
 		public function annotatePathFollowing(future:Vector3,onPath:Vector3,target:Vector3,outside:Number):void
 		{
 		}
 
 		// called when steerToAvoidCloseNeighbors decides steering is required
 		// (default action is to do nothing, layered classes can overload it)
+		/**
+		 * 
+		 * @param	otherVehicle
+		 * @param	seperationDistance
+		 */
 		public function annotateAvoidCloseNeighbor(otherVehicle:AbstractVehicle,seperationDistance:Number):void
 		{
 		}
 
 		// called when steerToAvoidNeighbors decides steering is required
 		// (default action is to do nothing, layered classes can overload it)
+		/**
+		 * 
+		 * @param	vehicle
+		 * @param	steer
+		 * @param	position
+		 * @param	threatPosition
+		 */
 		public function annotateAvoidNeighbor(vehicle:AbstractVehicle,steer:Number,position:Vector3,threatPosition:Vector3):void
 		{
 		}
 
+		/**
+		 * 
+		 * @param	dt
+		 * @return
+		 */
 		public function steerForWander(dt:Number):Vector3
 		{
 			// random walk WanderSide and WanderUp between -1 and +1
@@ -129,45 +189,71 @@ package tabinda.as3steer
 			WanderUp=scalarRandomWalk(WanderUp,speed,-1,+1);
 
 			// return a pure lateral steering vector: (+/-Side) + (+/-Up)
-			return Vector3.VectorAddition(Vector3.ScalarMultiplication1(side() , WanderSide) , Vector3.ScalarMultiplication1(up(),  WanderUp));
+			return Vector3.VectorAddition(Vector3.ScalarMultiplication(WanderSide,side) , Vector3.ScalarMultiplication(WanderUp,up));
 		}
 
-
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
 		public function steerForSeek(target:Vector3):Vector3
 		{
-			var desiredVelocity:Vector3=Vector3.VectorSubtraction(target , Position());
-			return Vector3.VectorSubtraction(desiredVelocity , velocity());
+			var desiredVelocity:Vector3=Vector3.VectorSubtraction(target , Position);
+			return Vector3.VectorSubtraction(desiredVelocity , velocity);
 		}
 
 
 		// ----------------------------------------------------------------------------
 		// Flee behavior
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
 		public function steerForFlee(target:Vector3):Vector3
 		{
-			var desiredVelocity:Vector3=Vector3.VectorSubtraction(Position() , target);
-			return Vector3.VectorSubtraction(desiredVelocity , velocity());
+			var desiredVelocity:Vector3=Vector3.VectorSubtraction(Position , target);
+			return Vector3.VectorSubtraction(desiredVelocity , velocity);
 		}
 
 		// ----------------------------------------------------------------------------
 		// xxx proposed, experimental new seek/flee [cwr 9-16-02]
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
 		public function xxxsteerForFlee(target:Vector3):Vector3
 		{
 
-			var offset:Vector3=Vector3.VectorSubtraction(Position() , target);
-			var desiredVelocity:Vector3=truncateLength(offset,maxSpeed());
-			return Vector3.VectorSubtraction(desiredVelocity , velocity());
+			var offset:Vector3=Vector3.VectorSubtraction(Position , target);
+			var desiredVelocity:Vector3=truncateLength(offset,maxSpeed);
+			return Vector3.VectorSubtraction(desiredVelocity , velocity);
 		}
+		
+		/**
+		 * 
+		 * @param	target
+		 * @return
+		 */
 		public function xxxsteerForSeek(target:Vector3):Vector3
 		{
-
-			var offset:Vector3=Vector3.VectorSubtraction(target , Position());
-			var desiredVelocity:Vector3=truncateLength(offset,maxSpeed());
-			return Vector3.VectorSubtraction(desiredVelocity , velocity());
+			var offset:Vector3=Vector3.VectorSubtraction(target , Position);
+			var desiredVelocity:Vector3 = truncateLength(offset, maxSpeed);
+			var temp:Vector3 = Vector3.VectorSubtraction(desiredVelocity , velocity);
+			return temp
 		}
 
 
 		// ----------------------------------------------------------------------------
 		// Path Following behaviors
+		/**
+		 * 
+		 * @param	predictionTime
+		 * @param	path
+		 * @return
+		 */
 		public function steerToStayOnPath(predictionTime:Number,path:Pathway):Vector3
 		{
 			// predict our future position
@@ -191,16 +277,23 @@ package tabinda.as3steer
 			}
 		}
 
+		/**
+		 * 
+		 * @param	direction
+		 * @param	predictionTime
+		 * @param	path
+		 * @return
+		 */
 		public function steerToFollowPath(direction:int,predictionTime:Number,path:Pathway):Vector3
 		{
 			// our goal will be offset from our path distance by this amount
-			var pathDistanceOffset:Number=direction * predictionTime * speed();
+			var pathDistanceOffset:Number=direction * predictionTime * speed;
 
 			// predict our future position
 			var futurePosition:Vector3=predictFuturePosition(predictionTime);
 			
 			// measure distance along path of our current and predicted positions
-			var nowPathDistance:Number=path.mapPointToPathDistance(Position());
+			var nowPathDistance:Number=path.mapPointToPathDistance(Position);
 			var futurePathDistance:Number=path.mapPointToPathDistance(futurePosition);
 
 			// are we facing in the correction direction?
@@ -254,6 +347,12 @@ package tabinda.as3steer
 		// XXX (perhaps there should be another version of steerToAvoidObstacles
 		// XXX whose second arg is "const Obstacle& obstacle" just in case we want
 		// XXX to avoid a non-grouped obstacle)
+		/**
+		 * 
+		 * @param	minTimeToCollision
+		 * @param	obstacle
+		 * @return
+		 */
 		public function steerToAvoidObstacle(minTimeToCollision:Number,obstacle:Obstacle):Vector3
 		{
 			var avoidance:Vector3=obstacle.steerToAvoid(this,minTimeToCollision);
@@ -261,7 +360,7 @@ package tabinda.as3steer
 			// XXX more annotation modularity problems (assumes spherical obstacle)
 			if (avoidance != Vector3.ZERO)
 			{
-				annotateAvoidObstacle(minTimeToCollision * speed());
+				annotateAvoidObstacle(minTimeToCollision * speed);
 			}
 
 			return avoidance;
@@ -271,6 +370,12 @@ package tabinda.as3steer
 		//
 		// XXX 9-12-03: note this does NOT use the Obstacle::steerToAvoid protocol
 		// XXX like the older steerToAvoidObstacle does/did.  It needs to be fixed
+		/**
+		 * 
+		 * @param	minTimeToCollision
+		 * @param	obstacles
+		 * @return
+		 */
 		public function steerToAvoidObstacles(minTimeToCollision:Number,obstacles:Array):Vector3
 		{
 			var avoidance:Vector3=new Vector3();
@@ -279,7 +384,7 @@ package tabinda.as3steer
 			nearest=new PathIntersection();
 			next=new PathIntersection();
 
-			var minDistanceToCollision:Number=minTimeToCollision * speed();
+			var minDistanceToCollision:Number=minTimeToCollision * speed;
 
 			next.intersect=0;// false;
 			nearest.intersect=0;// false;
@@ -309,12 +414,12 @@ package tabinda.as3steer
 				// take the component of that which is lateral (perpendicular to my
 				// forward direction), set length to maxForce, add a bit of forward
 				// component (in capture the flag, we never want to slow down)
-				var offset:Vector3=Vector3.VectorSubtraction(Position() , nearest.obstacle.center);
-				avoidance=Utility.perpendicularComponent(offset,forward());
+				var offset:Vector3=Vector3.VectorSubtraction(Position, nearest.obstacle.center);
+				avoidance=Utility.perpendicularComponent(offset,forward);
 
-				avoidance.Normalise();
-				avoidance= Vector3.ScalarMultiplication1(avoidance,maxForce());
-				avoidance= Vector3.VectorAddition(avoidance,Vector3.ScalarMultiplication1(Vector3.ScalarMultiplication1(forward() , maxForce()) , 0.75));
+				avoidance.fNormalize();
+				avoidance= Vector3.ScalarMultiplication(maxForce,avoidance);
+				avoidance= Vector3.VectorAddition(avoidance,Vector3.ScalarMultiplication(0.75,Vector3.ScalarMultiplication(maxForce,forward)));
 			}
 
 			return avoidance;
@@ -326,6 +431,12 @@ package tabinda.as3steer
 		// other other vehicle we would collide with first, then steers to avoid the
 		// site of that potential collision.  Returns a steering force vector, which
 		// is zero length if there is no impending collision.
+		/**
+		 * 
+		 * @param	minTimeToCollision
+		 * @param	others
+		 * @return
+		 */
 		public function steerToAvoidNeighbors(minTimeToCollision:Number,others:Array):Vector3
 		{
 			// first priority is to prevent immediate interpenetration
@@ -356,7 +467,7 @@ package tabinda.as3steer
 				if (other != this)
 				{
 					// avoid when future positions are this close (or less)
-					var collisionDangerThreshold:Number=radius() * 2;
+					var collisionDangerThreshold:Number=radius * 2;
 
 					// predicted time until nearest approach of "this" and "other"
 					var time:Number=predictNearestApproachTime(other);
@@ -382,15 +493,15 @@ package tabinda.as3steer
 			if (threat != null)
 			{
 				// parallel: +1, perpendicular: 0, anti-parallel: -1
-				var parallelness:Number=forward().DotProduct(threat.forward());
+				var parallelness:Number=forward.DotProduct(threat.forward);
 				var angle:Number=0.707;
 
 				if (parallelness < - angle)
 				{
 					// anti-parallel "head on" paths:
 					// steer away from future threat position
-					var offset:Vector3=Vector3.VectorSubtraction(xxxThreatPositionAtNearestApproach , Position());
-					var sideDot:Number=offset.DotProduct(side());
+					var offset:Vector3=Vector3.VectorSubtraction(xxxThreatPositionAtNearestApproach , Position);
+					var sideDot:Number=offset.DotProduct(side);
 					steer=sideDot > 0?-1.0:1.0;
 				}
 				else
@@ -398,38 +509,43 @@ package tabinda.as3steer
 					if (parallelness > angle)
 					{
 						// parallel paths: steer away from threat
-						offset=Vector3.VectorSubtraction(threat.Position() , Position());
-						sideDot=offset.DotProduct(side());
+						offset=Vector3.VectorSubtraction(threat.Position , Position);
+						sideDot=offset.DotProduct(side);
 						steer=sideDot > 0?-1.0:1.0;
 					}
 					else
 					{
 						// perpendicular paths: steer behind threat
 						// (only the slower of the two does this)
-						if (threat.speed() <= speed())
+						if (threat.speed <= speed)
 						{
-							sideDot=side().DotProduct(threat.velocity());
+							sideDot=side.DotProduct(threat.velocity);
 							steer=sideDot > 0?-1.0:1.0;
 						}
 					}
 				}
 				annotateAvoidNeighbor(threat,steer,xxxOurPositionAtNearestApproach,xxxThreatPositionAtNearestApproach);
 			}
-			return Vector3.ScalarMultiplication1(side() , steer);
+			return Vector3.ScalarMultiplication(steer,side);
 		}
 
 		// Given two vehicles, based on their current positions and velocities,
 		// determine the time until nearest approach
 		//
 		// XXX should this return zero if they are already in contact?
-		function predictNearestApproachTime(other:AbstractVehicle):Number
+		/**
+		 * 
+		 * @param	other
+		 * @return
+		 */
+		private function predictNearestApproachTime(other:AbstractVehicle):Number
 		{
 			// imagine we are at the origin with no velocity,
 			// compute the relative velocity of the other vehicle
-			var myVelocity:Vector3=velocity();
-			var otherVelocity:Vector3=other.velocity();
+			var myVelocity:Vector3=velocity;
+			var otherVelocity:Vector3=other.velocity;
 			var relVelocity:Vector3=Vector3.VectorSubtraction(otherVelocity , myVelocity);
-			var relSpeed:Number=relVelocity.Length();
+			var relSpeed:Number = relVelocity.Magnitude();
 
 			// for parallel paths, the vehicles will always be at the same distance,
 			// so return 0 (aka "now") since "there is no time like the present"
@@ -448,7 +564,7 @@ package tabinda.as3steer
 
 			// find distance from its path to origin (compute offset from
 			// other to us, find length of projection onto path)
-			var relPosition:Vector3=Vector3.VectorSubtraction(Position() , other.Position());
+			var relPosition:Vector3=Vector3.VectorSubtraction(Position , other.Position);
 			var projection:Number=relTangent.DotProduct(relPosition);
 
 			return projection / relSpeed;
@@ -457,19 +573,25 @@ package tabinda.as3steer
 		// Given the time until nearest approach (predictNearestApproachTime)
 		// determine position of each vehicle at that time, and the distance
 		// between them
-		function computeNearestApproachPositions(other:AbstractVehicle,time:Number):Number
+		/**
+		 * 
+		 * @param	other
+		 * @param	time
+		 * @return
+		 */
+		private function computeNearestApproachPositions(other:AbstractVehicle,time:Number):Number
 		{
-			var myTravel:Vector3=Vector3.ScalarMultiplication1(forward() , (speed() * time));
-			var otherTravel:Vector3=Vector3.ScalarMultiplication1(other.forward() , (other.speed() * time));
+			var myTravel:Vector3=Vector3.ScalarMultiplication( (speed * time),forward);
+			var otherTravel:Vector3=Vector3.ScalarMultiplication((other.speed * time),other.forward);
 
-			var myFinal:Vector3=Vector3.VectorAddition(Position() , myTravel);
-			var otherFinal:Vector3=Vector3.VectorAddition(other.Position() , otherTravel);
+			var myFinal:Vector3=Vector3.VectorAddition(Position , myTravel);
+			var otherFinal:Vector3=Vector3.VectorAddition(other.Position, otherTravel);
 
 			// xxx for annotation
 			ourPositionAtNearestApproach=myFinal;
 			hisPositionAtNearestApproach=otherFinal;
 
-			return Vector3.VectorSubtraction(myFinal , otherFinal).Length();//Vector3::distance (myFinal, otherFinal);
+			return Vector3.VectorSubtraction(myFinal , otherFinal).Magnitude();//Vector3::distance (myFinal, otherFinal);
 		}
 
 		// ----------------------------------------------------------------------------
@@ -478,6 +600,12 @@ package tabinda.as3steer
 		// XXX  Does a hard steer away from any other agent who comes withing a
 		// XXX  critical distance.  Ideally this should be replaced with a call
 		// XXX  to steerForSeparation.
+		/**
+		 * 
+		 * @param	minSeparationDistance
+		 * @param	others
+		 * @return
+		 */
 		public function steerToAvoidCloseNeighbors(minSeparationDistance:Number,others:Array):Vector3
 		{
 			// for each of the other vehicles...
@@ -486,15 +614,15 @@ package tabinda.as3steer
 				var other:AbstractVehicle=AbstractVehicle(others[i]);
 				if (other != this)
 				{
-					var sumOfRadii:Number=radius() + other.radius();
+					var sumOfRadii:Number=radius + other.radius;
 					var minCenterToCenter:Number=minSeparationDistance + sumOfRadii;
-					var offset:Vector3=Vector3.VectorSubtraction(other.Position() , Position());
-					var currentDistance:Number=offset.Length();
+					var offset:Vector3=Vector3.VectorSubtraction(other.Position , Position);
+					var currentDistance:Number = offset.Magnitude();
 
 					if (currentDistance < minCenterToCenter)
 					{
 						annotateAvoidCloseNeighbor(other,minSeparationDistance);
-						return Utility.perpendicularComponent(offset.Invert(),forward());
+						return Utility.perpendicularComponent(Vector3.Negate(offset),forward);
 					}
 				}
 			}
@@ -504,7 +632,15 @@ package tabinda.as3steer
 
 		// ----------------------------------------------------------------------------
 		// used by boid behaviors: is a given vehicle within this boid's neighborhood?
-		function inBoidNeighborhood(other:AbstractVehicle,minDistance:Number,maxDistance:Number,cosMaxAngle:Number):Boolean
+		/**
+		 * 
+		 * @param	other
+		 * @param	minDistance
+		 * @param	maxDistance
+		 * @param	cosMaxAngle
+		 * @return
+		 */
+		private function inBoidNeighborhood(other:AbstractVehicle,minDistance:Number,maxDistance:Number,cosMaxAngle:Number):Boolean
 		{
 			if (other == this)
 			{
@@ -512,8 +648,8 @@ package tabinda.as3steer
 			}
 			else
 			{
-				var offset:Vector3=Vector3.VectorSubtraction(other.Position() , Position());
-				var distanceSquared:Number=offset.SquaredLength();
+				var offset:Vector3=Vector3.VectorSubtraction(other.Position , Position);
+				var distanceSquared:Number = offset.SquaredMagnitude();
 
 				// definitely in neighborhood if inside minDistance sphere
 				if (distanceSquared < minDistance * minDistance)
@@ -531,7 +667,7 @@ package tabinda.as3steer
 					{
 						// otherwise, test angular offset from forward axis
 						var unitOffset:Vector3=Vector3.ScalarDivision(offset , Number(Math.sqrt(distanceSquared)));
-						var forwardness:Number = forward().DotProduct(unitOffset);
+						var forwardness:Number = forward.DotProduct(unitOffset);
 						return forwardness > cosMaxAngle;
 					}
 				}
@@ -540,6 +676,13 @@ package tabinda.as3steer
 
 		// ----------------------------------------------------------------------------
 		// Separation behavior: steer away from neighbors
+		/**
+		 * 
+		 * @param	maxDistance
+		 * @param	cosMaxAngle
+		 * @param	flock
+		 * @return
+		 */
 		public function steerForSeparation(maxDistance:Number,cosMaxAngle:Number,flock:Array):Vector3
 		{
 			// steering accumulator and count of neighbors, both initially zero
@@ -550,12 +693,12 @@ package tabinda.as3steer
 			for (var i:int=0; i < flock.length; i++)
 			{
 				var other:AbstractVehicle=AbstractVehicle(flock[i]);
-				if (inBoidNeighborhood(other,radius() * 3,maxDistance,cosMaxAngle))
+				if (inBoidNeighborhood(other,radius * 3,maxDistance,cosMaxAngle))
 				{
 					// add in steering contribution
 					// (opposite of the offset direction, divided once by distance
 					// to normalize, divided another time to get 1/d falloff)
-					var offset:Vector3=Vector3.VectorSubtraction(other.Position() , Position());
+					var offset:Vector3=Vector3.VectorSubtraction(other.Position , Position);
 					var distanceSquared:Number=offset.DotProduct(offset);
 					steering = Vector3.VectorAddition(steering,Vector3.ScalarDivision(offset , - distanceSquared));
 
@@ -568,13 +711,20 @@ package tabinda.as3steer
 			if (neighbors > 0)
 			{
 				steering=Vector3.ScalarDivision(steering , Number(neighbors));
-				steering.Normalise();
+				steering.fNormalize();
 			}
 			return steering;
 		}
 
 		// ----------------------------------------------------------------------------
 		// Alignment behavior: steer to head in same direction as neighbors
+		/**
+		 * 
+		 * @param	maxDistance
+		 * @param	cosMaxAngle
+		 * @param	flock
+		 * @return
+		 */
 		public function steerForAlignment(maxDistance:Number,cosMaxAngle:Number,flock:Array):Vector3
 		{
 			// steering accumulator and count of neighbors, both initially zero
@@ -586,10 +736,10 @@ package tabinda.as3steer
 			{
 				var other:AbstractVehicle=AbstractVehicle(flock[i]);
 
-				if (inBoidNeighborhood(other,radius() * 3,maxDistance,cosMaxAngle))
+				if (inBoidNeighborhood(other,radius * 3,maxDistance,cosMaxAngle))
 				{
 					// accumulate sum of neighbor's heading
-					steering= Vector3.VectorAddition(steering,other.forward());
+					steering= Vector3.VectorAddition(steering,other.forward);
 
 					// count neighbors
 					neighbors++;
@@ -600,14 +750,21 @@ package tabinda.as3steer
 			// correcting direction, then normalize to pure direction
 			if (neighbors > 0)
 			{
-				steering=Vector3.VectorSubtraction(Vector3.ScalarDivision(steering , Number(neighbors)) , forward());
-				steering.Normalise();
+				steering=Vector3.VectorSubtraction(Vector3.ScalarDivision(steering , Number(neighbors)) , forward);
+				steering.fNormalize();
 			}
 			return steering;
 		}
 
 		// ----------------------------------------------------------------------------
 		// Cohesion behavior: to to move toward center of neighbors
+		/**
+		 * 
+		 * @param	maxDistance
+		 * @param	cosMaxAngle
+		 * @param	flock
+		 * @return
+		 */
 		public function steerForCohesion(maxDistance:Number,cosMaxAngle:Number,flock:Array):Vector3
 		{
 			// steering accumulator and count of neighbors, both initially zero
@@ -619,10 +776,10 @@ package tabinda.as3steer
 			{
 				var other:AbstractVehicle=AbstractVehicle(flock[i]);
 
-				if (inBoidNeighborhood(other,radius() * 3,maxDistance,cosMaxAngle))
+				if (inBoidNeighborhood(other,radius * 3,maxDistance,cosMaxAngle))
 				{
 					// accumulate sum of neighbor's positions
-					steering = Vector3.VectorAddition(steering,other.Position());
+					steering = Vector3.VectorAddition(steering,other.Position);
 
 					// count neighbors
 					neighbors++;
@@ -633,37 +790,42 @@ package tabinda.as3steer
 			// correcting direction, then normalize to pure direction
 			if (neighbors > 0)
 			{
-				steering=Vector3.VectorSubtraction(Vector3.ScalarDivision(steering , Number(neighbors)) , Position());
-				steering.Normalise();
+				steering=Vector3.VectorSubtraction(Vector3.ScalarDivision(steering , Number(neighbors)) , Position);
+				steering.fNormalize();
 			}
 			return steering;
 		}
 
 		// ----------------------------------------------------------------------------
 		// pursuit of another vehicle (& version with ceiling on prediction time)
+		/**
+		 * 
+		 * @param	...args
+		 * @return
+		 */
 		public function steerForPursuit(...args):Vector3
 		{
 			if(args.length == 2)
 			{
 			// offset from this to quarry, that distance, unit vector toward quarry
-			var offset:Vector3=Vector3.VectorSubtraction(args[0].Position() , Position());
-			var distance:Number=offset.Length();
+			var offset:Vector3=Vector3.VectorSubtraction(args[0].Position , Position);
+			var distance:Number = offset.Magnitude();
 			var unitOffset:Vector3=Vector3.ScalarDivision(offset , distance);
 
 			// how parallel are the paths of "this" and the quarry
 			// (1 means parallel, 0 is pependicular, -1 is anti-parallel)
-			var parallelness:Number=forward().DotProduct(args[0].forward());
+			var parallelness:Number=forward.DotProduct(args[0].forward);
 
 			// how "forward" is the direction to the quarry
 			// (1 means dead ahead, 0 is directly to the side, -1 is straight back)
-			var forwardness:Number=forward().DotProduct(unitOffset);
+			var forwardness:Number=forward.DotProduct(unitOffset);
 
-			var directTravelTime:Number=distance / speed();
+			var directTravelTime:Number=distance / speed;
 			var f:int=intervalComparison(forwardness,-0.707,0.707);
 			var p:int=intervalComparison(parallelness,-0.707,0.707);
 
 			var timeFactor:Number=0;// to be filled in below
-			var color:Vector3=Colours.gBlack;// to be filled in below (xxx just for debugging)
+			var color:uint = Colors.Black;// to be filled in below (xxx just for debugging)
 
 			// Break the pursuit into nine cases, the cross product of the
 			// quarry being [ahead, aside, or behind] us and heading
@@ -675,17 +837,17 @@ package tabinda.as3steer
 					{
 						case +1 :// ahead, parallel
 							timeFactor=4;
-							color=Colours.gBlack;
+							color=Colors.Black;
 							break;
 						case 0 :// ahead, perpendicular
 							timeFactor = 1.8;
 							f;
-							color=Colours.gGray50;
+							color=Colors.Gray;
 							break;
 						case -1 :// ahead, anti-parallel
 							timeFactor = 0.85;
 							f;
-							color=Colours.gWhite;
+							color=Colors.White;
 							break;
 					}
 					break;
@@ -694,16 +856,16 @@ package tabinda.as3steer
 					{
 						case +1 :// aside, parallel
 							timeFactor=1;
-							color=Colours.gRed;
+							color = Colors.Red;
 							break;
 						case 0 :// aside, perpendicular
 							timeFactor = 0.8;
 							f;
-							color=Colours.gYellow;
+							color=Colors.Yellow
 							break;
 						case -1 :// aside, anti-parallel
 							timeFactor=4;
-							color=Colours.gGreen;
+							color = Colors.Green;
 							break;
 					}
 					break;
@@ -713,15 +875,15 @@ package tabinda.as3steer
 						case +1 :// behind, parallel
 							timeFactor = 0.5;
 							f;
-							color=Colours.gCyan;
+							color = Colors.Cyan;
 							break;
 						case 0 :// behind, perpendicular
 							timeFactor=2;
-							color=Colours.gBlue;
+							color = Colors.Blue;
 							break;
 						case -1 :// behind, anti-parallel
 							timeFactor=2;
-							color=Colours.gMagenta;
+							color = Colors.Magenta;
 							break;
 					}
 					break;
@@ -737,7 +899,7 @@ package tabinda.as3steer
 			var target:Vector3=args[0].predictFuturePosition(etl);
 
 			// annotation
-			annotationLine(Position(),target,gaudyPursuitAnnotation?color:Colours.gGray40);
+			annotationLine(Position,target,gaudyPursuitAnnotation?color:Colors.Gray);
 
 			return steerForSeek(target);
 			}
@@ -749,13 +911,19 @@ package tabinda.as3steer
 
 		// ----------------------------------------------------------------------------
 		// evasion of another vehicle
+		/**
+		 * 
+		 * @param	menace
+		 * @param	maxPredictionTime
+		 * @return
+		 */
 		public function steerForEvasion(menace:AbstractVehicle,maxPredictionTime:Number):Vector3
 		{
 			// offset from this to menace, that distance, unit vector toward menace
-			var offset:Vector3=Vector3.VectorSubtraction(menace.Position() , Position());
-			var distance:Number=offset.Length();
+			var offset:Vector3=Vector3.VectorSubtraction(menace.Position , Position);
+			var distance:Number = offset.Magnitude();
 
-			var roughTime:Number=distance / menace.speed();
+			var roughTime:Number=distance / menace.speed;
 			var predictionTime:Number=roughTime > maxPredictionTime?maxPredictionTime:roughTime;
 
 			var target:Vector3=menace.predictFuturePosition(predictionTime);
@@ -766,15 +934,25 @@ package tabinda.as3steer
 		// ----------------------------------------------------------------------------
 		// tries to maintain a given speed, returns a maxForce-clipped steering
 		// force along the forward/backward axis
+		/**
+		 * 
+		 * @param	targetSpeed
+		 * @return
+		 */
 		public function steerForTargetSpeed(targetSpeed:Number):Vector3
 		{
-			var mf:Number=maxForce();
-			var speedError:Number=targetSpeed - speed();
-			return Vector3.ScalarMultiplication1(forward() , Utility.clip(speedError,- mf,+ mf));
+			var mf:Number=maxForce;
+			var speedError:Number=targetSpeed - speed;
+			return Vector3.ScalarMultiplication(Utility.clip(speedError,- mf,+ mf),forward);
 		}
 
 		// ----------------------------------------------------------------------------
 		// xxx experiment cwr 9-6-02
+		/**
+		 * 
+		 * @param	obs
+		 * @param	intersection
+		 */
 		public function findNextIntersectionWithSphere(obs:SphericalObstacle,intersection:PathIntersection):void
 		{
 			// xxx"SphericalObstacle& obs" should be "const SphericalObstacle&
@@ -797,7 +975,7 @@ package tabinda.as3steer
 
 			// computer line-sphere intersection parameters
 			b=-2 * lc.z;
-			c=square(lc.x) + square(lc.y) + square(lc.z) - square(obs.radius + radius());
+			c=square(lc.x) + square(lc.y) + square(lc.z) - square(obs.radius + radius);
 			d=(b * b) - (4 * c);
 
 			// when the path does not intersect the sphere
@@ -828,10 +1006,18 @@ package tabinda.as3steer
                 ((p > 0) ? p : q);
 			return;
 		}
-
+		
+		/**
+		 * 
+		 * @param	initial
+		 * @param	walkspeed
+		 * @param	min
+		 * @param	max
+		 * @return
+		 */
 		public function scalarRandomWalk(initial:Number,walkspeed:Number,min:Number,max:Number):Number
 		{
-			var next:Number=initial + (((frandom01() * 2) - 1) * walkspeed);
+			var next:Number=initial + (((Math.random() * 2) - 1) * walkspeed);
 			if (next < min)
 			{
 				return min;
@@ -843,25 +1029,31 @@ package tabinda.as3steer
 			return next;
 		}
 
-
-		// From utility
-		public function frandom01():Number
-		{
-			return Number(Math.random());//((float) rand ()) / ((float) RAND_MAX));
-		}
-
+		/**
+		 * 
+		 * @param	tVector
+		 * @param	maxLength
+		 * @return
+		 */
 		public function truncateLength(tVector:Vector3,maxLength:Number):Vector3
 		{
-			var tLength:Number=tVector.Length();
+			var tLength:Number = tVector.Magnitude();
 			var returnVector:Vector3=tVector;
 			if (tLength > maxLength)
 			{
-				returnVector.Normalise();
-				returnVector = Vector3.ScalarMultiplication1(returnVector,maxLength);
+				returnVector.fNormalize();
+				returnVector = Vector3.ScalarMultiplication(maxLength,returnVector);
 			}
 			return returnVector;
 		}
-
+		
+		/**
+		 * 
+		 * @param	x
+		 * @param	lowerBound
+		 * @param	upperBound
+		 * @return
+		 */
 		public function intervalComparison(x:Number,lowerBound:Number,upperBound:Number):int
 		{
 			if (x < lowerBound)
@@ -875,13 +1067,59 @@ package tabinda.as3steer
 			return 0;
 		}
 
+		/**
+		 * 
+		 * @param	x
+		 * @return
+		 */
 		public function square(x:Number):Number
 		{
 			return x * x;
 		}
-
-		public function annotationLine(startPoint:Vector3,endPoint:Vector3,color:Vector3):void
+		
+		/**
+		 * 
+		 * @param	startPoint
+		 * @param	endPoint
+		 * @param	color
+		 */
+		public function annotationLine(startPoint:Vector3,endPoint:Vector3,color:uint):void
 		{
+		}
+		
+		public function get WanderSide():Number { return wanderSide; }
+		
+		public function set WanderSide(value:Number):void 
+		{
+			wanderSide = value;
+		}
+		
+		public function get WanderUp():Number { return wanderUp; }
+		
+		public function set WanderUp(value:Number):void 
+		{
+			wanderUp = value;
+		}
+		
+		public function get hisPositionAtNearestApproach():Vector3 { return _hisPositionAtNearestApproach; }
+		
+		public function set hisPositionAtNearestApproach(value:Vector3):void 
+		{
+			_hisPositionAtNearestApproach = value;
+		}
+		
+		public function get ourPositionAtNearestApproach():Vector3 { return _ourPositionAtNearestApproach; }
+		
+		public function set ourPositionAtNearestApproach(value:Vector3):void 
+		{
+			_ourPositionAtNearestApproach = value;
+		}
+		
+		public function get gaudyPursuitAnnotation():Boolean { return _gaudyPursuitAnnotation; }
+		
+		public function set gaudyPursuitAnnotation(value:Boolean):void 
+		{
+			_gaudyPursuitAnnotation = value;
 		}
 	}
 }

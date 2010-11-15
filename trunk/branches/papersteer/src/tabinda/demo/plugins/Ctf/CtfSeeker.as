@@ -45,7 +45,8 @@ package tabinda.demo.plugins.Ctf
 		private var evading:Boolean;// xxx store steer sub-state for anotation
 		private var lastRunningTime:Number;// for auto-reset
 		
-		private var text3D:Text3D;
+		//private var text3D:Text3D;
+		private var text3D:TextField;
 		private var textFont:Font3D;
 		private var textMat:Letter3DMaterial;
 		
@@ -54,13 +55,14 @@ package tabinda.demo.plugins.Ctf
 		{
 			super ();
 			
-			textMat = new Letter3DMaterial(0xffffff);
+			/*textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
 			textFont = new Font3D();
 			text3D = new Text3D("", new Eurostile, textMat);
-			text3D.scale = 1;
+			text3D.scale = 1;*/
 			
-			Demo.scene.addChild(text3D);
+			text3D = new TextField();
+			//Demo.container.addChild(text3D);
 			
 			Reset ();
 		}
@@ -95,8 +97,8 @@ package tabinda.demo.plugins.Ctf
 
 			// annotation
 			annotation.VelocityAcceleration (this);
-			CtfMesh.position = Position.ToNumber3D();
-			//trail.Record (currentTime,Position);
+			//objectMesh.position = Position.ToNumber3D();
+			trail.Record (currentTime,Position);
 		}
 
 		// is there a clear path to the goal?
@@ -283,7 +285,11 @@ package tabinda.demo.plugins.Ctf
 			annote+=seekerStateString;
 			annote += "\n" + Speed;
 			text3D.text = annote;
-			text3D.position = textOrigin.ToNumber3D();
+			//text3D.position = textOrigin.ToNumber3D();
+			text3D.x = textOrigin.x;
+			text3D.y = textOrigin.y;
+			text3D.z = textOrigin.z;
+			
 			//Drawing.Draw2dTextAt3dLocation(annote, textOrigin, Colors.White);
 			
 			// display status in the upper left corner of the window
@@ -292,7 +298,7 @@ package tabinda.demo.plugins.Ctf
 			status+="\n "+obstacleCount +" obstacles [F1/F2]";
 			status+="\n"+Globals.ResetCount+" restarts";
 			var screenLocation:Vector3=new Vector3(15,50,0);
-			Drawing.Draw2dTextAt2dLocation (status,screenLocation,Colors.LightGray);
+			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.LightGray);
 		}
 
 		public function SteerToEvadeAllDefenders ():Vector3
@@ -394,7 +400,6 @@ package tabinda.demo.plugins.Ctf
 			annotation.Line (Vector3.VectorSubtraction(pbb , gn),Vector3.VectorSubtraction(hbc , gn),Globals.ClearPathColor);
 			annotation.Line (Vector3.VectorSubtraction(hbc , gn),Vector3.VectorAddition(hbc , gn),Globals.ClearPathColor);
 			annotation.Line (Vector3.VectorSubtraction(pbb , gn),Vector3.VectorAddition(pbb , gn),Globals.ClearPathColor);
-			//annotation.AnnotationLine(pbb - behindSide, pbb + behindSide, Globals.clearPathColor);
 		}
 	}
 }

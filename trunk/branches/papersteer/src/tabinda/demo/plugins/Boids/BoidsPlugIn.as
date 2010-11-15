@@ -32,23 +32,45 @@
 
 package tabinda.demo.plugins.Boids
 {
-	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import flash.text.TextField;
-	import org.papervision3d.core.geom.TriangleMesh3D;
-	import org.papervision3d.materials.special.Letter3DMaterial;
-	import org.papervision3d.typography.Font3D;
-	import org.papervision3d.typography.Text3D;
+	
+	import org.papervision3d.core.geom.Lines3D;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.Number3D;
+	import org.papervision3d.materials.special.LineMaterial;
+	import org.papervision3d.typography.*;
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
 
 	public class BoidsPlugIn extends PlugIn
-	{		
+	{
+		public var lines:Lines3D;
+		
+		// flock: a group (STL vector) of pointers to all boids
+		public var flock:Vector.<Boid>;
+
+		// pointer to database used to accelerate proximity queries
+		public var pd:IProximityDatabase;
+
+		// keep track of current flock size
+		public var population:int;
+
+		// which of the various proximity databases is currently in use
+		public var cyclePD:int;
+		
 		public function BoidsPlugIn()
 		{
+			initPV3D();
+			
 			super();
 			flock = new Vector.<Boid>();
+		}
+		
+		public function initPV3D():void
+		{			
+			lines = new Lines3D(new LineMaterial(0x000000,1));
+			Demo.container.addChild(lines);
 		}
 
 		public override function get Name():String 
@@ -67,7 +89,8 @@ package tabinda.demo.plugins.Boids
 
 			// make default-sized flock
 			population = 0;
-			for (var i:int = 0; i < 20; i++) 
+			
+			for (var i:int = 0; i < 100; i++) 
 			{
 				AddBoidToFlock();
 			}
@@ -99,7 +122,7 @@ package tabinda.demo.plugins.Boids
 			var selected:IVehicle = Demo.SelectedVehicle;
 
 			// vehicle nearest mouse (to be highlighted)
-			var nearMouse:IVehicle = null;// Demo.vehicleNearestToMouse();
+			var nearMouse:IVehicle = Demo.VehicleNearestToMouse();
 
 			// update camera
 			Demo.UpdateCamera(currentTime, elapsedTime, selected);
@@ -110,11 +133,16 @@ package tabinda.demo.plugins.Boids
 				flock[i].Draw();
 			}
 
+			// Refresh PV3D Lines Object
+			lines.geometry.faces = [];
+            lines.geometry.vertices = [];
+            lines.removeAllLines();
+			
 			// highlight vehicle nearest mouse
-			Demo.DrawCircleHighlightOnVehicle(nearMouse, 1, Colors.LightGray);
-
+			DrawCircleHighlightOnVehicle(nearMouse, 1, Colors.LightGray);
+			
 			// highlight selected vehicle
-			Demo.DrawCircleHighlightOnVehicle(selected, 1, Colors.Gray);
+			DrawCircleHighlightOnVehicle(selected, 1, Colors.Gray);
 
 			// display status in the upper left corner of the window
 			var stats:String = new String();
@@ -132,7 +160,96 @@ package tabinda.demo.plugins.Boids
 				case 1: stats +="wrap around (teleport)"; break;
 			}
 			var screenLocation:Vector3 = new Vector3(15, 50, 0);
-			Drawing.Draw2dTextAt2dLocation(stats, screenLocation, Colors.LightGray);
+			Demo.Draw2dTextAt2dLocation(stats, screenLocation, Colors.LightGray);
+		}
+		
+		/**
+		 * Draws a colored circle (perpendicular to view axis) around the center
+		 * of a given vehicle.  The circle's radius is the vehicle's radius times
+		 * radiusMultiplier.
+		 * 
+		 * @param	v is a Vehicle
+		 * @param	radiusMultiplier is a Number
+		 * @param	color is an unsigned integer representing a color in Hex Format RGB
+		 */
+		public function DrawCircleHighlightOnVehicle(v:IVehicle,radiusMultiplier:Number,color:uint):void
+		{
+			if (v != null)
+			{
+				var cPosition:Vector3 = Demo.camera.Position;
+				var radius:Number = v.Radius * radiusMultiplier;  							 // adjusted radius
+				var	center:Vector3 = v.Position;                   							 // center
+				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
+				var	segments:int = 20;                          						 	 // circle segments
+				var filled:Boolean = true;
+				var in3d:Boolean = true;
+				
+				if (Demo.IsDrawPhase())
+				{
+					var ls:LocalSpace = new LocalSpace();
+					
+					if (in3d)
+					{
+						// define a local space with "axis" as the Y/up direction
+						// (XXX should this be a method on  LocalSpace?)
+						var unitAxis:Vector3 = axis;
+						unitAxis.fNormalize();
+						var unitPerp:Vector3 = VHelper.FindPerpendicularIn3d(axis);
+						unitPerp.fNormalize();
+						ls.Up = unitAxis;
+						ls.Forward = unitPerp;
+						ls.Position = (center);
+						ls.SetUnitSideFromForwardAndUp();
+					}
+					
+					var temp : Number3D = new Number3D(radius,0,0);
+					var tempcurve:Number3D = new Number3D(0,0,0);
+					var joinends : Boolean;
+					var i:int;
+					var pointcount : int;
+
+					var angle:Number = (0-360)/segments;
+					var curveangle : Number = angle/2;
+
+					tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+					tempcurve.rotateY(curveangle+0);
+
+					if(360-0<360)
+					{
+						joinends = false;
+						pointcount = segments+1;
+					}
+				   else
+					{
+						joinends = true;
+						pointcount = segments;
+					}
+				   
+					temp.rotateY(0);
+
+					var vertices:Array = new Array();
+					var curvepoints:Array = new Array();
+
+					for(i = 0; i< pointcount;i++)
+					{
+						vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+						curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+						temp.rotateY(angle);
+						tempcurve.rotateY(angle);
+					}
+
+					for(i = 0; i < segments ;i++)
+					{
+						var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+						line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+						lines.addLine(line);
+					}
+				}
+				else
+				{
+					DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+				}
+			}
 		}
 
 		public override function Close():void
@@ -143,11 +260,17 @@ package tabinda.demo.plugins.Boids
 				RemoveBoidFromFlock();
 			}
 			
-			//TODO: Remove scene object once the plugin closes
-			//Demo.scene.objects.splice(0);
+			destoryPV3DObject(lines);
 			
 			// delete the proximity database
 			pd = null;
+		}
+		
+		private function destoryPV3DObject(object:*):void 
+		{
+			Demo.container.removeChild(object);
+			object.material.destroy();
+			object = null;
 		}
 
 		public override function Reset():void
@@ -228,7 +351,9 @@ package tabinda.demo.plugins.Boids
 			population++;
 			var boid:Boid = new Boid(pd);
 			flock.push(boid);
-			Demo.scene.addChild(boid.BoidMesh);
+			
+			// PV3D Mesh being added to DisplayList
+			Demo.container.addChild(boid.objectMesh);
 			
 			if (population == 1)
 			{
@@ -244,8 +369,10 @@ package tabinda.demo.plugins.Boids
 				population--;
 				var boid:Boid = flock[population];
 				flock.splice(population, 1);
-				Demo.scene.removeChild(boid.BoidMesh);
-
+				
+				// PV3D Mesh being Removed from DisplayList
+				destoryPV3DObject(boid.objectMesh);
+				
 				// if it is Demo's selected vehicle, unselect it
 				if (boid == Demo.SelectedVehicle)
 				{
@@ -263,17 +390,5 @@ package tabinda.demo.plugins.Boids
 			var vehicles:Vector.<IVehicle> = Vector.<IVehicle>(flock);
 			return vehicles;
 		}
-		
-		// flock: a group (STL vector) of pointers to all boids
-		public var flock:Vector.<Boid>;
-
-		// pointer to database used to accelerate proximity queries
-		public var pd:IProximityDatabase;
-
-		// keep track of current flock size
-		public var population:int;
-
-		// which of the various proximity databases is currently in use
-		public var cyclePD:int;
 	}
 }

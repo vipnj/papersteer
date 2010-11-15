@@ -47,27 +47,27 @@ package tabinda.as3steer
 	*/
 	public class SimpleVehicle extends SteerLibrary
 	{
-		var _mass:Number;// mass (defaults to unity so acceleration=force)
-		var _radius:Number;// size of bounding sphere, for obstacle avoidance, etc.
-		var _speed:Number;// speed along Forward direction.  Because local space
+		private var _mass:Number;// mass (defaults to unity so acceleration=force)
+		private var _radius:Number;// size of bounding sphere, for obstacle avoidance, etc.
+		private var _speed:Number;// speed along Forward direction.  Because local space
 		// is velocity-aligned, velocity = Forward * Speed
 
-		var _maxForce:Number;// the maximum steering force this vehicle can apply
+		private var _maxForce:Number;// the maximum steering force this vehicle can apply
 		// (steering force is clipped to this magnitude)
 
-		var _maxSpeed:Number;// the maximum speed this vehicle is allowed to move
+		private var _maxSpeed:Number;// the maximum speed this vehicle is allowed to move
 		// (velocity is clipped to this magnitude)
 
-		var _curvature:Number;
-		var _lastForward:Vector3;
-		var _lastPosition:Vector3;
-		var _smoothedPosition:Vector3;
-		var _smoothedCurvature:Number;
-		var _smoothedAcceleration:Vector3;
+		private var _curvature:Number;
+		private var _lastForward:Vector3;
+		private var _lastPosition:Vector3;
+		private var _smoothedPosition:Vector3;
+		private var _smoothedCurvature:Number;
+		private var _smoothedAcceleration:Vector3;
 
-		static var serialNumberCounter:int=0;
+		public static var serialNumberCounter:int=0;
 
-		var serialNumber:int;
+		private var serialNumber:int;
 		// Constructor
 
 		public function SimpleVehicle()
@@ -89,13 +89,13 @@ package tabinda.as3steer
 			// (XXX this seems really fragile, needs to be redesigned XXX)
 			resetSteering();
 
-			setMass(1);// mass (defaults to 1 so acceleration=force)
-			setSpeed(0);// speed along Forward direction.
+			mass =1;// mass (defaults to 1 so acceleration=force)
+			speed = 0;// speed along Forward direction.
 
-			setRadius(0.5);// size of bounding sphere
+			radius = 0.5;// size of bounding sphere
 
-			setMaxForce(0.1);// steering force is clipped to this magnitude
-			setMaxSpeed(1.0);// velocity is clipped to this magnitude
+			maxForce =0.1;// steering force is clipped to this magnitude
+			maxSpeed = 1.0;// velocity is clipped to this magnitude
 
 			// reset bookkeeping to do running averages of these quanities
 			resetSmoothedPosition(Vector3.ZERO);
@@ -104,101 +104,101 @@ package tabinda.as3steer
 		}
 
 		// get/set mass
-		public override  function mass():Number
+		public override function get mass():Number
 		{
 			return _mass;
 		}
-		public override  function setMass(m:Number):Number
+		public override function set mass(value:Number):void
 		{
-			return _mass=m;
+			_mass=value;
 		}
 
 		// get velocity of vehicle
-		public override  function velocity():Vector3
+		public override function get velocity():Vector3
 		{
-			return Vector3.ScalarMultiplication1(forward() , speed());
+			return Vector3.ScalarMultiplication(speed,forward);
 		}
 
 		// get/set speed of vehicle  (may be faster than taking mag of velocity)
-		public override  function speed():Number
+		public override  function get speed():Number
 		{
 			return _speed;
 		}
-		public override  function setSpeed(s:Number):Number
+		public override  function set speed(s:Number):void
 		{
-			return _speed=s;
+			 _speed=s;
 		}
 
 		// size of bounding sphere, for obstacle avoidance, etc.
-		public override  function radius():Number
+		public override  function get radius():Number
 		{
 			return _radius;
 		}
-		public override  function setRadius(m:Number):Number
+		public override  function set radius(m:Number):void
 		{
-			return _radius=m;
+			 _radius=m;
 		}
 
 		// get/set maxForce
-		public override  function maxForce():Number
+		public override  function get maxForce():Number
 		{
 			return _maxForce;
 		}
-		public override  function setMaxForce(mf:Number):Number
+		public override  function set maxForce(mf:Number):void
 		{
-			return _maxForce=mf;
+			_maxForce=mf;
 		}
 
 		// get/set maxSpeed
-		public override  function maxSpeed():Number
+		public override function get maxSpeed():Number
 		{
 			return _maxSpeed;
 		}
-		public override  function setMaxSpeed(ms:Number):Number
+		public override  function set maxSpeed(ms:Number):void
 		{
-			return _maxSpeed=ms;
+			_maxSpeed=ms;
 		}
 
 		// get instantaneous curvature (since last update)
-		function curvature():Number
+		private function get curvature():Number
 		{
 			return _curvature;
 		}
 
 		// get/reset smoothedCurvature, smoothedAcceleration and smoothedPosition
-		function smoothedCurvature():Number
+		private function get smoothedCurvature():Number
 		{
 			return _smoothedCurvature;
 		}
-		function resetSmoothedCurvature(value:Number):Number
+		private function resetSmoothedCurvature(value:Number):Number
 		{
 			_lastForward=Vector3.ZERO;
 			_lastPosition=Vector3.ZERO;
 
 			return _smoothedCurvature=_curvature=value;
 		}
-		function smoothedAcceleration():Vector3
+		private function get smoothedAcceleration():Vector3
 		{
 			return _smoothedAcceleration;
 		}
-		function resetSmoothedAcceleration(value:Vector3):Vector3
+		private function resetSmoothedAcceleration(value:Vector3):Vector3
 		{
 			return _smoothedAcceleration=value;
 		}
-		function smoothedPosition():Vector3
+		private function get smoothedPosition():Vector3
 		{
 			return _smoothedPosition;
 		}
-		function resetSmoothedPosition(value:Vector3):Vector3
+		private function resetSmoothedPosition(value:Vector3):Vector3
 		{
 			return _smoothedPosition=value;
 		}
 
-		function randomizeHeadingOnXZPlane():void
+		private function randomizeHeadingOnXZPlane():void
 		{
-			setUp(Vector3.UNIT_Y);
-			setForward(Utility.RandomUnitVectorOnXZPlane());
-			setSide(localRotateForwardToSide(forward()));
+			up = Vector3.UNIT_Y;
+			forward = Utility.RandomUnitVectorOnXZPlane();
+			side = localRotateForwardToSide(forward);
 		}
 
 		// From CPP
@@ -214,17 +214,17 @@ package tabinda.as3steer
 		// parameter names commented out to prevent compiler warning from "-W"
 		public function adjustRawSteeringForce(force:Vector3):Vector3
 		{
-			var maxAdjustedSpeed:Number=0.2 * maxSpeed();
+			var maxAdjustedSpeed:Number=0.2 * maxSpeed;
 
-			if (speed() > maxAdjustedSpeed || force == Vector3.ZERO)
+			if (speed > maxAdjustedSpeed || force == Vector3.ZERO)
 			{
 				return force;
 			}
 			else
 			{
-				var range:Number=speed() / maxAdjustedSpeed;
+				var range:Number=speed / maxAdjustedSpeed;
 				var cosine:Number=Utility.interpolate2(Number(Math.pow(range,20)),1.0,-1.0);
-				return Utility.limitMaxDeviationAngle(force,cosine,forward());
+				return Utility.limitMaxDeviationAngle(force,cosine,forward);
 			}
 		}
 
@@ -243,12 +243,12 @@ package tabinda.as3steer
 		// maybe the guts of applySteeringForce should be split off into a subroutine
 		// used by both applySteeringForce and applyBrakingForce?
 
-		function applyBrakingForce(rate:Number,deltaTime:Number):void
+		private function applyBrakingForce(rate:Number,deltaTime:Number):void
 		{
-			var rawBraking:Number=speed() * rate;
-			var clipBraking:Number=rawBraking < maxForce()?rawBraking:maxForce();
+			var rawBraking:Number=speed * rate;
+			var clipBraking:Number=rawBraking < maxForce?rawBraking:maxForce;
 
-			setSpeed(speed() - (clipBraking * deltaTime));
+			speed = (speed - (clipBraking * deltaTime));
 		}
 
 		// ----------------------------------------------------------------------------
@@ -258,11 +258,11 @@ package tabinda.as3steer
 		{
 			
 			var adjustedForce:Vector3=adjustRawSteeringForce(force);//, elapsedTime);
-			var clippedForce:Vector3=truncateLength(adjustedForce,maxForce());
+			var clippedForce:Vector3=truncateLength(adjustedForce,maxForce);
 
 			// compute acceleration and velocity
-			var newAcceleration:Vector3=Vector3.ScalarDivision(clippedForce , mass());
-			var newVelocity:Vector3=velocity();
+			var newAcceleration:Vector3=Vector3.ScalarDivision(clippedForce , mass);
+			var newVelocity:Vector3=velocity;
 
 			// damp out abrupt changes and oscillations in steering acceleration
 			// (rate is proportional to time step, then clipped into useful range)
@@ -273,16 +273,16 @@ package tabinda.as3steer
 			}
 
 			// Euler integrate (per frame) acceleration into velocity
-			newVelocity = Vector3.VectorAddition(newVelocity,Vector3.ScalarMultiplication1(_smoothedAcceleration , elapsedTime));
+			newVelocity = Vector3.VectorAddition(newVelocity,Vector3.ScalarMultiplication(elapsedTime,_smoothedAcceleration));
 
 			// enforce speed limit
-			newVelocity= truncateLength(newVelocity,maxSpeed());
+			newVelocity= truncateLength(newVelocity,maxSpeed);
 
 			// update Speed
-			setSpeed(newVelocity.Length());
-
+			speed = newVelocity.Magnitude();
+			
 			// Euler integrate (per frame) velocity into position
-			setPosition(Vector3.VectorAddition(Position() , Vector3.ScalarMultiplication1(newVelocity , elapsedTime)));
+			Position = Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(elapsedTime,newVelocity));
 
 			// regenerate local space (by default: align vehicle's forward axis with
 			// new velocity, but this behavior may be overridden by derived classes.)
@@ -292,7 +292,7 @@ package tabinda.as3steer
 			measurePathCurvature(elapsedTime);
 
 			// running average of recent positions
-			_smoothedPosition=Utility.blendIntoAccumulator(elapsedTime * 0.06,Position(),_smoothedPosition);
+			_smoothedPosition=Utility.blendIntoAccumulator(elapsedTime * 0.06,Position,_smoothedPosition);
 		}
 
 
@@ -301,12 +301,12 @@ package tabinda.as3steer
 		// little as possible.
 		//
 		// parameter names commented out to prevent compiler warning from "-W"
-		function regenerateLocalSpace(newVelocity:Vector3):void
+		private function regenerateLocalSpace(newVelocity:Vector3):void
 		{
 			// adjust orthonormal basis vectors to be aligned with new velocity
-			if (speed() > 0)
+			if (speed > 0)
 			{
-				regenerateOrthonormalBasisUF(Vector3.ScalarDivision(newVelocity , speed()));
+				regenerateOrthonormalBasisUF(Vector3.ScalarDivision(newVelocity , speed));
 			}
 		}
 
@@ -324,53 +324,53 @@ package tabinda.as3steer
 
 			// acceleration points toward the center of local path curvature, the
 			// length determines how much the vehicle will roll while turning
-			var accelUp:Vector3=Vector3.ScalarMultiplication1(_smoothedAcceleration , 0.05);
+			var accelUp:Vector3=Vector3.ScalarMultiplication(0.05,_smoothedAcceleration);
 
 			// combined banking, sum of UP due to turning and global UP
 			var bankUp:Vector3=Vector3.VectorAddition(accelUp , globalUp);
 
 			// blend bankUp into vehicle's UP basis vector
 			var smoothRate:Number=elapsedTime * 3;
-			var tempUp:Vector3=up();
+			var tempUp:Vector3=up;
 			tempUp=Utility.blendIntoAccumulator(smoothRate,bankUp,tempUp);
-			tempUp.Normalise();
-			setUp(tempUp);
+			tempUp.fNormalize();
+			up = tempUp;
 
 			// adjust orthonormal basis vectors to be aligned with new velocity
-			if (speed() > 0)
+			if (speed > 0)
 			{
-				regenerateOrthonormalBasisUF(Vector3.ScalarDivision(newVelocity , speed()));
+				regenerateOrthonormalBasisUF(Vector3.ScalarDivision(newVelocity , speed));
 			}
 		}
 
 		// ----------------------------------------------------------------------------
 		// measure path curvature (1/turning-radius), maintain smoothed version
-		function measurePathCurvature(elapsedTime:Number):void
+		private function measurePathCurvature(elapsedTime:Number):void
 		{
 			if (elapsedTime > 0)
 			{
-				var dP:Vector3=Vector3.VectorSubtraction(_lastPosition , Position());
-				var dF:Vector3=Vector3.VectorSubtraction(_lastForward , Vector3.ScalarDivision(forward() , dP.Length()));
+				var dP:Vector3=Vector3.VectorSubtraction(_lastPosition , Position);
+				var dF:Vector3=Vector3.VectorSubtraction(_lastForward , Vector3.ScalarDivision(forward , dP.Magnitude()));
 				//SI - BIT OF A WEIRD FIX HERE . NOT SURE IF ITS CORRECT
-				var lateral:Vector3=Utility.perpendicularComponent(dF,forward());
+				var lateral:Vector3=Utility.perpendicularComponent(dF,forward);
 
-				var sign:Number=lateral.DotProduct(side()) < 0?1.0:-1.0;
-				_curvature=lateral.Length() * sign;
+				var sign:Number=lateral.DotProduct(side) < 0?1.0:-1.0;
+				_curvature=lateral.Magnitude() * sign;
 				_smoothedCurvature=Utility.blendIntoAccumulator2(elapsedTime * 4.0,_curvature,_smoothedCurvature);
 
-				_lastForward=forward();
-				_lastPosition=Position();
+				_lastForward=forward;
+				_lastPosition=Position;
 			}
 		}
 
 		// ----------------------------------------------------------------------------
 		// draw lines from vehicle's position showing its velocity and acceleration
-		function annotationVelocityAcceleration(maxLengthA:Number,maxLengthV:Number):void
+		private function annotationVelocityAcceleration(maxLengthA:Number,maxLengthV:Number):void
 		{
 			var desat:Number=0.4;
-			var aScale:Number=maxLengthA / maxForce();
-			var vScale:Number=maxLengthV / maxSpeed();
-			var p:Vector3=Position();
+			var aScale:Number=maxLengthA / maxForce;
+			var vScale:Number=maxLengthV / maxSpeed;
+			var p:Vector3=Position;
 			var aColor:Vector3=new Vector3(desat,desat,1);// bluish
 			var vColor:Vector3=new Vector3(1,desat,1);// pinkish
 		}
@@ -386,7 +386,7 @@ package tabinda.as3steer
 		// XXX move to a vehicle utility mixin?
 		public override  function predictFuturePosition(predictionTime:Number):Vector3
 		{
-			return Vector3.VectorAddition(Position(), Vector3.ScalarMultiplication1(velocity() , predictionTime));
+			return Vector3.VectorAddition(Position, Vector3.ScalarMultiplication(predictionTime,velocity));
 		}
 		// ----------------------------------------------------------------------------
 	}

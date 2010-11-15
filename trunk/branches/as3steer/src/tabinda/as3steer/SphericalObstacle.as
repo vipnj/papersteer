@@ -41,7 +41,7 @@ package tabinda.as3steer
 		public var radius:Number;
 		public var center:Vector3;
 
-		var _seenFrom:String;
+		private var _seenFrom:String;
 
 		// constructors
 		public function SphericalObstacle(...args):void
@@ -56,15 +56,6 @@ package tabinda.as3steer
 				radius = 1;
 				center = Vector3.ZERO;
 			}
-		}
-
-		public override  function seenFrom():String
-		{
-			return _seenFrom;
-		}
-		public override  function setSeenFrom(s:String):void
-		{
-			_seenFrom=s;
 		}
 
 		// XXX 4-23-03: Temporary work around (see comment above)
@@ -84,36 +75,45 @@ package tabinda.as3steer
 		public override function steerToAvoid(v:AbstractVehicle,minTimeToCollision:Number):Vector3
 		{
 			// minimum distance to obstacle before avoidance is required
-			var minDistanceToCollision:Number=minTimeToCollision * v.speed();
+			var minDistanceToCollision:Number=minTimeToCollision * v.speed;
 			var minDistanceToCenter:Number=minDistanceToCollision + radius;
 
 			// contact distance: sum of radii of obstacle and vehicle
-			var totalRadius:Number=radius + v.radius();
+			var totalRadius:Number=radius + v.radius;
 
 			// obstacle center relative to vehicle position
-			var localOffset:Vector3=Vector3.VectorSubtraction(center , v.Position());
+			var localOffset:Vector3=Vector3.VectorSubtraction(center , v.Position);
 
 			// distance along vehicle's forward axis to obstacle's center
-			var forwardComponent:Number=localOffset.DotProduct(v.forward());
-			var forwardOffset:Vector3=Vector3.ScalarMultiplication2(forwardComponent, v.forward());
+			var forwardComponent:Number=localOffset.DotProduct(v.forward);
+			var forwardOffset:Vector3=Vector3.ScalarMultiplication(forwardComponent, v.forward);
 
 			// offset from forward axis to obstacle's center
 			var offForwardOffset:Vector3=Vector3.VectorSubtraction(localOffset, forwardOffset);
 
 			// test to see if sphere overlaps with obstacle-free corridor
-			var inCylinder:Boolean=offForwardOffset.Length() < totalRadius;
+			var inCylinder:Boolean=offForwardOffset.Magnitude() < totalRadius;
 			var nearby:Boolean=forwardComponent < minDistanceToCenter;
 			var inFront:Boolean=forwardComponent > 0;
 
 			// if all three conditions are met, steer away from sphere center
 			if (inCylinder && nearby && inFront)
 			{
-				return Vector3.ScalarMultiplication1(offForwardOffset , -1);
+				return Vector3.ScalarMultiplication(-1,offForwardOffset);
 			}
 			else
 			{
 				return Vector3.ZERO;
 			}
+		}
+		override public function get SeenFrom():String
+		{
+			return _seenFrom;
+		}
+		
+		override public function set SeenFrom(value:String):void 
+		{
+			_seenFrom = value;
 		}
 	}
 }

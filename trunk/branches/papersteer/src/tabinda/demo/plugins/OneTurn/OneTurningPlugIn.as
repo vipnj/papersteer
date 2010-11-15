@@ -32,23 +32,22 @@
 
 package tabinda.demo.plugins.OneTurn
 {
-	import org.papervision3d.materials.special.Letter3DMaterial;
-	import org.papervision3d.typography.Font3D;
-	import org.papervision3d.typography.Text3D;
-	import tabinda.papersteer.*;
-	import tabinda.demo.*;
-	
+	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.geom.TriangleMesh3D;
-	import org.papervision3d.core.math.NumberUV;
 	import org.papervision3d.materials.ColorMaterial;
+	import org.papervision3d.materials.special.Letter3DMaterial;
+	import org.papervision3d.Papervision3D;
+	import org.papervision3d.typography.*;
+	
+	import tabinda.demo.*;
+	import tabinda.papersteer.*;
+	
 	
 	public class OneTurningPlugIn extends PlugIn
 	{
 		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
 		public var GridMesh:TriangleMesh3D;
 		public var colMat:ColorMaterial;
-		public var uvArr1:Array;
-		public var uvArr2:Array;
 		
 		// Text3D Mesh to render Text on Vehicles
 		private var text3D1:Text3D;
@@ -58,15 +57,16 @@ package tabinda.demo.plugins.OneTurn
 		
 		private var oneTurning:OneTurning;
 		private var theVehicle:Vector.<OneTurning>;				// for allVehicles
+		
+		public var pluginReset:Boolean;
 				
 		public function OneTurningPlugIn ()
 		{
-			uvArr1 = new Array(new NumberUV(0, 0), new NumberUV(1, 1), new NumberUV(0, 1));
-			uvArr2 = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(1, 1));
-			
 			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = true;
+			colMat.doubleSided = false;
 			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+	
+			Demo.container.addChild(GridMesh);
 			
 			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
@@ -75,11 +75,12 @@ package tabinda.demo.plugins.OneTurn
 			text3D2 = new Text3D("", new Eurostile, textMat);
 			text3D1.scale = text3D2.scale = 1;
 			
-			Demo.scene.addChild(text3D1);
-			Demo.scene.addChild(text3D2);
-			Demo.scene.addChild(GridMesh);
+			//Demo.container.addChild(text3D1);
+			//Demo.container.addChild(text3D2);
+			super();
 			
-			theVehicle= new Vector.<OneTurning>();
+			theVehicle = new Vector.<OneTurning>();
+			pluginReset = true;
 		}
 
 		public override  function get Name ():String
@@ -94,7 +95,10 @@ package tabinda.demo.plugins.OneTurn
 
 		public override  function Open ():void
 		{
-			oneTurning=new OneTurning();
+			oneTurning = new OneTurning();
+			Demo.container.addChild(oneTurning.objectMesh);
+			Demo.container.addChild(oneTurning.lines);
+			
 			Demo.SelectedVehicle=oneTurning;
 			theVehicle.push(oneTurning);
 
@@ -113,7 +117,17 @@ package tabinda.demo.plugins.OneTurn
 		public override  function Redraw (currentTime:Number,elapsedTime:Number):void
 		{
 			// draw "ground plane"
-			Demo.GridUtility (oneTurning.Position,GridMesh);
+			//Demo.GridUtility (oneTurning.Position,GridMesh);
+			// We do  this because PV3D and AS3 are not Canvas based Drawers
+			if(pluginReset)
+			{				
+				GridMesh.geometry.faces = [];
+				GridMesh.geometry.vertices = [];
+				//Demo.GridUtility(gridCenter,GridMesh);
+				Grid(oneTurning.Position);
+				
+				pluginReset = false;
+			}
 
 			// draw test vehicle
 			oneTurning.Draw ();
@@ -131,20 +145,90 @@ package tabinda.demo.plugins.OneTurn
 			// update camera, tracking test vehicle
 			Demo.UpdateCamera (currentTime,elapsedTime,oneTurning);
 		}
+		
+		public function Grid(gridTarget:Vector3):void
+		{		
+			var center:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
+												 Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
+												 Number(Math.round(gridTarget.z * 0.5) * 2));
+
+			// colors for checkboard
+			var gray1:uint = Colors.LightGray
+			var gray2:uint = Colors.DarkGray;
+			
+			var size:int = 500;
+			var subsquares:int = 50;
+			
+			var half:Number = size / 2;
+			var spacing:Number = size / subsquares;
+
+			var flag1:Boolean = false;
+			var p:Number = -half;
+			var corner:Vector3 = new Vector3();
+			
+			for (var i:int = 0; i < subsquares; i++)
+			{
+				var flag2:Boolean = flag1;
+				var q:Number = -half;
+				for (var j:int = 0; j < subsquares; j++)
+				{
+					corner.x = p;
+					corner.y = -1;
+					corner.z = q;
+
+					corner = Vector3.VectorAddition(corner, center);
+					
+					var vertA:Vertex3D = corner.ToVertex3D();
+					var vertB:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, 0)).ToVertex3D();
+					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
+					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
+					
+					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					
+					var color:uint = flag2 ? gray1 : gray2;
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					
+					GridMesh.geometry.faces.push(t1);
+					GridMesh.geometry.faces.push(t2);
+					
+					flag2 = !flag2;
+					q += spacing;
+				}
+				flag1 = !flag1;
+				p += spacing;
+			}
+			if (Papervision3D.useRIGHTHANDED)
+			{
+				GridMesh.geometry.flipFaces();
+			}
+			GridMesh.geometry.ready = true;
+		}
 
 		public override  function Close ():void
 		{
 			//TODO: Remove scene object once the plugin closes
-			//Demo.scene.objects.splice(0);
+			destoryPV3DObject(GridMesh);
+			
+			destoryPV3DObject(oneTurning.objectMesh);
+			destoryPV3DObject(oneTurning.lines);
 			
 			theVehicle.splice(0, theVehicle.length);
 			oneTurning=null;
+		}
+		
+		private function destoryPV3DObject(object:*):void 
+		{
+			Demo.container.removeChild(object);
+			object.material.destroy();
+			object = null;
 		}
 
 		public override  function Reset ():void
 		{
 			// reset vehicle
 			oneTurning.Reset ();
+			pluginReset = true;
 		}
 
 		public override  function get Vehicles ():Vector.<IVehicle>

@@ -156,7 +156,7 @@ package tabinda.demo.plugins.MapDrive
 		 */
 		public function TangentAt(...args):Vector3
 		{
-			trace("GCRoute.TangentAt",args[0] is Vector3, args[1] is int);
+			//trace("GCRoute.TangentAt",args[0] is Vector3, args[1] is int);
 			if (args.length == 2)
 			{
 				var segmentIndex:int=IndexOfNearestSegment(args[0]);

@@ -84,12 +84,12 @@ package tabinda.as3steer
 
 	public class LQProximityDatabase extends AbstractProximityDatabase
 	{
-		var lq:locationQueryDatabase;
+		private var _lq:locationQueryDatabase;
 
 		// constructor
 		public function LQProximityDatabase(center:Vector3,dimensions:Vector3,divisions:Vector3)
 		{
-			var halfsize:Vector3=Vector3.ScalarMultiplication1(dimensions , 0.5);
+			var halfsize:Vector3=Vector3.ScalarMultiplication(0.5,dimensions);
 			var origin:Vector3=Vector3.VectorSubtraction(center , halfsize);
 
 			lq = new locationQueryDatabase(origin.x, origin.y, origin.z,
@@ -102,7 +102,7 @@ package tabinda.as3steer
 		// allocate a token to represent a given client object in this database
 		public override function allocateToken(parentObject:AbstractVehicle):AbstractTokenForProximityDatabase
 		{
-			return new tokenType(parentObject,this);
+			return new token(parentObject,this);
 		}
 
 		// count the number of tokens currently in the database
@@ -127,5 +127,61 @@ package tabinda.as3steer
 		{
 			return lq.getMostPopulatedBinCenter();
 		}
+		
+		public function get lq():locationQueryDatabase { return _lq; }
+		
+		public function set lq(value:locationQueryDatabase):void 
+		{
+			_lq = value;
+		}
+	}
+}
+
+import tabinda.as3steer.*;
+
+/**
+ * "token" to represent objects stored in the database
+ */ 
+class token extends AbstractTokenForProximityDatabase
+{
+	private var _proxy:lqClientProxy;
+	private var _lq:locationQueryDatabase;
+
+	// constructor
+	public function token(parentObject:Object,lqsd:LQProximityDatabase)
+	{
+		proxy=new lqClientProxy(parentObject);// lqInitClientProxy(proxy, parentObject);
+		lq=lqsd.lq;
+	}
+
+	// the client object calls this each time its position changes
+	public override function updateForNewPosition(p:Vector3):void
+	{
+		lq.lqUpdateForNewLocation(proxy,p.x,p.y,p.z);
+	}
+
+	// find all neighbors within the given sphere (as center and radius)
+	public override function findNeighbors(center:Vector3,radius:Number,results:Array):void
+	{
+		var tList:Array = lq.getAllObjectsInLocality(center.x, center.y, center.z, radius);
+		for (var i:int=0; i < tList.length; i++)
+		{
+			var tProxy:lqClientProxy=lqClientProxy(tList[i]);
+			results.push(AbstractVehicle(tProxy.clientObject));
+		}
+	}
+	
+	public function get proxy():lqClientProxy { return _proxy; }
+	
+	public function set proxy(value:lqClientProxy):void 
+	{
+		_proxy = value;
+	}
+	
+	public function get lq():locationQueryDatabase { return _lq; }
+	
+	public function set lq(value:locationQueryDatabase):void 
+	{
+		_lq = value;
 	}
 }

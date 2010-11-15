@@ -69,7 +69,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			ApplySteeringForce(SteerForPursuit2(wanderer, maxTime), elapsedTime);
 
 			// for annotation
-			//trail.Record(currentTime, Position);
+			trail.Record(currentTime, Position);
 		}
 
 		// reset position

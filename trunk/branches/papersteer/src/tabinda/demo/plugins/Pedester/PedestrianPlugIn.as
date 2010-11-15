@@ -32,17 +32,20 @@
 
 package tabinda.demo.plugins.Pedester
 {
-	import org.papervision3d.core.math.Number3D;
-	import org.papervision3d.materials.special.Letter3DMaterial;
-	import org.papervision3d.typography.Font3D;
-	import org.papervision3d.typography.Text3D;
-	import tabinda.papersteer.*;
-	import tabinda.demo.*;
 	import flash.ui.Keyboard;
 	
-	import org.papervision3d.core.geom.TriangleMesh3D;
-	import org.papervision3d.core.math.NumberUV;
+	import org.papervision3d.core.geom.*;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.*;
 	import org.papervision3d.materials.ColorMaterial;
+	import org.papervision3d.materials.special.*;
+	import org.papervision3d.Papervision3D;
+	import org.papervision3d.typography.*;
+	
+	import tabinda.demo.*;
+	import tabinda.papersteer.*;
+	
+	
 
 	public class PedestrianPlugIn extends PlugIn
 	{
@@ -62,31 +65,37 @@ package tabinda.demo.plugins.Pedester
 		
 		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
 		public var GridMesh:TriangleMesh3D;
+		public var lines:Lines3D;
 		public var colMat:ColorMaterial;
-		public var uvArr1:Array;
-		public var uvArr2:Array;
+		public var uvArr:Array;
 		
 		private var text3D:Text3D;
 		private var textFont:Font3D;
 		private var textMat:Letter3DMaterial;
 		
+		public var pluginReset:Boolean;
+		
 		public function PedestrianPlugIn()
 		{
-			uvArr1 = new Array(new NumberUV(0, 0), new NumberUV(1, 1), new NumberUV(0, 1));
-			uvArr2 = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(1, 1));
+			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
 			
 			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = true;
+			colMat.doubleSided = false;
 			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+		
+			lines = new Lines3D(new LineMaterial(0x000000,1));
 			
 			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
 			textFont = new Font3D();
 			text3D = new Text3D("", new Eurostile, textMat);
-			text3D.scale = 2;
+			text3D.scale = 1;
 			
-			Demo.scene.addChild(text3D);
-			Demo.scene.addChild(GridMesh);
+			//Demo.container.addChild(text3D);
+			Demo.container.addChild(GridMesh);
+			Demo.container.addChild(lines);
+			
+			pluginReset = true;
 			
 			super();
 			crowd = new Vector.<Pedestrian>();
@@ -104,13 +113,14 @@ package tabinda.demo.plugins.Pedester
 
 			// create the specified number of Pedestrians
 			population = 0;
-			for (var i:int = 0; i < 100; i++)
+			for (var i:int = 0; i < 20; i++)
 			{
 				AddPedestrianToCrowd();
 			}
 
 			// initialize camera and selectedVehicle
 			var firstPedestrian:Pedestrian = crowd[0];
+		
 			Demo.Init3dCamera(firstPedestrian);
 			Demo.camera.Mode = CameraMode.FixedDistanceOffset;
 			Demo.camera.FixedTarget.x = 15;
@@ -143,13 +153,27 @@ package tabinda.demo.plugins.Pedester
 
 			// draw "ground plane"
 			if (Demo.SelectedVehicle != null) gridCenter = selected.Position;
-			Demo.GridUtility(gridCenter,GridMesh);
+			
+			// We do  this because PV3D and AS3 are not Canvas based Drawers
+			if(pluginReset)
+			{
+				lines.geometry.faces = [];
+				lines.geometry.vertices = [];
+				lines.removeAllLines();
+				
+				// Should be drawn once per restart or obstacle insertion/removal, PV3D is clumsy on constant Redrawing
+				// draw the path they follow and obstacles they avoid
+				DrawPathAndObstacles();
+				
+				GridMesh.geometry.faces = [];
+				GridMesh.geometry.vertices = [];
+				Grid(gridCenter);
+				
+				pluginReset = false;
+			}
 
 			// draw and annotate each Pedestrian
 			for (var i:int = 0; i < crowd.length; i++) crowd[i].Draw();
-
-			// draw the path they follow and obstacles they avoid
-			DrawPathAndObstacles();
 
 			// highlight Pedestrian nearest mouse
 			Demo.HighlightVehicleUtility(nearMouse);
@@ -204,7 +228,66 @@ package tabinda.demo.plugins.Pedester
 			}
 			status +="\n";
 			var screenLocation:Vector3 = new Vector3(15, 50, 0);
-			Drawing.Draw2dTextAt2dLocation(status, screenLocation, Colors.LightGray);
+			Demo.Draw2dTextAt2dLocation(status, screenLocation, Colors.LightGray);
+		}
+		
+		public function Grid(gridTarget:Vector3):void
+		{		
+			var center:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
+												 Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
+												 Number(Math.round(gridTarget.z * 0.5) * 2));
+
+			// colors for checkboard
+			var gray1:uint = Colors.LightGray
+			var gray2:uint = Colors.DarkGray;
+			
+			var size:int = 500;
+			var subsquares:int = 50;
+			
+			var half:Number = size / 2;
+			var spacing:Number = size / subsquares;
+
+			var flag1:Boolean = false;
+			var p:Number = -half;
+			var corner:Vector3 = new Vector3();
+			
+			for (var i:int = 0; i < subsquares; i++)
+			{
+				var flag2:Boolean = flag1;
+				var q:Number = -half;
+				for (var j:int = 0; j < subsquares; j++)
+				{
+					corner.x = p;
+					corner.y = -1;
+					corner.z = q;
+
+					corner = Vector3.VectorAddition(corner, center);
+					
+					var vertA:Vertex3D = corner.ToVertex3D();
+					var vertB:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, 0)).ToVertex3D();
+					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
+					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
+					
+					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					
+					var color:uint = flag2 ? gray1 : gray2;
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1),uvArr);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1),uvArr);
+					
+					GridMesh.geometry.faces.push(t1);
+					GridMesh.geometry.faces.push(t2);
+					
+					flag2 = !flag2;
+					q += spacing;
+				}
+				flag1 = !flag1;
+				p += spacing;
+			}
+			if (Papervision3D.useRIGHTHANDED)
+			{
+				GridMesh.geometry.flipFaces();
+			}
+			GridMesh.geometry.ready = true;
 		}
 
 		public function SerialNumberAnnotationUtility(selected:IVehicle, nearMouse:IVehicle):void
@@ -239,20 +322,90 @@ package tabinda.demo.plugins.Pedester
 			// draw a line along each segment of path
 			var path:PolylinePathway = Globals.GetTestPath();
 			for (var i:int = 0; i < path.pointCount; i++)
-				if (i > 0) Drawing.DrawLine(path.points[i], path.points[i - 1], Colors.Red);
+				if (i > 0) DrawLine(path.points[i], path.points[i - 1], Colors.Red);
+				//if (i > 0) Drawing.DrawLine(path.points[i], path.points[i - 1], Colors.Red);
 
 			// draw obstacles
-			Drawing.DrawXZCircle(Globals.Obstacle1.Radius, Globals.Obstacle1.Center, Colors.White, 40);
-			Drawing.DrawXZCircle(Globals.Obstacle2.Radius, Globals.Obstacle2.Center, Colors.White, 40);
+			//Drawing.DrawXZCircle(Globals.Obstacle1.Radius, Globals.Obstacle1.Center, Colors.White, 40);
+			//Drawing.DrawXZCircle(Globals.Obstacle2.Radius, Globals.Obstacle2.Center, Colors.White, 40);			
+			DrawCircleOrDisk(Globals.Obstacle1.Radius, Vector3.Zero,Globals.Obstacle1.Center, Colors.White, 40,false,false);
+			DrawCircleOrDisk(Globals.Obstacle2.Radius, Vector3.Zero,Globals.Obstacle2.Center, Colors.White, 40,false,false);
+		}
+		
+		private function DrawLine(startPoint:Vector3, endPoint:Vector3, color:uint):void
+		{
+			lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+		}
+		
+		private function DrawCircleOrDisk(radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
+		{
+			if (Demo.IsDrawPhase())
+			{
+				var temp : Number3D = new Number3D(radius,0,0);
+				var tempcurve:Number3D = new Number3D(0,0,0);
+				var joinends : Boolean;
+				var i:int;
+				var pointcount : int;
+				
+				var angle:Number = (0-360)/segments;
+				var curveangle : Number = angle/2;
+
+				tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+				tempcurve.rotateY(curveangle+0);
+
+				if(360-0<360)
+				{
+					joinends = false;
+					pointcount = segments+1;
+				}
+			   else
+				{
+					joinends = true;
+					pointcount = segments;
+				}
+			   
+				temp.rotateY(0);
+
+				var vertices:Array = new Array();
+				var curvepoints:Array = new Array();
+
+				for(i = 0; i< pointcount;i++)
+				{
+					vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+					curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+					temp.rotateY(angle);
+					tempcurve.rotateY(angle);
+				}
+
+				for(i = 0; i < segments ;i++)
+				{
+					var line:Line3D = new Line3D(lines, new LineMaterial(Colors.White), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+					line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+					lines.addLine(line);
+				}
+			}
+			else
+			{
+				DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+			}
 		}
 
 		public override function Close():void
 		{
 			//TODO: Remove scene object once the plugin closes
-			//Demo.scene.objects.splice(0);
+			destoryPV3DObject(GridMesh);
+			//Demo.container.removeChild(text3D);
+			destoryPV3DObject(lines);
 			
 			// delete all Pedestrians
 			while (population > 0) RemovePedestrianFromCrowd();
+		}
+		
+		private function destoryPV3DObject(object:*):void 
+		{
+			Demo.container.removeChild(object);
+			object.material.destroy();
+			object = null;
 		}
 
 		public override function Reset():void
@@ -265,6 +418,8 @@ package tabinda.demo.plugins.Pedester
 
 			// make camera jump immediately to new position
 			Demo.camera.DoNotSmoothNextMove();
+			
+			pluginReset = true;
 		}
 
 		public override function HandleFunctionKeys(key:uint):void
@@ -298,6 +453,10 @@ package tabinda.demo.plugins.Pedester
 			population++;
 			var pedestrian:Pedestrian = new Pedestrian(pd);
 			crowd.push(pedestrian);
+			
+			Demo.container.addChild(pedestrian.objectMesh);
+			Demo.container.addChild(pedestrian.lines);
+			
 			if (population == 1)
 			{
 				Demo.SelectedVehicle = pedestrian;
@@ -311,6 +470,10 @@ package tabinda.demo.plugins.Pedester
 				// save pointer to last pedestrian, then remove it from the crowd
 				population--;
 				var pedestrian:Pedestrian = crowd[population];
+				
+				destoryPV3DObject(pedestrian.objectMesh);
+				destoryPV3DObject(pedestrian.lines);
+				
 				crowd.splice(population,1);
 
 				// if it is OpenSteerDemo's selected vehicle, unselect it

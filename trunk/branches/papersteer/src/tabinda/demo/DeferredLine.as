@@ -32,6 +32,9 @@
 
 package tabinda.demo
 {
+	import org.papervision3d.core.geom.renderables.Line3D;
+	import org.papervision3d.core.geom.renderables.Vertex3D;
+	import org.papervision3d.materials.special.LineMaterial;
 	import tabinda.papersteer.*;
 	
 	/**
@@ -52,10 +55,11 @@ package tabinda.demo
 			}
 		}
 			
-		public static function AddToBuffer(s:Vector3, e:Vector3, c:uint):void
+		public static function AddToBuffer(object:*,s:Vector3, e:Vector3, c:uint):void
 		{
 			if (index < size)
 			{
+				deferredLineArray[index].object = object;
 				deferredLineArray[index].startPoint = s;
 				deferredLineArray[index].endPoint = e;
 				deferredLineArray[index].color = c;
@@ -73,17 +77,23 @@ package tabinda.demo
 			for (var i:int = 0; i < index; i++)
 			{
 				var dl:DeferredLine = deferredLineArray[i];
-				Drawing.iDrawLine(dl.startPoint, dl.endPoint, dl.color);
+				DrawLine(dl.object,dl.startPoint, dl.endPoint, dl.color);
 			}
 
 			// reset buffer index
 			index = 0;
 		}
 		
+		public static function DrawLine(object:*,startPoint:Vector3,endPoint:Vector3,color:uint):void
+		{
+			object.addLine(new Line3D(object, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+		}
+		
 		private var startPoint:Vector3;
 		private var endPoint:Vector3;
 		private var color:uint;
-
+		private var object:*;
+		
 		private static var index:int = 0;
 		private static const size:int = 3000;
 		private static var deferredLineArray:Vector.<DeferredLine>;

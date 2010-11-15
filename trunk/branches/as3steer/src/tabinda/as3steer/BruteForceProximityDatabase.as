@@ -61,7 +61,7 @@ package tabinda.as3steer
 		public override  function allocateToken(parentObject:AbstractVehicle):AbstractTokenForProximityDatabase
 		{
 
-			var tToken:tokenType2=new tokenType2(parentObject,this);
+			var tToken:token=new token(parentObject,this);
 			return AbstractTokenForProximityDatabase(tToken);
 		}
 
@@ -73,5 +73,74 @@ package tabinda.as3steer
 		{
 			return group.length;
 		}
+	}
+}
+
+import tabinda.as3steer.*;
+
+/**
+ * "token" to represent objects stored in the database
+ */ 
+class token extends AbstractTokenForProximityDatabase
+{
+	private var _bfpd:BruteForceProximityDatabase;
+	private var _tParentObject:AbstractVehicle;
+	private var _position:Vector3;
+
+	// constructor
+	public function token(parentObject:AbstractVehicle,pd:BruteForceProximityDatabase)
+	{
+		// store pointer to our associated database and the object this
+		// token represents, and store this token on the database's vector
+		bfpd=pd;
+		tParentObject=parentObject;
+		bfpd.group.push(this);
+	}
+
+	// the client object calls this each time its position changes
+	public override  function updateForNewPosition(newPosition:Vector3):void
+	{
+		position = newPosition;
+	}
+
+	// find all neighbors within the given sphere (as center and radius)
+	public override function findNeighbors(center:Vector3,radius:Number,results:Array):void
+	{
+		// loop over all tokens
+		var r2:Number=radius * radius;
+
+		for (var i:int=0; i < bfpd.group.length; i++)
+		{
+			var tToken:token = token(bfpd.group[i]);
+			var offset:Vector3=Vector3.VectorSubtraction(center , tToken.position);
+			var d2:Number = offset.SquaredMagnitude();
+
+			// push onto result vector when within given radius
+			if (d2 < r2)
+			{
+				results.push(tToken.tParentObject);
+			}//
+		}
+	}
+	
+	public function get bfpd():BruteForceProximityDatabase { return _bfpd; }
+	
+	public function set bfpd(value:BruteForceProximityDatabase):void 
+	{
+		_bfpd = value;
+	}
+	
+	public function get tParentObject():AbstractVehicle { return _tParentObject; }
+	
+	public function set tParentObject(value:AbstractVehicle):void 
+	{
+		_tParentObject = value;
+	}
+	
+	public function get position():Vector3 { return _position; }
+	
+	public function set position(value:Vector3):void 
+	{
+		_position = value;
 	}
 }

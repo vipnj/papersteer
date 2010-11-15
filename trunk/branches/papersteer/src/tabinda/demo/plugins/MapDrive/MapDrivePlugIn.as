@@ -31,11 +31,16 @@
 // ----------------------------------------------------------------------------
 package tabinda.demo.plugins.MapDrive
 {
-	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import flash.text.TextField;
-	import tabinda.papersteer.*;
+	
+	import org.papervision3d.core.geom.*;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.materials.ColorMaterial;
+	import org.papervision3d.materials.special.LineMaterial;
+	import org.papervision3d.Papervision3D;
+	
 	import tabinda.demo.*;
+	import tabinda.papersteer.*;
 	
 	public class MapDrivePlugIn extends PlugIn
 	{		
@@ -47,10 +52,30 @@ package tabinda.demo.plugins.MapDrive
 		private var usePathFences:Boolean;
 		private var useRandomRocks:Boolean;
 		
+		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
+		public var SandMesh:TriangleMesh3D;
+		public var lines:Lines3D;
+		public var colMat:ColorMaterial;
+		
+		public var pluginReset:Boolean;
+		
 		public function MapDrivePlugIn ()
 		{
-			super ();
-			vehicles=new Vector.<MapDriver>();
+			vehicles = new Vector.<MapDriver>();
+			
+			initPV3D();
+			super();
+			pluginReset = true;
+		}
+		
+		public function initPV3D():void
+		{
+			colMat = new ColorMaterial(0x000000, 1);
+			lines = new Lines3D(new LineMaterial(0x000000, 1));
+			SandMesh = new TriangleMesh3D(colMat, new Array(), new Array());
+			
+			Demo.container.addChild(SandMesh);
+			Demo.container.addChild(lines);
 		}
 
 		public override  function get Name ():String
@@ -68,6 +93,10 @@ package tabinda.demo.plugins.MapDrive
 			// make new MapDriver
 			vehicle=new MapDriver();
 			vehicles.push (vehicle);
+			Demo.container.addChild(vehicle.objectMesh);
+			Demo.container.addChild(vehicle.MapMesh);
+			Demo.container.addChild(vehicle.PathMesh);
+			
 			Demo.SelectedVehicle=vehicle;
 
 			// marks as obstacles map cells adjacent to the path
@@ -119,30 +148,67 @@ package tabinda.demo.plugins.MapDrive
 			// update camera, tracking test vehicle
 			Demo.UpdateCamera (currentTime,elapsedTime,vehicle);
 
-			// draw "ground plane"  (make it 4x map size)
-			var s:Number=MapDriver.worldSize * 2;
-			var u:Number=-0.2;
-			Drawing.DrawQuadrangle (new Vector3( + s, u, + s),
-									new Vector3( + s, u, - s),
-									new Vector3( - s, u, - s),
-									new Vector3( - s, u, + s),
-									Colors.toHex((255.0 * 0.8),
-									int(255.0 * 0.7),int(255.0 * 0.5)));// "sand"
-
-			// draw map and path
-			if (MapDriver.demoSelect == 2)
+			// We do  this because PV3D and AS3 are not Canvas based Drawers
+			if(pluginReset)
 			{
-				vehicle.DrawPath ();
-			}
-			vehicle.DrawMap ();
+				SandMesh.geometry.faces = [];
+				SandMesh.geometry.vertices = [];
+			
+				// draw "ground plane"  (make it 4x map size)
+				var s:Number=MapDriver.worldSize * 2;
+				var u:Number=-0.2;
 
+				/*DrawQuadrangle (new Vector3( + s, u, + s),
+										new Vector3( + s, u, - s),
+										new Vector3( - s, u, - s),
+										new Vector3( - s, u, + s),
+										Colors.toHex((255.0 * 0.8),
+										int(255.0 * 0.7), int(255.0 * 0.5)));// "sand"*/
+										
+				var vertA:Vertex3D = new Vertex3D( +s, u, +s);
+				var vertB:Vertex3D = new Vertex3D( +s, u, -s);
+				var vertC:Vertex3D = new Vertex3D( -s, u, -s);
+				var vertD:Vertex3D = new Vertex3D( -s, u, +s);
+				
+				SandMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					
+				var color2:uint = Colors.toHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
+				
+				var t1:Triangle3D = new Triangle3D(SandMesh, [vertA,vertB,vertC], new ColorMaterial(color2, 1));
+				var t2:Triangle3D = new Triangle3D(SandMesh, [vertD,vertA,vertC], new ColorMaterial(color2, 1));
+					
+				SandMesh.geometry.faces.push(t1);
+				SandMesh.geometry.faces.push(t2);
+					
+				if (Papervision3D.useRIGHTHANDED)
+				{
+					SandMesh.geometry.flipFaces();
+				}
+				SandMesh.geometry.ready = true;
+
+				// draw map and path
+				if (MapDriver.demoSelect == 2)
+				{
+					vehicle.DrawPath ();
+				}
+				vehicle.DrawMap ();
+				
+				pluginReset = false;
+			}
+			
+			lines.geometry.faces = [];
+			lines.geometry.vertices = [];
+			lines.removeAllLines();
+				
 			// draw test vehicle
 			vehicle.Draw ();
 
 			// QQQ mark origin to help spot artifacts
 			var tick:Number=2;
-			Drawing.DrawLine (new Vector3(tick,0,0),new Vector3(- tick,0,0),Colors.Green);
-			Drawing.DrawLine (new Vector3(0,0,tick),new Vector3(0,0,- tick),Colors.Green);
+			//Drawing.DrawLine (new Vector3(tick,0,0),new Vector3(- tick,0,0),Colors.Green);
+			//Drawing.DrawLine (new Vector3(0,0,tick),new Vector3(0,0,- tick),Colors.Green);
+			DrawLine (new Vector3(tick,0,0),new Vector3(- tick,0,0),Colors.Green);
+			DrawLine (new Vector3(0,0,tick),new Vector3(0,0,- tick),Colors.Green);
 
 			// compute conversion factor miles-per-hour to meters-per-second
 			var metersPerMile:Number=1609.344;
@@ -228,33 +294,45 @@ package tabinda.demo.plugins.MapDrive
 			var screenLocation:Vector3=new Vector3(15,50,0);
 			var color:Vector3 = new Vector3(0.15, 0.15, 0.5);
 			
-			Drawing.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
+			//Drawing.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
+			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
 			{
-				var v:Number=Drawing.GetWindowHeight() - 5.0;
+				var v:Number=Demo.WindowHeight - 5.0;
 				var m:Number=10.0;
-				var w:Number=Drawing.GetWindowWidth();
+				var w:Number = Demo.WindowWidth;
 				var f:Number=w - 2.0 * m;
 				var s2:Number=vehicle.RelativeSpeed();
 
 				// limit tick mark
 				var l:Number=vehicle.annoteMaxRelSpeed;
-				Drawing.Draw2dLine (new Vector3(m + f * l,v - 3,0),new Vector3(m + f * l,v + 3,0),Colors.Black);
+				//Drawing.Draw2dLine (new Vector3(m + f * l,v - 3,0),new Vector3(m + f * l,v + 3,0),Colors.Black);
+				DrawLine (new Vector3(m + f * l,v - 3,0),new Vector3(m + f * l,v + 3,0),Colors.Black);
 				// two "inverse speedometers" showing limits due to curvature and
 				// path alignment
 				if (l != 0)
 				{
 					var c:Number=vehicle.annoteMaxRelSpeedCurve;
 					var p:Number=vehicle.annoteMaxRelSpeedPath;
-					Drawing.Draw2dLine (new Vector3(m + f * c,v + 1,0),new Vector3(w - m,v + 1,0),Colors.Red);
-					Drawing.Draw2dLine (new Vector3(m + f * p,v - 2,0),new Vector3(w - m,v - 1,0),Colors.Green);
+					//Drawing.Draw2dLine (new Vector3(m + f * c,v + 1,0),new Vector3(w - m,v + 1,0),Colors.Red);
+					//Drawing.Draw2dLine (new Vector3(m + f * p, v - 2, 0), new Vector3(w - m, v - 1, 0), Colors.Green);
+					DrawLine (new Vector3(m + f * c,v + 1,0),new Vector3(w - m,v + 1,0),Colors.Red);
+					DrawLine (new Vector3(m + f * p,v - 2,0),new Vector3(w - m,v - 1,0),Colors.Green);
 				}
 				// speedometer: horizontal line with length proportional to speed
-				Drawing.Draw2dLine (new Vector3(m,v,0),new Vector3(m + f * s,v,0),Colors.White);
+				//Drawing.Draw2dLine (new Vector3(m,v,0),new Vector3(m + f * s,v,0),Colors.White);
+				DrawLine (new Vector3(m,v,0),new Vector3(m + f * s,v,0),Colors.White);
 				// min and max tick marks
-				Drawing.Draw2dLine (new Vector3(m,v,0),new Vector3(m,v - 2,0),Colors.White);
-				Drawing.Draw2dLine (new Vector3(w - m,v,0),new Vector3(w - m,v - 2,0),Colors.White);
+				//Drawing.Draw2dLine (new Vector3(m,v,0),new Vector3(m,v - 2,0),Colors.White);
+				//Drawing.Draw2dLine (new Vector3(w - m, v, 0), new Vector3(w - m, v - 2, 0), Colors.White);
+				DrawLine (new Vector3(m,v,0),new Vector3(m,v - 2,0),Colors.White);
+				DrawLine (new Vector3(w - m,v,0),new Vector3(w - m,v - 2,0),Colors.White);
 			}
-		};
+		}
+		
+		public function DrawLine(startPoint:Vector3,endPoint:Vector3,color:uint):void
+		{
+			lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+		}
 
 		private function qqqRange (text:String,range:Number,status:String):void
 		{
@@ -272,9 +350,21 @@ package tabinda.demo.plugins.MapDrive
 		public override  function Close ():void
 		{
 			//TODO: Remove scene object once the plugin closes
-			//Demo.scene.objects.splice(0);
-			
+			destoryPV3DObject(SandMesh);
+			destoryPV3DObject(lines);
+			destoryPV3DObject(vehicle.objectMesh);
+			destoryPV3DObject(vehicle.MapMesh);
+			destoryPV3DObject(vehicle.PathMesh);
+			destoryPV3DObject(vehicle.lines);
+
 			vehicles.splice(0,vehicles.length);
+		}
+		
+		private function destoryPV3DObject(object:*):void 
+		{
+			Demo.container.removeChild(object);
+			object.material.destroy();
+			object = null;
 		}
 
 		public override  function Reset ():void
@@ -288,7 +378,9 @@ package tabinda.demo.plugins.MapDrive
 			Demo.camera.DoNotSmoothNextMove ();
 
 			// reset camera position
-			Demo.Position2dCamera (vehicle,initCamDist,initCamElev);
+			Demo.Position2dCamera (vehicle, initCamDist, initCamElev);
+			
+			pluginReset = true;
 		}
 
 		public override  function HandleFunctionKeys (key:uint):void
