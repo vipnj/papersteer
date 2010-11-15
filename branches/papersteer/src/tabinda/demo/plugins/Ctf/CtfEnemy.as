@@ -84,8 +84,8 @@ package tabinda.demo.plugins.Ctf
 
 			// annotation
 			annotation.VelocityAcceleration (this);
-			CtfMesh.position = Position.ToNumber3D();
-			//trail.Record (currentTime,Position);
+			//objectMesh.position = Position.ToNumber3D();
+			trail.Record (currentTime,Position);
 
 			// detect and record interceptions ("tags") of seeker
 			var seekerToMeDist:Number=Vector3.Distance(Position,Globals.Seeker.Position);

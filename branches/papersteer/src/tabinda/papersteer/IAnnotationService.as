@@ -34,12 +34,21 @@ package tabinda.papersteer
 	// Provides methods to annotate the steering behaviors.
 	public interface IAnnotationService
 	{
-		/// Indicates whether annotation is enabled.
+		/**
+		 * Indicates whether annotation is enabled.
+		 */ 
 		function get IsEnabled ():Boolean;
 		function set IsEnabled (val:Boolean):void;
+		
+		/**
+		 * This function should be called to redraw the Annotation Canvas
+		 */
+		function Redraw():void;
 
-		/// Adds a Trail.
-		/// <param name="trail"></param>
+		/**
+		 * Adds a Trail
+		 * @param	trail An instance of a trail canvas
+		 */
 		function AddTrail (trail:Trail):void;
 
 		/// <summary>

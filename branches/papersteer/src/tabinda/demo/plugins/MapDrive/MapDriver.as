@@ -32,10 +32,12 @@
 
 package tabinda.demo.plugins.MapDrive
 {
-	import org.papervision3d.core.geom.renderables.Triangle3D;
-	import org.papervision3d.core.geom.TriangleMesh3D;
-	import org.papervision3d.core.math.NumberUV;
+	import org.papervision3d.core.geom.*;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.*;
 	import org.papervision3d.materials.ColorMaterial;
+	import org.papervision3d.materials.special.LineMaterial;
+	import org.papervision3d.Papervision3D;
 	
 	import tabinda.papersteer.*;
 	import tabinda.demo.*;
@@ -43,10 +45,12 @@ package tabinda.demo.plugins.MapDrive
 	public class MapDriver extends SimpleVehicle
 	{
 		public var MapMesh:TriangleMesh3D;
-		public var DriverMesh:TriangleMesh3D;
 		public var PathMesh:TriangleMesh3D;
-		public var colMat:ColorMaterial;
+		public var colMat1:ColorMaterial;
+		public var colMat2:ColorMaterial;
+		public var colMat3:ColorMaterial;
 		public var uvArr:Array;
+		public var lines:Lines3D;
 		
 		private var trail:Trail;
 		
@@ -131,22 +135,23 @@ package tabinda.demo.plugins.MapDrive
 
 		// size of the world (the map actually)
 		public static var worldSize:Number = 200.0;
-		public static var worldDiag:Number = Number(Math.sqrt(Utilities.Square(worldSize) / 2))+0.0;
+		public static var worldDiag:Number = Number(Math.sqrt(worldSize * worldSize / 2));
 
 		// constructor
 		public function MapDriver()
 		{
 			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1),new NumberUV(1,1));
 			
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = true;
-			MapMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			DriverMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			PathMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			colMat1 = colMat2 = colMat3 = new ColorMaterial(0x000000, 1);
+			colMat1.doubleSided = colMat2.doubleSided = colMat3.doubleSided = false;
 			
-			Demo.scene.addChild(MapMesh);
-			Demo.scene.addChild(DriverMesh);
-			Demo.scene.addChild(PathMesh);
+			MapMesh = new TriangleMesh3D(colMat1 , new Array(), new Array());
+			objectMesh = new TriangleMesh3D(colMat2 , new Array(), new Array());
+			PathMesh = new TriangleMesh3D(colMat3 , new Array(), new Array());
+			
+			lines = new Lines3D(new LineMaterial(0x000000,1));
+			
+			trail = new Trail();
 			
 			map = MakeMap();
 			path = MakePath();
@@ -1340,10 +1345,10 @@ package tabinda.demo.plugins.MapDrive
 		// draw vehicle's body and annotation
 		public function Draw():void
 		{
-			DriverMesh.geometry.vertices.splice(0);
-			DriverMesh.geometry.faces.splice(0);
-			
-			// for now: draw as a 2d bounding box on the ground
+			objectMesh.geometry.faces = [];
+			objectMesh.geometry.vertices = [];
+				
+			// for now: draw as a 2d bounding box on the groundq
 			var bodyColor:uint = Colors.Black;
 			if (stuck) bodyColor = Colors.Yellow;
 			if (!IsBodyInsidePath()) bodyColor = Colors.Orange;
@@ -1351,30 +1356,37 @@ package tabinda.demo.plugins.MapDrive
 
 			// draw vehicle's bounding box on gound plane (its "shadow")
 			var p:Vector3 = Position;
-			var bbSide:Vector3 = Vector3.ScalarMultiplication(halfWidth,Side);
-			var bbFront:Vector3 = Vector3.ScalarMultiplication(halfLength,Forward);
+			var bbSide:Vector3 = Vector3.ScalarMultiplication(halfWidth, Side);
+			var bbFront:Vector3 = Vector3.ScalarMultiplication(halfLength, Forward);
 			var bbHeight:Vector3 = new Vector3(0, 0.1, 0);
 			
-			DriverMesh.geometry.vertices.push(p.ToVertex3D());
-			DriverMesh.geometry.vertices.push(bbSide.ToVertex3D());
-			DriverMesh.geometry.vertices.push(bbFront.ToVertex3D());
-			DriverMesh.geometry.vertices.push(bbHeight.ToVertex3D());
-			
-			DriverMesh.geometry.faces.push(new Triangle3D(DriverMesh,new Array(Vector3.VectorAddition(Vector3.VectorSubtraction(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)).ToVertex3D(),
-							Vector3.VectorAddition(Vector3.VectorAddition(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)).ToVertex3D(),
-							Vector3.VectorSubtraction(Vector3.VectorAddition(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)).ToVertex3D(),
-							Vector3.VectorSubtraction(Vector3.VectorSubtraction(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)).ToVertex3D()),
-							new ColorMaterial(bodyColor),uvArr));
-			/*Drawing.DrawQuadrangle(Vector3.VectorAddition(Vector3.VectorSubtraction(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)),
-							Vector3.VectorAddition(Vector3.VectorAddition(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)),
-							Vector3.VectorSubtraction(Vector3.VectorAddition(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)),
-							Vector3.VectorSubtraction(Vector3.VectorSubtraction(p , bbFront) , Vector3.VectorAddition(bbSide , bbHeight)),
+			/*Drawing.DrawQuadrangle(p - bbFront + bbSide + bbHeight,
+							p + bbFront + bbSide + bbHeight,
+							p + bbFront - bbSide + bbHeight,
+							p - bbFront - bbSide + bbHeight,
 							bodyColor);*/
+			
+			var vertA:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(Vector3.VectorSubtraction(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
+			var vertB:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(Vector3.VectorAddition(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
+			var vertC:Vertex3D = Vector3.VectorAddition(Vector3.VectorSubtraction(Vector3.VectorAddition(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
+			var vertD:Vertex3D = Vector3.VectorAddition(Vector3.VectorSubtraction(Vector3.VectorSubtraction(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
+			
+			objectMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+				
+			var color:uint = bodyColor;
+			
+			var t1:Triangle3D = new Triangle3D(objectMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
+			var t2:Triangle3D = new Triangle3D(objectMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+				
+			objectMesh.geometry.faces.push(t1);
+			objectMesh.geometry.faces.push(t2);
+				
+			objectMesh.geometry.ready = true;
 
 			// annotate trail
-			var darkGreen:uint = Colors.toHex(0, int(255.0 * 0.6), 0);
-			//trail.TrailColor = darkGreen;
-			//trail.TickColor = Colors.Black;
+			var darkGreen:uint = Colors.toHex(new Vector3(0, (255.0 * 0.6), 0));
+			trail.TrailColor = darkGreen;
+			trail.TickColor = Colors.Black;
 			//trail.Draw(Annotation.drawer);
 		}
 
@@ -1411,8 +1423,8 @@ package tabinda.demo.plugins.MapDrive
 
 		public function DrawMap():void
 		{
-			MapMesh.geometry.vertices.splice(0);
-			MapMesh.geometry.faces.splice(0);
+			MapMesh.geometry.faces = [];
+			MapMesh.geometry.vertices = [];
 			
 			var xs:Number = map.xSize / Number(map.resolution);
 			var zs:Number = map.zSize / Number(map.resolution);
@@ -1428,33 +1440,27 @@ package tabinda.demo.plugins.MapDrive
 					{
 						// spikes
 						// Vector3 spikeTop (0, 5.0f, 0);
-						// drawLine (g, g+spikeTop, Colors.White);
+						// drawLine (g, g+spikeTop, Color.White);
 
 						// squares
-						var rockHeight:Number = 0;
-						var v1:Vector3 = new Vector3(+xs / 2, rockHeight, +zs / 2);
-						var v2:Vector3 = new Vector3(+xs / 2, rockHeight, -zs / 2);
-						var v3:Vector3 = new Vector3(-xs / 2, rockHeight, -zs / 2);
-						var v4:Vector3 = new Vector3( -xs / 2, rockHeight, +zs / 2);
+						var rockHeight:Number = 0.0;
+						var vertA:Vertex3D = Vector3.VectorAddition(new Vector3(+xs / 2, rockHeight, +zs / 2),g).ToVertex3D();
+						var vertB:Vertex3D = Vector3.VectorAddition(new Vector3(+xs / 2, rockHeight, -zs / 2),g).ToVertex3D();
+						var vertC:Vertex3D = Vector3.VectorAddition(new Vector3( -xs / 2, rockHeight, -zs / 2), g).ToVertex3D();
+						var vertD:Vertex3D = Vector3.VectorAddition(new Vector3( -xs / 2, rockHeight, +zs / 2),g).ToVertex3D();
 						
-						MapMesh.geometry.vertices.push(v1.ToVertex3D());
-						MapMesh.geometry.vertices.push(v2.ToVertex3D());
-						MapMesh.geometry.vertices.push(v3.ToVertex3D());
-						MapMesh.geometry.vertices.push(v4.ToVertex3D());
+						MapMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
 						
 						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
-						var orangeRockColor:uint = Colors.toHex(int(255.0 * 0.5), int(255.0 * 0.2), int(255.0 * 0.0));
-						
-						MapMesh.geometry.faces.push(new Triangle3D(MapMesh,new Array((Vector3.VectorAddition(g , v1).ToVertex3D(), 
-												Vector3.VectorAddition(g , v2).ToVertex3D(),
-												Vector3.VectorAddition(g , v3).ToVertex3D(),
-												Vector3.VectorAddition(g , v4).ToVertex3D()), orangeRockColor,uvArr)));
-												
-						/*Drawing.DrawQuadrangle(Vector3.VectorAddition(g , v1), 
-												Vector3.VectorAddition(g , v2),
-												Vector3.VectorAddition(g , v3),
-												Vector3.VectorAddition(g , v4), orangeRockColor);*/
+						var orangeRockColor:uint = Colors.toHex(new Vector3((255.0 * 0.5), (255.0 * 0.2), (255.0 * 0.0)));
+						//Drawing.DrawQuadrangle(g + v1, g + v2, g + v3, g + v4, orangeRockColor);
 
+						var t1:Triangle3D = new Triangle3D(MapMesh, [vertA,vertB,vertC], new ColorMaterial(orangeRockColor, 1));
+						var t2:Triangle3D = new Triangle3D(MapMesh, [vertD,vertA,vertC], new ColorMaterial(orangeRockColor, 1));
+							
+						MapMesh.geometry.faces.push(t1);
+						MapMesh.geometry.faces.push(t2);
+				
 						// pyramids
 						// Vector3 top (0, xs/2, 0);
 						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
@@ -1468,6 +1474,7 @@ package tabinda.demo.plugins.MapDrive
 				}
 				g = Vector3.VectorAddition(g,nextRow);
 			}
+			MapMesh.geometry.ready = true;
 		}
 
 		// draw the GCRoute as a series of circles and "wide lines"
@@ -1476,9 +1483,13 @@ package tabinda.demo.plugins.MapDrive
 		// color in, certainly shouldn't be recomputing it each draw)
 		public function DrawPath():void
 		{
-			PathMesh.geometry.vertices.splice(0);
-			PathMesh.geometry.faces.splice(0);
+			PathMesh.geometry.faces = [];
+			PathMesh.geometry.vertices = [];
 			
+			lines.geometry.faces = [];
+			lines.geometry.vertices = [];
+			lines.removeAllLines();
+				
 			var pathColor:Vector3 = new Vector3(0, 0.5, 0.5);
 			var sandColor:Vector3 = new Vector3(0.8, 0.7, 0.5);
 			var vColor:Vector3 = Utilities.Interpolate2(0.1, sandColor, pathColor);
@@ -1494,14 +1505,101 @@ package tabinda.demo.plugins.MapDrive
 
 					var legWidth:Number = path.radii[i];
 
-					Drawing.DrawXZWideLine(endPoint0, endPoint1,PathMesh,uvArr, color, legWidth * 2);
-					Drawing.DrawLine(path.points[i], path.points[i - 1], Colors.toHex(pathColor));
+					/*Drawing.DrawXZWideLine(endPoint0, endPoint1, color, legWidth * 2);
+					Drawing.DrawLine(path.points[i], path.points[i - 1], new Color(pathColor));
 					Drawing.DrawXZDisk(legWidth, endPoint0, color, 24);
-					Drawing.DrawXZDisk(legWidth, endPoint1, color, 24);
+					Drawing.DrawXZDisk(legWidth, endPoint1, color, 24);	*/				
+					DrawXZWideLine(endPoint0, endPoint1, color, legWidth * 2);
+					DrawLine(path.points[i], path.points[i - 1], Colors.toHex(pathColor));
+					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint0, color, 24,true,false);
+					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint1, color, 24,true,false);
 				}
 			}
 		}
+		
+		private function DrawXZWideLine(startPoint:Vector3, endPoint:Vector3, color:uint, width:Number):void
+		{
+			var offset:Vector3 = Vector3.VectorSubtraction(endPoint , startPoint);
+			offset.fNormalize();
+            var perp:Vector3 = Demo.localSpace.LocalRotateForwardToSide(offset);
+			var radius:Vector3 = Vector3.ScalarMultiplication(width / 2, perp);
 
+			var vertA:Vertex3D = Vector3.VectorAddition(startPoint , radius).ToVertex3D();
+			var vertB:Vertex3D = Vector3.VectorAddition(endPoint , radius).ToVertex3D();
+			var vertC:Vertex3D = Vector3.VectorSubtraction(endPoint , radius).ToVertex3D();
+			var vertD:Vertex3D = Vector3.VectorSubtraction(startPoint , radius).ToVertex3D();
+
+			PathMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					
+			var color:uint = Colors.toHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
+			
+			var t1:Triangle3D = new Triangle3D(PathMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
+			var t2:Triangle3D = new Triangle3D(PathMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+				
+			PathMesh.geometry.faces.push(t1);
+			PathMesh.geometry.faces.push(t2);
+				
+			PathMesh.geometry.ready = true;
+		}
+		
+		private function DrawLine(startPoint:Vector3, endPoint:Vector3, color:uint):void
+		{
+			lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+		}
+		
+		private function DrawCircleOrDisk(radius:Number,axis:Vector3,center:Vector3,color:uint,segments:int,filled:Boolean,in3d:Boolean):void
+		{
+			if (Demo.IsDrawPhase())
+			{
+				var temp : Number3D = new Number3D(Radius,0,0);
+				var tempcurve:Number3D = new Number3D(0,0,0);
+				var joinends : Boolean;
+				var i:int;
+				var pointcount : int;
+				
+				var angle:Number = (0-360)/segments;
+				var curveangle : Number = angle/2;
+
+				tempcurve.x = Radius/Math.cos(curveangle * Number3D.toRADIANS);
+				tempcurve.rotateY(curveangle+0);
+
+				if(360-0<360)
+				{
+					joinends = false;
+					pointcount = segments+1;
+				}
+			   else
+				{
+					joinends = true;
+					pointcount = segments;
+				}
+			   
+				temp.rotateY(0);
+
+				var vertices:Array = new Array();
+				var curvepoints:Array = new Array();
+
+				for(i = 0; i< pointcount;i++)
+				{
+					vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+					curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+					temp.rotateY(angle);
+					tempcurve.rotateY(angle);
+				}
+
+				for(i = 0; i < segments ;i++)
+				{
+					var line:Line3D = new Line3D(lines, new LineMaterial(Colors.White), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+					line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+					lines.addLine(line);
+				}
+			}
+			else
+			{
+				DeferredCircle.AddToBuffer(lines,Radius, axis, center, color, segments, filled, in3d);
+			}
+		}
+		
 		public function MakePath():GCRoute
 		{
 			// a few constants based on world size

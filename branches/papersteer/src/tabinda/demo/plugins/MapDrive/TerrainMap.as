@@ -128,8 +128,9 @@ package tabinda.demo.plugins.MapDrive
 						var v4:Vector3=new Vector3(- xs / 2,rockHeight,+ zs / 2);
 						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
 						var orangeRockColor:uint=Colors.toHex(int(255.0 * 0.5),int(255.0 * 0.2),int(255.0 * 0.0));
-						Drawing.DrawQuadrangle (Vector3.VectorAddition(g , v1),Vector3.VectorAddition(g , v2),Vector3.VectorAddition(g , v3),Vector3.VectorAddition(g , v4),orangeRockColor);
-
+						//Drawing.DrawQuadrangle (Vector3.VectorAddition(g , v1),Vector3.VectorAddition(g , v2),Vector3.VectorAddition(g , v3),Vector3.VectorAddition(g , v4),orangeRockColor);
+						DrawQuadrangle (Vector3.VectorAddition(g , v1),Vector3.VectorAddition(g , v2),Vector3.VectorAddition(g , v3),Vector3.VectorAddition(g , v4),orangeRockColor);
+						
 						// pyramids
 						// Vector3 top (0, xs/2, 0);
 						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
@@ -143,6 +144,11 @@ package tabinda.demo.plugins.MapDrive
 				}
 				g= Vector3.VectorAddition(g,nextRow);
 			}
+		}
+		
+		private function DrawQuadrangle(a:Vector3, b:Vector3, c:Vector3, d:Vector3, color:uint):void
+		{
+			
 		}
 
 		public function MinSpacing ():Number

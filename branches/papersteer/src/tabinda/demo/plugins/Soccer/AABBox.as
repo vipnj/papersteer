@@ -32,13 +32,24 @@
 
 package tabinda.demo.plugins.Soccer
 {
+	import org.papervision3d.core.geom.Lines3D;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.materials.special.LineMaterial;
+	
 	import tabinda.papersteer.*;
 	import tabinda.demo.*;
 	
 	public class AABBox
 	{
+		public var lines:Lines3D;
+		
+		private var m_min:Vector3;
+		private var m_max:Vector3;
+		
 		public function AABBox (min:Vector3,max:Vector3)
 		{
+			lines = new Lines3D(new LineMaterial(0x000000,1));
+			
 			m_min=min;
 			m_max=max;
 		}
@@ -54,14 +65,34 @@ package tabinda.demo.plugins.Soccer
 		{
 			var b:Vector3=new Vector3(m_min.x,0,m_max.z);
 			var c:Vector3=new Vector3(m_max.x,0,m_min.z);
-			var color:uint=Colors.toHex(255,255,0);
-			Drawing.DrawLineAlpha (m_min,b,color,1.0);
+			var color:uint = Colors.toHex(255, 255, 0);
+			
+			/*Drawing.DrawLineAlpha (m_min,b,color,1.0);
 			Drawing.DrawLineAlpha (b,m_max,color,1.0);
 			Drawing.DrawLineAlpha (m_max,c,color,1.0);
-			Drawing.DrawLineAlpha (c,m_min,color,1.0);
+			Drawing.DrawLineAlpha (c, m_min, color, 1.0);*/
+			
+			lines.geometry.faces = [];
+			lines.geometry.vertices = [];
+			lines.removeAllLines();
+				
+			DrawLineAlpha (m_min,b,color,1.0);
+			DrawLineAlpha (b,m_max,color,1.0);
+			DrawLineAlpha (m_max,c,color,1.0);
+			DrawLineAlpha (c,m_min,color,1.0);
 		}
-
-		private var m_min:Vector3;
-		private var m_max:Vector3;
+		
+		private function DrawLineAlpha(startPoint:Vector3, endPoint:Vector3, color:uint, alpha:Number):void
+		{
+			var c:uint = color;
+			if (Demo.IsDrawPhase == true)
+			{
+				lines.addLine(new Line3D(lines, new LineMaterial(color,alpha),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+			}
+			else
+			{
+				DeferredLine.AddToBuffer(lines,startPoint, endPoint, c);
+			}
+		}
 	}
 }

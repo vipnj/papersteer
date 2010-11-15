@@ -31,12 +31,9 @@
 // ----------------------------------------------------------------------------
 
 package tabinda.papersteer
-{	
+{		
 	import org.papervision3d.cameras.Camera3D;
-	import org.papervision3d.cameras.DebugCamera3D;
-	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.view.Viewport3D;
-	import tabinda.demo.Demo;
 	
 	public class PSCamera extends LocalSpace
 	{
@@ -46,7 +43,6 @@ package tabinda.papersteer
 		// xxx differently (which is to say, correctly) during mouse adjustment.
 		
 		private var ls:LocalSpace;
-		public var pv3dcamera:Camera3D;
 		
 		// "look at" point, center of view
 		public var Target:Vector3;
@@ -80,6 +76,8 @@ package tabinda.papersteer
 		// "offset POV" camera mode parameters
 		public var PovOffset:Vector3;
 		
+		public var pv3dcamera:Camera3D;
+		
 		public function xxxls ():LocalSpace
 		{
 			ls.RegenerateOrthonormalBasis2 (Vector3.VectorSubtraction(Target, Position),Up);
@@ -87,9 +85,13 @@ package tabinda.papersteer
 		}
 
 		// constructor
-		public function PSCamera (viewport:Viewport3D):void
+		public function PSCamera ():void
 		{
-			pv3dcamera = new DebugCamera3D(viewport);
+			pv3dcamera = new Camera3D();
+			pv3dcamera.z = 100;
+			pv3dcamera.focus = 30;
+			pv3dcamera.zoom = -20;
+			//pv3dcamera.useCulling = true;
 			Reset ();
 		}
 
@@ -220,8 +222,11 @@ package tabinda.papersteer
 			SmoothCameraMove (newPosition,newTarget,newUp,elapsedTime);
 
 			//TODO: set camera in draw module
-			//pv3dcamera.lookAt(SimpleVehicle(v).displayObject, new Number3D(Up.x, Up.y, Up.z));
 			//drawCameraLookAt(position(), target, up());
+			if(SimpleVehicle(VehicleToTrack).objectMesh)
+			{
+				pv3dcamera.lookAt(SimpleVehicle(VehicleToTrack).objectMesh, Up.ToNumber3D());
+			}
 		}
 
 		public function callUpdate (currentTime:Number,elapsedTime:Number):void
@@ -299,7 +304,11 @@ package tabinda.papersteer
 				Target = newTarget;
 				Up=newUp;
 			}
-			pv3dcamera.position = new Number3D(Position.x, Position.y, Position.z);
+			if(SimpleVehicle(VehicleToTrack).objectMesh)
+			{
+				pv3dcamera.position = Position.ToNumber3D();
+				
+			}
 		}
 
 		public function DoNotSmoothNextMove():void

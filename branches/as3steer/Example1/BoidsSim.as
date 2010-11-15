@@ -32,36 +32,57 @@
 
 package
 {
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
-	import flash.text.TextField;
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.events.*;
-	import flash.utils.getTimer;
-	
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.text.TextFieldAutoSize;
+	import flash.ui.Keyboard;
 	import tabinda.as3steer.*;
-
-	public class BoidsSim extends Sprite
+	
+	public class BoidsSim extends MovieClip
 	{
+		var clock:Clock;
+
+		// flock: a group (STL vector) of pointers to all boids
+		var flock:Array;
+
+		// pointer to database used to accelerate proximity queries
+		var pd:AbstractProximityDatabase;
+
+		// keep track of current flock size
+		var population:int;
+
+		// which of the various proximity databases is currently in use
+		var cyclePD:int;
+				
+		var container:Sprite = new Sprite();
+
 		public function BoidsSim()
 		{
-			this.x = stage.stageWidth / 2;
-			this.y = stage.stageHeight / 2;
+			container.x = stage.stageWidth / 4;
+			container.y = stage.stageHeight / 2;
+			addChild(container);
 			
 			clock = new Clock();
 			flock = new Array();
+			
 			Open();
+			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, HandleFunctionKeys);
 			this.addEventListener(Event.ENTER_FRAME, cycle);
+			stage.addEventListener(MouseEvent.CLICK,callAddBoidtoFlock);
 		}
-		
-		public function cycle(e:Event):void
+
+		function cycle(e:Event):void
 		{
 			clock.Update();
 			Update(clock.TotalSimulationTime, clock.ElapsedSimulationTime);
+			Redraw();
 		}
 
-		public function Open():void
+		function Open():void
 		{
 			// make the database used to accelerate proximity queries
 			cyclePD = -1;
@@ -75,7 +96,7 @@ package
 			}
 		}
 
-		public function Update(currentTime:Number,elapsedTime:Number):void
+		function Update(currentTime:Number,elapsedTime:Number):void
 		{
 			// update flock simulation for each boid
 			for (var i:int = 0; i < flock.length; i++)
@@ -84,7 +105,7 @@ package
 			}
 		}
 
-		public function Redraw():void
+		function Redraw():void
 		{
 			// draw each boid in flock
 			for (var i:int = 0; i < flock.length; i++)
@@ -93,7 +114,7 @@ package
 			}
 		}
 
-		public function Close():void
+		function Close():void
 		{
 			// delete each member of the flock
 			while (population > 0)
@@ -105,7 +126,7 @@ package
 			pd = null;
 		}
 
-		public function Reset():void
+		function Reset():void
 		{
 			// reset each boid in flock
 			for (var i:int = 0; i < flock.length; i++)
@@ -117,7 +138,7 @@ package
 		// for purposes of demonstration, allow cycling through various
 		// types of proximity databases.  this routine is called when the
 		// Demo user pushes a function key.
-		public function NextPD():void
+		function NextPD():void
 		{
 			// save pointer to old PD
 			var oldPD = pd;
@@ -128,6 +149,8 @@ package
 			{
 			case 0:
 				{
+					proinfo.autoSize = TextFieldAutoSize.LEFT;
+					proinfo.text = "Proximity: LQ Bin Lattice";
 					var center:Vector3 = Vector3.ZERO;
 					var div:Number = 10.0;
 					var divisions:Vector3 = new Vector3(div, div, div);
@@ -138,6 +161,8 @@ package
 				}
 			case 1:
 				{
+					proinfo.autoSize = TextFieldAutoSize.LEFT;
+					proinfo.text = "Proximity: Brute Force";
 					pd = new BruteForceProximityDatabase();
 					break;
 				}
@@ -153,26 +178,33 @@ package
 			oldPD = null;
 		}
 
-		public function HandleFunctionKeys(key:KeyboardEvent):void
+		function HandleFunctionKeys(key:KeyboardEvent):void
 		{
 			switch (key.keyCode)
 			{
 				case (Keyboard.F1): AddBoidToFlock(); break;
 				case (Keyboard.F2): RemoveBoidFromFlock(); break;
 				case (Keyboard.F3): NextPD(); break;
-				case (Keyboard.F4): Boid.NextBoundaryCondition(); break;
+				case (Keyboard.F4): Boid.NextBoundaryCondition(boundinfo); break;
 			}
 		}
-
-		public function AddBoidToFlock():void
+		
+		function callAddBoidtoFlock(e:MouseEvent):void
 		{
+			AddBoidToFlock();
+		}
+
+		function AddBoidToFlock():void
+		{		
 			population++;
 			var boid:Boid = new Boid(pd);
 			flock.push(boid);
-			addChild(boid.sp);
+			container.addChild(boid.sp);
+			binfo.autoSize = TextFieldAutoSize.RIGHT;
+			binfo.text = "Boids: " + flock.length;
 		}
 
-		public function RemoveBoidFromFlock():void
+		function RemoveBoidFromFlock():void
 		{
 			if (population > 0)
 			{
@@ -181,30 +213,16 @@ package
 				var boid:Boid = flock[population];
 				flock.splice(population, 1);
 				
-				removeChild(boid.sp);
+				container.removeChild(boid.sp);
 				// delete the Boid
 				boid = null;
 			}
 		}
 
 		// return an AVGroup containing each boid of the flock
-		public function get Vehicles():Array
+		function get Vehicles():Array
 		{
 			return flock;
 		}
-
-		public var clock:Clock;
-		
-		// flock: a group (STL vector) of pointers to all boids
-		public var flock:Array;
-
-		// pointer to database used to accelerate proximity queries
-		public var pd:AbstractProximityDatabase;
-
-		// keep track of current flock size
-		public var population:int;
-
-		// which of the various proximity databases is currently in use
-		public var cyclePD:int;
 	}
 }

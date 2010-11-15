@@ -32,6 +32,8 @@
 
 package tabinda.papersteer
 {
+	import flash.display.Sprite;
+	
 	public interface IDraw
 	{
 		function Line (startPoint:Vector3, endPoint:Vector3, color:uint):void;

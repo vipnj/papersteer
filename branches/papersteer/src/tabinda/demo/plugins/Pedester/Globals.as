@@ -67,14 +67,15 @@ package tabinda.demo.plugins.Pedester
 				var gap:Number = 1.2 * size;
 				var outter:Number = 2 * size;
 				var h:Number = 0.5;
+				
 				var pathPoints:Vector.<Vector3> = new Vector.<Vector3>(pathPointCount);
-				pathPoints[0] = new Vector3 (h + gap - outter,  0,  h + top - outter); // 0 a
-				pathPoints[1] = new Vector3 (h + gap, 0,  h + top);        			// 1 b
-				pathPoints[2] = new Vector3 (h + gap + (top/2), 0, h+top/2);      		// 2 c
-				pathPoints[3] = new Vector3 (h + gap, 0, h);            				// 3 d
-				pathPoints[4] = new Vector3 (h, 0, h);            						// 4 e
-				pathPoints[5] = new Vector3 (h,0,h + top);        						// 5 f
-				pathPoints[6] = new Vector3 (h + gap,0,  h + top/2);      				// 6 g
+				pathPoints[0] = new Vector3 (h + gap - outter,  0,  h + top - outter); 		// 0 a
+				pathPoints[1] = (new Vector3 (h + gap, 0,  h + top));        				// 1 b
+				pathPoints[2] = (new Vector3 (h + gap + (top/2), 0, h+top/2));      		// 2 c
+				pathPoints[3] = (new Vector3 (h + gap, 0, h));            					// 3 d
+				pathPoints[4]=(new Vector3 (h, 0, h));            							// 4 e
+				pathPoints[5]=(new Vector3 (h,0,h + top));        							// 5 f
+				pathPoints[6]=(new Vector3 (h + gap,0,  h + top/2));      					// 6 g
 					
 				Obstacle1.Center = Utilities.Interpolate2(0.2, pathPoints[0], pathPoints[1]);
 				Obstacle2.Center = Utilities.Interpolate2(0.5, pathPoints[2], pathPoints[3]);

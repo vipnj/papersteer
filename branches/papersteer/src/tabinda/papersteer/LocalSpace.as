@@ -32,8 +32,8 @@
 
 package tabinda.papersteer
 {
-	import tabinda.papersteer.Vector3;
 	import org.papervision3d.Papervision3D;
+	import tabinda.papersteer.Vector3;
 	
 	/// <summary>
 	/// LocalSpaceMixin is a mixin layer, a class template with a paramterized base
@@ -127,12 +127,8 @@ package tabinda.papersteer
 		// overloaded in derived types (e.g. vehicles) to change handedness.
 		public function get IsRightHanded ():Boolean
 		{
-			// NOTE: If you change the coordinate system of Papersteer to LeftHanded
-			// i.e. return false in this function, you must also set Papervision3D to false
-			// as well. Although, PV3d uses Left handed coordinated system by default.
 			Papervision3D.useRIGHTHANDED = true;
 			return true;
-			
 		}
 
 		// ------------------------------------------------------------------------

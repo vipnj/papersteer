@@ -32,27 +32,25 @@
 
 package tabinda.demo.plugins.Boids
 {
-	import flash.filters.ColorMatrixFilter;
 	import org.papervision3d.core.geom.*;
-	import org.papervision3d.core.math.*;
 	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.*;
 	import org.papervision3d.materials.ColorMaterial;
-	import org.papervision3d.objects.DisplayObject3D;
-	import org.papervision3d.objects.primitives.Cone;
+	import org.papervision3d.objects.*;
+	import org.papervision3d.Papervision3D;
 	
-	import tabinda.papersteer.*;
 	import tabinda.demo.*;
+	import tabinda.papersteer.*;
 
 	public class Boid extends SimpleVehicle
 	{
-		public static const AvoidancePredictTimeMin:Number=0.9;
-		public static const AvoidancePredictTimeMax:Number=2;
-		public static var AvoidancePredictTime:Number = AvoidancePredictTimeMin;
+		//public static const AvoidancePredictTimeMin:Number=0.9;
+		//public static const AvoidancePredictTimeMax:Number=2;
+		//public static var AvoidancePredictTime:Number = AvoidancePredictTimeMin;
 		
-		public var BoidMesh:TriangleMesh3D;
-		public var colMat:ColorMaterial;
-		public var uvArr:Array;
-		public var triArr:Vector.<Triangle3D>;
+		public var uvArr:Array;							// UV Array to assign texture
+		public var triArr:Vector.<Triangle3D>;			// Triangle Array for the Mesh
+		public var colArr:Vector.<ColorMaterial>;		// Used to assign a color Material to the Mesh
 
 		// a pointer to this boid's interface object for the proximity database
 		public var proximityToken:ITokenForProximityDatabase;
@@ -70,20 +68,27 @@ package tabinda.demo.plugins.Boids
 			proximityToken=null;
 			NewPD (pd);
 			
-			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
-			triArr = new Vector.<Triangle3D>(6);
-			
-			for (var i:int = 0; i < 6; i++)
-			{
-				triArr[i] = new Triangle3D(BoidMesh, new Array(), colMat, uvArr);
-			}
-			
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			BoidMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			// Keep the Steer Library Clean from PV3D Stuff
+			initPV3D();
 			
 			// reset all boid state
 			Reset ();
+		}
+		
+		public function initPV3D():void
+		{
+			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+			triArr = new Vector.<Triangle3D>(6);
+			colArr = new Vector.<ColorMaterial>(6);
+			
+			for (var i:int = 0; i < 6; i++)
+			{
+				colArr[i] = new ColorMaterial(0x000000, 1, false);
+				colArr[i].doubleSided = false;
+				triArr[i] = new Triangle3D(objectMesh, new Array(), colArr[i]);
+			}
+			
+			objectMesh = new TriangleMesh3D(colArr[0] , new Array(), new Array(), null);
 		}
 
 		// reset state
@@ -117,10 +122,69 @@ package tabinda.demo.plugins.Boids
 		// draw this boid into the scene
 		public function Draw ():void
 		{
-			//BoidMesh.position = this.Position.ToNumber3D();
-			BoidMesh.geometry.vertices =[];
-			BoidMesh.geometry.faces = [];
-			Drawing.DrawBasic3dSphericalVehicle (this,BoidMesh,triArr,uvArr,Colors.LightGray);
+			objectMesh.geometry.vertices =[];
+			objectMesh.geometry.faces = [];
+			
+			DrawBasic3dSphericalVehicle();
+		}
+		
+		private function DrawBasic3dSphericalVehicle():void
+		{
+			var vColor:Vector3 = Colors.toVector(Colors.LightGray);
+			
+			// "aspect ratio" of body (as seen from above)
+			const x:Number = 0.5;
+			var y:Number = Number(Math.sqrt(1 - (x * x)));
+
+			// radius and position of vehicle
+			var r:Number = Radius;
+			var p:Vector3 = Position;
+
+			// body shape parameters
+			var f:Vector3 = Vector3.ScalarMultiplication(r,Forward);
+			var s:Vector3 = Vector3.ScalarMultiplication((r * x), Side);
+			var u:Vector3 = Vector3.ScalarMultiplication((r * x * 0.5),Up);
+			var b:Vector3 = Vector3.ScalarMultiplication(r * -y,Forward);
+
+			// vertex positions
+			var nose:Vertex3D = Vector3.VectorAddition(p , f).ToVertex3D();
+			var side1:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , s).ToVertex3D();
+			var side2:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , s).ToVertex3D();
+			var top:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , u).ToVertex3D();
+			var bottom:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u).ToVertex3D();;
+	
+			// colors
+			const j:Number = +0.5;
+			const k:Number = -0.5;
+			
+			colArr[0].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
+			colArr[1].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
+			colArr[2].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
+			colArr[3].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
+			colArr[4].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
+			
+			objectMesh.geometry.vertices.push(nose,top,side1,side2,bottom);
+			
+			triArr[0].reset(objectMesh, [nose, side1, top], colArr[0],uvArr);
+			triArr[1].reset(objectMesh, [nose, top, side2], colArr[1], uvArr);
+			triArr[2].reset(objectMesh, [nose, bottom, side1], colArr[2], uvArr);
+			triArr[3].reset(objectMesh, [nose, side2, bottom], colArr[3], uvArr);
+			triArr[4].reset(objectMesh, [side1, side2, top], colArr[4], uvArr);
+			triArr[5].reset(objectMesh, [side2, side1, bottom], colArr[4], uvArr);
+			
+			objectMesh.geometry.faces.push(triArr[0]);
+			objectMesh.geometry.faces.push(triArr[1]);
+			objectMesh.geometry.faces.push(triArr[2]);
+			objectMesh.geometry.faces.push(triArr[3]);
+			objectMesh.geometry.faces.push(triArr[4]);
+			objectMesh.geometry.faces.push(triArr[5]);
+			
+			if (Papervision3D.useRIGHTHANDED)
+			{
+				objectMesh.geometry.flipFaces();
+			}
+			
+			objectMesh.geometry.ready = true;
 		}
 
 		// per frame simulation update
@@ -137,9 +201,9 @@ package tabinda.demo.plugins.Boids
 		// basic flocking
 		public function SteerToFlock ():Vector3
 		{
-			const separationRadius:Number=5.0;
-			const separationAngle:Number=-0.707;
-			const separationWeight:Number=12.0;
+			const separationRadius:Number = 5.0;
+			const separationAngle:Number = -0.707;
+			const separationWeight:Number = 12.0;
 
 			const alignmentRadius:Number=7.5;
 			const alignmentAngle:Number=0.7;

@@ -31,17 +31,13 @@
 // ----------------------------------------------------------------------------
 
 package tabinda.papersteer
-{	
-	import org.papervision3d.core.geom.renderables.Vertex3D;
-	import org.papervision3d.objects.DisplayObject3D;
+{
 	/** 
 	 * Pure virtual base class for generic steerable vehicles
 	 * @author Mohammad Haseeb
 	 */
 	public class AbstractVehicle extends LocalSpace implements IVehicle
-	{
-		private var _displayObject:DisplayObject3D;
-		
+	{		
 		public function get Mass():Number { return 0.0; }
 		public function get Radius():Number { return 0.0; }
 		public function set Mass(param:Number):void { }
@@ -57,12 +53,5 @@ package tabinda.papersteer
 		public function get MaxSpeed():Number { return 0.0; }
 		public function set MaxForce(param:Number):void{}
 		public function set MaxSpeed(param:Number):void { }
-		
-		public function get displayObject():DisplayObject3D { return _displayObject; }
-		
-		public function set displayObject(value:DisplayObject3D):void 
-		{
-			_displayObject = value;
-		}
 	}
 }

@@ -50,7 +50,7 @@ package tabinda.demo.plugins.Ctf
 
 		public static const AvoidancePredictTimeMin:Number=0.9;
 		public static const AvoidancePredictTimeMax:Number=2;
-		public static  var AvoidancePredictTime:Number=0.9;
+		public static  var AvoidancePredictTime:Number=AvoidancePredictTimeMin;
 
 		public static  var EnableAttackSeek:Boolean=true;// for testing (perhaps retain for UI control?)
 		public static  var EnableAttackEvade:Boolean=true;// for testing (perhaps retain for UI control?)

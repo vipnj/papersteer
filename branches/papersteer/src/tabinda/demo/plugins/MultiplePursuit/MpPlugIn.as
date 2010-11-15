@@ -32,32 +32,41 @@
 
 package tabinda.demo.plugins.MultiplePursuit
 {
-	import tabinda.papersteer.*;
-	import tabinda.demo.*;
-	
-	import org.papervision3d.core.geom.TriangleMesh3D;
-	import org.papervision3d.core.math.NumberUV;
+	import org.papervision3d.core.geom.*;
+	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.materials.ColorMaterial;
+	import org.papervision3d.materials.special.LineMaterial;
+	import org.papervision3d.Papervision3D;
+	
+	import tabinda.demo.*;
+	import tabinda.papersteer.*;
+	
 	
 	public class MpPlugIn extends PlugIn
 	{
 		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
 		public var GridMesh:TriangleMesh3D;
-		public var colMat:ColorMaterial;
-		public var uvArr1:Array;
-		public var uvArr2:Array;
+		public var lines:Lines3D;
+		public var colMat:ColorMaterial
+		
+		public var pluginReset:Boolean;
 		
 		public function MpPlugIn ()
 		{
-			uvArr1 = new Array(new NumberUV(0, 0), new NumberUV(1, 1), new NumberUV(0, 1));
-			uvArr2 = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(1, 1));
+			super();
 			
 			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = true;
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			Demo.scene.addChild(GridMesh);
+			colMat.doubleSided = false;
 			
-			allMP=new Vector.<MpBase>();
+			lines = new Lines3D(new LineMaterial(0x000000, 1));
+			
+			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			
+			Demo.container.addChild(lines);
+			Demo.container.addChild(GridMesh);
+			
+			allMP = new Vector.<MpBase>();
+			pluginReset = true;
 		}
 
 		public override  function get Name ():String
@@ -73,15 +82,23 @@ package tabinda.demo.plugins.MultiplePursuit
 		public override  function Open ():void
 		{
 			// create the wanderer, saving a pointer to it
-			wanderer=new MpWanderer() ;
+			wanderer = new MpWanderer() ;
+			Demo.container.addChild(wanderer.objectMesh);
+			Demo.container.addChild(wanderer.lines);
+			
 			allMP.push (wanderer);
 
 			// create the specified number of pursuers, save pointers to them
 			const pursuerCount:int=30;
 			for (var i:int=0; i < pursuerCount; i++)
 			{
-				allMP.push (new MpPursuer(wanderer));
-			}//pBegin = allMP.begin() + 1;  // iterator pointing to first pursuer
+				var mpPursuer:MpPursuer = new MpPursuer(wanderer);
+				allMP.push (mpPursuer);
+				Demo.container.addChild(mpPursuer.objectMesh);
+				Demo.container.addChild(mpPursuer.lines);
+			}
+			
+			//pBegin = allMP.begin() + 1;  // iterator pointing to first pursuer
 			//pEnd = allMP.end();          // iterator pointing to last pursuer
 
 			// initialize camera
@@ -101,6 +118,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			{
 				MpPursuer(allMP[i]).Update (currentTime,elapsedTime);
 			}
+			//pluginReset = true;
 		}
 
 		public override  function Redraw (currentTime:Number,elapsedTime:Number):void
@@ -109,14 +127,21 @@ package tabinda.demo.plugins.MultiplePursuit
 			var selected:IVehicle=Demo.SelectedVehicle;
 
 			// vehicle nearest mouse (to be highlighted)
-			var nearMouse:IVehicle=null;//Demo.vehicleNearestToMouse ();
+			var nearMouse:IVehicle = Demo.VehicleNearestToMouse();
 
 			// update camera
 			Demo.UpdateCamera (currentTime,elapsedTime,selected);
 
-			// draw "ground plane"
-			Demo.GridUtility (selected.Position,GridMesh);
-
+			if(pluginReset)
+			{
+				GridMesh.geometry.faces = [];
+				GridMesh.geometry.vertices = [];
+			
+				// draw "ground plane"
+				//Demo.GridUtility (selected.Position,GridMesh);
+				Grid(selected.Position);
+				pluginReset = false;
+			}
 			// draw each vehicles
 			for (var i:int=0; i < allMP.length; i++)
 			{
@@ -127,14 +152,89 @@ package tabinda.demo.plugins.MultiplePursuit
 			Demo.HighlightVehicleUtility (nearMouse);
 			Demo.CircleHighlightVehicleUtility (selected);
 		}
+		
+		public function Grid(gridTarget:Vector3):void
+		{		
+			var center:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
+												 Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
+												 Number(Math.round(gridTarget.z * 0.5) * 2));
+
+			// colors for checkboard
+			var gray1:uint = Colors.LightGray
+			var gray2:uint = Colors.DarkGray;
+			
+			var size:int = 500;
+			var subsquares:int = 50;
+			
+			var half:Number = size / 2;
+			var spacing:Number = size / subsquares;
+
+			var flag1:Boolean = false;
+			var p:Number = -half;
+			var corner:Vector3 = new Vector3();
+			
+			for (var i:int = 0; i < subsquares; i++)
+			{
+				var flag2:Boolean = flag1;
+				var q:Number = -half;
+				for (var j:int = 0; j < subsquares; j++)
+				{
+					corner.x = p;
+					corner.y = -1;
+					corner.z = q;
+
+					corner = Vector3.VectorAddition(corner, center);
+					
+					var vertA:Vertex3D = corner.ToVertex3D();
+					var vertB:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, 0)).ToVertex3D();
+					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
+					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
+					
+					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					
+					var color:uint = flag2 ? gray1 : gray2;
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					
+					GridMesh.geometry.faces.push(t1);
+					GridMesh.geometry.faces.push(t2);
+					
+					flag2 = !flag2;
+					q += spacing;
+				}
+				flag1 = !flag1;
+				p += spacing;
+			}
+			if (Papervision3D.useRIGHTHANDED)
+			{
+				GridMesh.geometry.flipFaces();
+			}
+			GridMesh.geometry.ready = true;
+		}
 
 		public override  function Close ():void
-		{
-			//TODO: Remove scene object once the plugin closes
-			//Demo.scene.objects.splice(0);
+		{			
+			destoryPV3DObject(lines);
+			destoryPV3DObject(GridMesh);
 			
+			destoryPV3DObject(wanderer.objectMesh);
+			destoryPV3DObject(wanderer.lines);
+			
+			for (var i:int=1; i < allMP.length; i++)
+			{
+				destoryPV3DObject(MpPursuer(allMP[i]).objectMesh);
+				destoryPV3DObject(MpPursuer(allMP[i]).lines);
+			}
+
 			// delete wanderer, all pursuers, and clear list
 			allMP.splice(0,allMP.length);
+		}
+		
+		private function destoryPV3DObject(object:*):void 
+		{
+			Demo.container.removeChild(object);
+			object.material.destroy();
+			object = null;
 		}
 
 		public override  function Reset ():void
@@ -149,6 +249,8 @@ package tabinda.demo.plugins.MultiplePursuit
 			// immediately jump to default camera position
 			Demo.camera.DoNotSmoothNextMove ();
 			Demo.camera.ResetLocalSpace ();
+			
+			pluginReset = true;
 		}
 
 		//const AVGroup& allVehicles () {return (const AVGroup&) allMP;}

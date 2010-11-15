@@ -30,7 +30,7 @@
 //
 // ----------------------------------------------------------------------------
 
-package tabinda.papersteer
+package tabinda.as3steer
 {
 	import flash.display.Sprite;
 	
@@ -147,7 +147,7 @@ package tabinda.papersteer
 		 * Draws the trail as a dotted line, fading away with age.
 		 * @param	drawer
 		 */
-		public function Draw(drawer:IDraw):void
+		public function Draw():void
 		{
 			var index:int = currentIndex;
 			for (var j:int = 0; j < vertices.length; j++)
@@ -200,7 +200,7 @@ package tabinda.papersteer
 
 			for (var i:int = 0; i < vertices.length; i++)
 			{
-				vertices[i] = Vector3.Zero;
+				vertices[i] = Vector3.ZERO;
 				flags[i] = 0;
 			}
 		}

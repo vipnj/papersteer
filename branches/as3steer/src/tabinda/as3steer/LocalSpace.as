@@ -32,6 +32,7 @@
 
 package tabinda.as3steer
 {
+	import flash.geom.Vector3D;
 	
 	/** LocalSpace: a local coordinate system for 3d space
 	*
@@ -56,75 +57,67 @@ package tabinda.as3steer
 	*/
 	public class LocalSpace
 	{
-		private var _side:Vector3;//    side-pointing unit basis vector
-		private var _up:Vector3;//  upward-pointing unit basis vector
-		private var _forward:Vector3;// forward-pointing unit basis vector
-		private var _position:Vector3;// origin of local space
+		private var _side:Vector3;				// side-pointing unit basis vector
+		private var _up:Vector3;				// upward-pointing unit basis vector
+		private var _forward:Vector3;			// forward-pointing unit basis vector
+		private var _position:Vector3;			// origin of local space
 
 
-		public function side():Vector3
+		public function get side():Vector3
 		{
 			return _side;
 		}
-		public function up():Vector3
+		public function get up():Vector3
 		{
 			return _up;
 		}
-		public function forward():Vector3
+		public function get forward():Vector3
 		{
 			return _forward;
 		}
-		public function Position():Vector3
+		public function get Position():Vector3
 		{
 			return _position;
 		}
 
-		public function setSide(...args):Vector3
+		public function set side(value:Vector3):void
 		{
-			if(args.length == 3)
-			{
-				return _side=new Vector3(args[0],args[1],args[2]);
-			}
-			else
-			{
-				return _side = args[0];
-			}
+			_side = value;
 		}
 		
-		public function setUp(...args):Vector3
+		public function setSide(x:Number,y:Number,z:Number):void
 		{
-			if(args.length == 3)
-			{
-				return _up=new Vector3(args[0],args[1],args[2]);
-			}
-			else
-			{
-				return _up = args[0];
-			}
+			_side=new Vector3(x,y,z);
 		}
 		
-		public function setForward(...args):Vector3
+		public function set up(value:Vector3):void
 		{
-			if(args.length == 3)
-			{
-				return _forward=new Vector3(args[0],args[1],args[2]);
-			}
-			else
-			{
-				return _forward = args[0];
-			}
+			_up = value
 		}
 		
-		public function setPosition(...args):Vector3
+		public function setUp(x:Number,y:Number,z:Number):void
 		{
-			if(args.length == 3)
-			{
-				return _position=new Vector3(args[0],args[1],args[2]);
-			}
-			else
-			{
-				return _position = args[0];
-			}
+			_up=new Vector3(x,y,z);
+		}
+		
+		public function set forward(value:Vector3):void
+		{
+			_forward = value;
+		}
+		
+		public function setForward(x:Number,y:Number,z:Number):void
+		{
+			_forward=new Vector3(x,y,z);
+		}
+		
+		public function set Position(value:Vector3):void
+		{
+			_position = value;
+		}
+		
+		public function setPosition(x:Number,y:Number,z:Number):void
+		{
+			_position=new Vector3(x,y,z);
 		}
 
 		// use right-(or left-)handed coordinate space
@@ -183,9 +176,9 @@ package tabinda.as3steer
 		public function globalizeDirection(localDirection:Vector3):Vector3
 		{
 			return Vector3.VectorAddition(
-										Vector3.VectorAddition(Vector3.ScalarMultiplication1(_side, localDirection.x),
-										Vector3.ScalarMultiplication1(_up, localDirection.y)),
-										Vector3.ScalarMultiplication1(_forward,localDirection.z));
+										Vector3.VectorAddition(Vector3.ScalarMultiplication(localDirection.x,_side),
+										Vector3.ScalarMultiplication(localDirection.y,_up)),
+										Vector3.ScalarMultiplication(localDirection.z,_forward));
 		}
 
 		// ------------------------------------------------------------------------
@@ -195,13 +188,13 @@ package tabinda.as3steer
 			// derive new unit side basis vector from forward and up
 			if (rightHanded())
 			{
-				_side=_forward.CrossProduct(_up);
+				_side= Vector3.CrossProduct(_forward,_up);
 			}
 			else
 			{
-				_side=_up.CrossProduct(_forward);
+				_side= Vector3.CrossProduct(_up,_forward);
 			}
-			_side.Normalise();
+			_side.fNormalize();
 		}
 
 		// ------------------------------------------------------------------------
@@ -219,11 +212,11 @@ package tabinda.as3steer
 			// perpendicular and unit length)
 			if (rightHanded())
 			{
-				_up=_side.CrossProduct(_forward);
+				_up=Vector3.CrossProduct(_side,_forward);
 			}
 			else
 			{
-				_up=_forward.CrossProduct(_side);
+				_up=Vector3.CrossProduct(_forward,_side);
 			}
 		}
 
@@ -232,12 +225,12 @@ package tabinda.as3steer
 			if(args.length == 2)
 			{
 				_up=args[1];
-				args[0].Normalise();
+				args[0].fNormalize();
 				regenerateOrthonormalBasis(args[0]);
 			}
 			else if(args.length ==1)
 			{
-				args[0].Normalise();
+				args[0].fNormalize();
 				regenerateOrthonormalBasisUF(args[0]);
 			}
 		}

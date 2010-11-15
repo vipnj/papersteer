@@ -32,6 +32,12 @@
 
 package tabinda.papersteer
 {
+	import org.papervision3d.core.geom.Lines3D;
+	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.Number3D;
+	import org.papervision3d.materials.special.LineMaterial;
+	
+	import tabinda.demo.*;
 	/** 
 	 *  This class adds OpenSteerDemo-based graphical annotation functionality to a 
 	 *  given base class, which is typically something that supports the AbstractVehicle interface.
@@ -41,9 +47,13 @@ package tabinda.papersteer
 	{
 		private var trails:Vector.<Trail>;
 		private var isenabled:Boolean;
+		
+		//PV3D Render Variables
+		public var lines:Lines3D;
+		public var lineMat:LineMaterial;
 
 		//HACK: change the IDraw to a IDrawService
-		public static  var drawer:IDraw;
+		//public static  var drawer:IDraw;
 
 		/** 
 		 * constructor
@@ -51,7 +61,11 @@ package tabinda.papersteer
 		public function Annotation ()
 		{
 			isenabled = false;
-			trails=new Vector.<Trail>();
+			trails = new Vector.<Trail>();
+			
+			lineMat = new LineMaterial(0x000000, 1);
+			lines = new Lines3D(lineMat, "Lines");
+			Demo.scene.addChild(lines);
 		}
 
 		/** 
@@ -65,6 +79,13 @@ package tabinda.papersteer
 		public function set IsEnabled (val:Boolean):void
 		{
 			isenabled=val;
+		}
+		
+		public function Redraw():void
+		{
+			lines.geometry.faces = [];
+            lines.geometry.vertices = [];
+            lines.removeAllLines();
 		}
 
 		/** Adds a Trail.
@@ -113,12 +134,19 @@ package tabinda.papersteer
 		 * @param endPoint A 3D point in space where the line ends
 		 * <p/> 
 		 * @param color An unsigned integer for the color of the object
-		 */ 
+		 */
 		public function Line (startPoint:Vector3,endPoint:Vector3,color:uint):void
 		{
-			if (isenabled == true && drawer != null)
+			if (isenabled)
 			{
-				drawer.Line (startPoint,endPoint,color);
+				if (Demo.IsDrawPhase == true)
+				{
+					lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+				}	
+				else
+				{
+					DeferredLine.AddToBuffer(lines,startPoint, endPoint, color);
+				}
 			}
 		}
 
@@ -200,9 +228,59 @@ package tabinda.papersteer
 		*/ 
 		public function CircleOrDisk (radius:Number,axis:Vector3,center:Vector3,color:uint,segments:int,filled:Boolean,in3d:Boolean):void
 		{
-			if (isenabled == true && drawer != null)
+			if (isenabled)
 			{
-				drawer.CircleOrDisk (radius,axis,center,color,segments,filled,in3d);
+				//drawer.CircleOrDisk (radius, axis, center, color, segments, filled, in3d);
+				
+				if (Demo.IsDrawPhase())
+				{
+					var temp : Number3D = new Number3D(radius,0,0);
+					var tempcurve:Number3D = new Number3D(0,0,0);
+					var joinends : Boolean;
+					var i:int;
+					var pointcount : int;
+
+					var angle:Number = (0-360)/segments;
+					var curveangle : Number = angle/2;
+
+					tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+					tempcurve.rotateY(curveangle+0);
+
+					if(360-0<360)
+					{
+						joinends = false;
+						pointcount = segments+1;
+					}
+				   else
+					{
+						joinends = true;
+						pointcount = segments;
+					}
+				   
+					temp.rotateY(0);
+
+					var vertices:Array = new Array();
+					var curvepoints:Array = new Array();
+
+					for(i = 0; i< pointcount;i++)
+					{
+						vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+						curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+						temp.rotateY(angle);
+						tempcurve.rotateY(angle);
+					}
+
+					for(i = 0; i < segments ;i++)
+					{
+						var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+						line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+						lines.addLine(line);
+					}
+				}
+				else
+				{
+					DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+				}
 			}
 		}
 

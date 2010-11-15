@@ -37,11 +37,11 @@ package tabinda.as3steer
 	*/
 	public class Obstacle
 	{
-		public function seenFrom():String
+		public function get SeenFrom():String
 		{
 			return seenFromState.inside;
 		}
-		public function setSeenFrom(s:String):void
+		public function set SeenFrom(s:String):void
 		{
 		}
 		

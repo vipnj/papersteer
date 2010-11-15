@@ -45,7 +45,7 @@ package tabinda.papersteer
 		// constructor
 		public function SphericalObstacle(...args):void
 		{
-			trace("SphericalObstacle.constructor",args[0] is Number, args[1] is Vector3);
+			//trace("SphericalObstacle.constructor",args[0] is Number, args[1] is Vector3);
 			
 			if (args.length == 2)
 			{

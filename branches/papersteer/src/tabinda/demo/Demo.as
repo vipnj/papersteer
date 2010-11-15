@@ -36,29 +36,31 @@ package tabinda.demo
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
+	import flash.system.*;
 	import flash.text.*;
-	import flash.utils.Timer;
-	import flash.ui.Keyboard;
-	import flash.text.TextField;
-	import flash.system.System;
+	import flash.ui.*;
 	
 	// Papervision3D Imports
+	import org.papervision3d.core.clipping.*;
+	import org.papervision3d.core.geom.*;
+	import org.papervision3d.objects.*;
+	import org.papervision3d.view.stats.*;
+	import org.papervision3d.events.*;
 	import org.papervision3d.render.*;
 	import org.papervision3d.scenes.*;
 	import org.papervision3d.view.*;
-	import org.papervision3d.events.*;
-	import org.papervision3d.core.geom.TriangleMesh3D;
 	
 	// PaperSteer Imports
-	import tabinda.papersteer.*;
 	import tabinda.demo.plugins.Boids.*;
-	import tabinda.demo.plugins.LowSpeedTurning.*;
-	import tabinda.demo.plugins.Pedester.*;
 	import tabinda.demo.plugins.Ctf.*;
+	import tabinda.demo.plugins.LowSpeedTurning.*;
 	import tabinda.demo.plugins.MapDrive.*;
 	import tabinda.demo.plugins.MultiplePursuit.*;
-	import tabinda.demo.plugins.Soccer.*;
 	import tabinda.demo.plugins.OneTurn.*;
+	import tabinda.demo.plugins.Pedester.*;
+	import tabinda.demo.plugins.Soccer.*;
+	import tabinda.papersteer.*;
+
 	
 	/**
 	 * The Demo class is a big example that shows off multiple plugins that can be made with opensteer
@@ -88,7 +90,7 @@ package tabinda.demo
 		
 		// Different Phases of Drawing
 		private static var phase:int;
-		private static var phaseStackSize:int = 5;
+		private static const phaseStackSize:int = 5;
 		private static var phaseStack:Array = new Array(phaseStackSize);
 		private static var phaseStackIndex:int = 0;
 		private static var phaseTimers:Array = new Array(Phase.Count);
@@ -111,6 +113,12 @@ package tabinda.demo
 		private static var pluginOptions:TextField; // Plugin options
 		private var strFormat:TextFormat;			// TextFormat Common for all Text
 		
+		// Object container for objects from PV3D
+		public static var container:DisplayObject3D;
+		
+		//PV3D Stats View
+		public static var stats:StatsView;
+		
 		// currently selected plug-in (user can choose or cycle through them)
 		public static var SelectedPlugIn:PlugIn = null;
 
@@ -128,19 +136,22 @@ package tabinda.demo
 		public static const CameraTargetDistance:Number = 13.0;
 		public static var CameraTargetOffset:Vector3 = new Vector3(0, Camera2dElevation, 0);
 
+		public static var localSpace:LocalSpace = new LocalSpace();
+		
 		public function Demo()
 		{
-			Drawing.demo = this;
-			
-			viewport=new Viewport3D(WindowWidth,WindowHeight,false,false);
+			viewport = new Viewport3D(WindowWidth, WindowHeight, false, false);
 			addChild(viewport);
 		
 			renderer = new BasicRenderEngine();
 			scene = new Scene3D();
-			camera = new PSCamera(viewport);
+			camera = new PSCamera();
+			container = new DisplayObject3D();
+			scene.addChild(container);
 			
-			scene.addChild(Drawing.lines);
-			//scene.addChild(Drawing.shapes);
+			stats = new StatsView(renderer);
+			stats.x = WindowWidth - 180;
+			addChild(stats);
 			
 			cameraMode = new TextField();
 			currentPlugin = new TextField();
@@ -160,9 +171,6 @@ package tabinda.demo
 			addChild(strCam);
 			addChild(pluginOptions);
 
-			//TODO: Fix here
-			Annotation.drawer = new Drawing();
-
 			boids = new BoidsPlugIn();
 			lowSpeedTurn = new LowSpeedTurnPlugIn();
 			pedestrian = new PedestrianPlugIn();
@@ -173,6 +181,7 @@ package tabinda.demo
 			oneTurning = new OneTurningPlugIn();
 
 			init();
+			//renderer.clipping = new FrustumClipping(FrustumClipping.NEAR); 
 			renderer.renderScene(scene,camera.pv3dcamera,viewport);
 		}
 		
@@ -184,13 +193,11 @@ package tabinda.demo
 		public function init():void
 		{
 			// TODO: Any further initialization logic should rest here
-           // stage.scaleMode = StageScaleMode.NO_SCALE;
+            //stage.scaleMode = StageScaleMode.NO_SCALE;
             //stage.quality = StageQuality.LOW;
 			
 			SelectDefaultPlugIn();
 			OpenSelectedPlugIn();
-			
-			Drawing.init();
 			
 			this.addEventListener(Event.ENTER_FRAME, Update);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys);
@@ -202,7 +209,7 @@ package tabinda.demo
 		 */
 		public static function Init2dCamera(...args):void
 		{
-			trace("Demo.Init2DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
+			//trace("Demo.Init2DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
 			if(args.length == 1)
 			{
 				Position2dCamera(args[0], CameraTargetDistance, Camera2dElevation);
@@ -225,7 +232,8 @@ package tabinda.demo
 		 */
 		public static function Init3dCamera(...args):void
 		{
-			trace("Demo.Init3DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
+			//trace("Demo.Init3DCamera", args[0] is IVehicle, args[1] is Number, args[2] is Number);
+			
 			if(args.length == 1)
 			{
 				Position3dCamera(args[0], CameraTargetDistance, Camera2dElevation);
@@ -248,7 +256,7 @@ package tabinda.demo
 		 */
 		public static function Position2dCamera(...args):void
 		{
-			trace("Demo.Position2DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
+			//trace("Demo.Position2DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
 			if(args.length == 1)
 			{
 				// position the camera as if in 3d:
@@ -277,7 +285,7 @@ package tabinda.demo
 		 */
 		public static function Position3dCamera(...args):void
 		{
-			trace("Demo.Position3DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
+			//trace("Demo.Position3DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
 			
 			SelectedVehicle = args[0];
 			
@@ -332,7 +340,7 @@ package tabinda.demo
 			var gray2:uint = Colors.toHex(new Vector3(0.30));
 
 			// draw 50x50 checkerboard grid with 50 squares along each side
-			Drawing.DrawXZCheckerboardGrid(GridMesh,5, 5, gridCenter, gray1, gray2);
+			//Drawing.DrawXZCheckerboardGrid(GridMesh,50, 5, gridCenter, gray1, gray2);
 		}
 
 		/**
@@ -343,7 +351,7 @@ package tabinda.demo
 		{
 			if (vehicle != null)
 			{
-				Drawing.DrawXZDisk(vehicle.Radius, vehicle.Position, Colors.LightGray, 20);
+				//Drawing.DrawXZDisk(vehicle.Radius, vehicle.Position, Colors.LightGray, 20);
 			}
 		}
 
@@ -355,7 +363,7 @@ package tabinda.demo
 		{
 			if (vehicle != null)
 			{
-				Drawing.DrawXZCircle(vehicle.Radius * 1.1, vehicle.Position, Colors.LightGray, 20);
+				//Drawing.DrawXZCircle(vehicle.Radius * 1.1, vehicle.Position, Colors.LightGray, 20);
 			}
 		}
 
@@ -371,7 +379,7 @@ package tabinda.demo
 			{
 				var diameter:Number = v.Radius * 2;
 				var size:Vector3 = new Vector3(diameter, diameter, diameter);
-				Drawing.DrawBoxOutline(v, size, color);
+				//Drawing.DrawBoxOutline(v, size, color);
 			}
 		}
 
@@ -388,12 +396,12 @@ package tabinda.demo
 			if (v != null)
 			{
 				var cPosition:Vector3 = camera.Position;
-				Drawing.Draw3dCircle(
-					v.Radius * radiusMultiplier,  // adjusted radius
-					v.Position,                   // center
-					Vector3.VectorSubtraction(v.Position , cPosition),       // view axis
-					color,                        // drawing color
-					20);                          // circle segments
+				//Drawing.Draw3dCircle(
+				//	v.Radius * radiusMultiplier,  // adjusted radius
+				//	v.Position,                   // center
+				//	Vector3.VectorSubtraction(v.Position , cPosition),       // view axis
+				//	color,                        // drawing color
+				//	20);                          // circle segments
 			}
 		}
 
@@ -405,7 +413,7 @@ package tabinda.demo
 		 */
 		public static function VehicleNearestToMouse():IVehicle
 		{
-			return null;
+			return findVehicleNearestScreenPosition(viewport.mouseX, viewport.mouseY);
 		}
 		
 		/**
@@ -619,9 +627,11 @@ package tabinda.demo
 			SelectedPlugIn.Redraw(currentTime, elapsedTime);
 
 			// draw any annotation queued up during selected PlugIn's Update method
-			Drawing.AllDeferredLines();
-			Drawing.AllDeferredCirclesOrDisks();
-
+			//Drawing.AllDeferredLines();
+			//Drawing.AllDeferredCirclesOrDisks();
+			DeferredCircle.DrawAll();
+			DeferredLine.DrawAll();
+			
 			// return to previous phase
 			PopPhase();
 		}
@@ -759,10 +769,8 @@ package tabinda.demo
 			var lookAt:Vector3 = camera.Target;
 			var up:Vector3 = camera.Up;
 			
-			//Drawing.shapes.graphics.clear();
-			Drawing.lines.geometry.faces = [];
-            Drawing.lines.geometry.vertices = [];
-            Drawing.lines.removeAllLines();
+			SteerLibrary.annotation.Redraw();
+			
 			Draw();
 		}
 
@@ -945,7 +953,7 @@ package tabinda.demo
 		{
 			return clock.ElapsedRealTime - (PhaseTimerDraw + PhaseTimerUpdate)+0.0;
 		}
-
+		
 		public function InitPhaseTimers():void
 		{
 			phaseTimers[Phase.Draw] = 0;
@@ -961,7 +969,7 @@ package tabinda.demo
 			phaseTimerBase = currentRealTime;
 		}
 		
-		public function getandDrawText(text:String, location:Vector3, color:uint):void
+		public static function Draw2dTextAt2dLocation(text:String, location:Vector3, color:uint):void
 		{
 			// set text color and raster position
 			var strFormat:TextFormat = new TextFormat();
