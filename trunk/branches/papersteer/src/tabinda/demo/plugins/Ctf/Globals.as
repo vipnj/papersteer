@@ -44,9 +44,9 @@ package tabinda.demo.plugins.Ctf
 
 		public static const BrakingRate:Number=0.75;
 
-		public static  const EvadeColor:uint=Colors.toHex(int(255.0 * 0.6),int(255.0 * 0.6),int(255.0 * 0.3));// annotation
-		public static  const SeekColor:uint=Colors.toHex(int(255.0 * 0.3),int(255.0 * 0.6),int(255.0 * 0.6));// annotation
-		public static  const ClearPathColor:uint=Colors.toHex(int(255.0 * 0.3),int(255.0 * 0.6),int(255.0 * 0.3));// annotation
+		public static  const EvadeColor:uint=Colors.RGBToHex(int(255.0 * 0.6),int(255.0 * 0.6),int(255.0 * 0.3));// annotation
+		public static  const SeekColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.6),int(255.0 * 0.6));// annotation
+		public static  const ClearPathColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.6),int(255.0 * 0.3));// annotation
 
 		public static const AvoidancePredictTimeMin:Number=0.9;
 		public static const AvoidancePredictTimeMax:Number=2;

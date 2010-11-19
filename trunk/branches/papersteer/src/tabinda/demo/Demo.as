@@ -115,7 +115,7 @@ package tabinda.demo
 		
 		// Object container for objects from PV3D
 		public static var container:DisplayObject3D;
-		
+
 		//PV3D Stats View
 		public static var stats:StatsView;
 		
@@ -140,7 +140,7 @@ package tabinda.demo
 		
 		public function Demo()
 		{
-			viewport = new Viewport3D(WindowWidth, WindowHeight, false, false);
+			viewport = new Viewport3D(WindowWidth, WindowHeight, true, false);
 			addChild(viewport);
 		
 			renderer = new BasicRenderEngine();
@@ -181,7 +181,7 @@ package tabinda.demo
 			oneTurning = new OneTurningPlugIn();
 
 			init();
-			//renderer.clipping = new FrustumClipping(FrustumClipping.NEAR); 
+			//renderer.clipping = new FrustumClipping(FrustumClipping.NEAR);
 			renderer.renderScene(scene,camera.pv3dcamera,viewport);
 		}
 		
@@ -205,107 +205,64 @@ package tabinda.demo
 		
 		/**
 		 * Initiates a 2D Camera. Takes selected vehicle or elevation and distance in addition
-		 * @param	...args vehicle:IVehicle, distance:Number, elevation:Number
+		 * @param	selected Selected Vehicle to align camera to
+		 * @param	distance Distance of Camera from Vehicle
+		 * @param	elevation Elevation of Camera from Vehicle
 		 */
-		public static function Init2dCamera(...args):void
+		public static function Init2dCamera(selected:IVehicle,distance:Number = CameraTargetDistance,elevation:Number = Camera2dElevation):void
 		{
-			//trace("Demo.Init2DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
-			if(args.length == 1)
-			{
-				Position2dCamera(args[0], CameraTargetDistance, Camera2dElevation);
-				camera.FixedDistanceDistance = CameraTargetDistance;
-				camera.FixedDistanceVerticalOffset = Camera2dElevation;
-				camera.Mode = CameraMode.FixedDistanceOffset;
-			}
-			else if(args.length == 3)
-			{
-				Position2dCamera(args[0], args[1], args[2]);
-				camera.FixedDistanceDistance = args[1];
-				camera.FixedDistanceVerticalOffset = args[2];
-				camera.Mode = CameraMode.FixedDistanceOffset;
-			}
+			Position2dCamera(selected, distance, elevation);
+			camera.FixedDistanceDistance = distance;
+			camera.FixedDistanceVerticalOffset = elevation;
+			camera.Mode = CameraMode.FixedDistanceOffset;
 		}
 
 		/**
 		 * Initiates a 3D Camera. Takes selected vehicle or elevation and distance in addition
-		 * @param	...args vehicle:IVehicle, distance:Number, elevation:Number
+		 * @param	selected Selected Vehicle to align camera to
+		 * @param	distance Distance of Camera from Vehicle
+		 * @param	elevation Elevation of Camera from Vehicle
 		 */
-		public static function Init3dCamera(...args):void
+		public static function Init3dCamera(selected:IVehicle,distance:Number = CameraTargetDistance,elevation:Number = Camera2dElevation):void
 		{
-			//trace("Demo.Init3DCamera", args[0] is IVehicle, args[1] is Number, args[2] is Number);
-			
-			if(args.length == 1)
-			{
-				Position3dCamera(args[0], CameraTargetDistance, Camera2dElevation);
-				camera.FixedDistanceDistance = CameraTargetDistance;
-				camera.FixedDistanceVerticalOffset = Camera2dElevation;
-				camera.Mode = CameraMode.FixedDistanceOffset;
-			}
-			if(args.length == 3)
-			{
-				Position3dCamera(args[0], args[1], args[2]);
-				camera.FixedDistanceDistance = args[1];
-				camera.FixedDistanceVerticalOffset = args[2];
-				camera.Mode = CameraMode.FixedDistanceOffset;
-			}
+			Position3dCamera(selected, distance, elevation);
+			camera.FixedDistanceDistance = distance;
+			camera.FixedDistanceVerticalOffset = elevation;
+			camera.Mode = CameraMode.FixedDistanceOffset;
 		}
 
 		/**
-		 * Positions the 2D Camera. Takes selected vehicle or elevation and distance in addition
-		 * @param	...args vehicle:IVehicle, distance:Number, elevation:Number
+		 * Positions a 2D Camera. Takes selected vehicle or elevation and distance in addition
+		 * @param	selected Selected Vehicle to align camera to
+		 * @param	distance Distance of Camera from Vehicle
+		 * @param	elevation Elevation of Camera from Vehicle
 		 */
-		public static function Position2dCamera(...args):void
+		public static function Position2dCamera(selected:IVehicle,distance:Number = CameraTargetDistance,elevation:Number = Camera2dElevation):void
 		{
-			//trace("Demo.Position2DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
-			if(args.length == 1)
-			{
-				// position the camera as if in 3d:
-				Position3dCamera(args[0], CameraTargetDistance, Camera2dElevation);
+			// position the camera as if in 3d:
+			Position3dCamera(selected, distance, elevation);
 
-				// then adjust for 3d:
-				var position3d:Vector3 = camera.Position;
-				position3d.y += Camera2dElevation;
-				camera.Position = (position3d);
-			}
-			else if(args.length == 3)
-			{
-				// position the camera as if in 3d:
-				Position3dCamera(args[0], args[1], args[2]);
-
-				// then adjust for 3d:
-				position3d = camera.Position;
-				position3d.y += args[2];
-				camera.Position = (position3d);
-			}
+			// then adjust for 3d:
+			var position3d:Vector3 = camera.Position;
+			position3d.y += elevation;
+			camera.Position = position3d;
 		}
 
 		/**
-		 * Positions the 3D Camera. Takes selected vehicle or elevation and distance in addition
-		 * @param	...args vehicle:IVehicle, distance:Number, elevation:Number
+		 * Positions a 3D Camera. Takes selected vehicle or elevation and distance in addition
+		 * @param	selected Selected Vehicle to align camera to
+		 * @param	distance Distance of Camera from Vehicle
+		 * @param	elevation Elevation of Camera from Vehicle
 		 */
-		public static function Position3dCamera(...args):void
-		{
-			//trace("Demo.Position3DCamera",args[0] is IVehicle, args[1] is Number, args[2] is Number);
-			
-			SelectedVehicle = args[0];
-			
-			if(args.length == 1)
+		public static function Position3dCamera(selected:IVehicle,distance:Number = CameraTargetDistance,elevation:Number = Camera2dElevation):void
+		{	
+			SelectedVehicle = selected;
+
+			if (selected != null)
 			{
-				if (args[0] != null)
-				{
-					var behind:Vector3 = Vector3.ScalarMultiplication(-args[1],args[0].Forward);
-					camera.Position = Vector3.VectorAddition(args[0].Position , behind);
-					camera.Target = args[0].Position;
-				}
-			}
-			else if(args.length == 3)
-			{
-				if (args[0] != null)
-				{
-					behind = Vector3.ScalarMultiplication(-args[1],args[0].Forward);
-					camera.Position = Vector3.VectorAddition(args[0].Position , behind);
-					camera.Target = args[0].Position;
-				}
+				var behind:Vector3 = Vector3.ScalarMultiplication(-distance,selected.Forward);
+				camera.Position = Vector3.VectorAddition(selected.Position , behind);
+				camera.Target = selected.Position;
 			}
 		}
 
@@ -336,8 +293,8 @@ package tabinda.demo
 								   Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.toHex(new Vector3(0.27));
-			var gray2:uint = Colors.toHex(new Vector3(0.30));
+			var gray1:uint = Colors.VectorToHex(new Vector3(0.27,0.27,0.27));
+			var gray2:uint = Colors.VectorToHex(new Vector3(0.30,0.30,0.30));
 
 			// draw 50x50 checkerboard grid with 50 squares along each side
 			//Drawing.DrawXZCheckerboardGrid(GridMesh,50, 5, gridCenter, gray1, gray2);
@@ -413,7 +370,7 @@ package tabinda.demo
 		 */
 		public static function VehicleNearestToMouse():IVehicle
 		{
-			return findVehicleNearestScreenPosition(viewport.mouseX, viewport.mouseY);
+			return findVehicleNearestScreenPosition(viewport.containerSprite.mouseX, viewport.containerSprite.mouseY);
 		}
 		
 		/**
@@ -764,10 +721,6 @@ package tabinda.demo
 
 			// run selected PlugIn (with simulation's current time and step size)
 			UpdateSelectedPlugIn(clock.TotalSimulationTime, clock.ElapsedSimulationTime);
-
-			var pos:Vector3 = camera.Position;
-			var lookAt:Vector3 = camera.Target;
-			var up:Vector3 = camera.Up;
 			
 			SteerLibrary.annotation.Redraw();
 			

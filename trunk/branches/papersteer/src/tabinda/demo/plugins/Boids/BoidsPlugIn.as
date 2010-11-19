@@ -33,6 +33,8 @@
 package tabinda.demo.plugins.Boids
 {
 	import flash.ui.Keyboard;
+	import org.papervision3d.core.proto.DisplayObjectContainer3D;
+	import org.papervision3d.objects.DisplayObject3D;
 	
 	import org.papervision3d.core.geom.Lines3D;
 	import org.papervision3d.core.geom.renderables.*;
@@ -60,19 +62,11 @@ package tabinda.demo.plugins.Boids
 		public var cyclePD:int;
 		
 		public function BoidsPlugIn()
-		{
-			initPV3D();
-			
+		{			
 			super();
 			flock = new Vector.<Boid>();
 		}
 		
-		public function initPV3D():void
-		{			
-			lines = new Lines3D(new LineMaterial(0x000000,1));
-			Demo.container.addChild(lines);
-		}
-
 		public override function get Name():String 
 		{ return "Boids";}
 
@@ -83,6 +77,8 @@ package tabinda.demo.plugins.Boids
 
 		public override function Open():void
 		{
+			initPV3D();
+			
 			// make the database used to accelerate proximity queries
 			cyclePD = -1;
 			NextPD();
@@ -105,6 +101,12 @@ package tabinda.demo.plugins.Boids
 			Demo.camera.PovOffset.x =0;
             Demo.camera.PovOffset.y = 0.5;
             Demo.camera.PovOffset.z = -2;
+		}
+		
+		public function initPV3D():void
+		{
+			lines = new Lines3D(new LineMaterial(0x000000,1));
+			Demo.container.addChild(lines);
 		}
 
 		public override function Update(currentTime:Number, elapsedTime:Number):void
@@ -181,8 +183,8 @@ package tabinda.demo.plugins.Boids
 				var	center:Vector3 = v.Position;                   							 // center
 				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
 				var	segments:int = 20;                          						 	 // circle segments
-				var filled:Boolean = true;
-				var in3d:Boolean = true;
+				var filled:Boolean = false;
+				var in3d:Boolean = false;
 				
 				if (Demo.IsDrawPhase())
 				{
@@ -193,9 +195,9 @@ package tabinda.demo.plugins.Boids
 						// define a local space with "axis" as the Y/up direction
 						// (XXX should this be a method on  LocalSpace?)
 						var unitAxis:Vector3 = axis;
-						unitAxis.fNormalize();
+						unitAxis.Normalize();
 						var unitPerp:Vector3 = VHelper.FindPerpendicularIn3d(axis);
-						unitPerp.fNormalize();
+						unitPerp.Normalize();
 						ls.Up = unitAxis;
 						ls.Forward = unitPerp;
 						ls.Position = (center);

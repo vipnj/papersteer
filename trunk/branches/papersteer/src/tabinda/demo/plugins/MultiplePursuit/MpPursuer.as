@@ -47,7 +47,7 @@ package tabinda.demo.plugins.MultiplePursuit
 		public override function Reset():void
 		{
 			super.Reset();
-			bodyColor = Colors.toHex(int(255.0 * 0.6), int(255.0 * 0.4), int(255.0 * 0.4)); // redish
+			bodyColor = Colors.RGBToHex(int(255.0 * 0.6), int(255.0 * 0.4), int(255.0 * 0.4)); // redish
 			if (wanderer != null)
 			{
 				RandomizeStartingPositionAndHeading();

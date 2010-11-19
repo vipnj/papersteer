@@ -34,8 +34,6 @@ package tabinda.papersteer
 {
 	public class Utilities
 	{
-		private static var rng:Number=Math.random();
-
 		public static  function Interpolate (alpha:Number,x0:Number,x1:Number):Number
 		{
 			return x0 + ((x1 - x0) * alpha);
@@ -153,7 +151,7 @@ package tabinda.papersteer
 		/// <example>blendIntoAccumulator (dt * 0.4f, currentFPS, smoothedFPS)</example>
 		public static  function BlendIntoAccumulator (smoothRate:Number,newValue:Number,smoothedAccumulator:Number):Number
 		{
-			return Interpolate(Clip(smoothRate,0,1),smoothedAccumulator,newValue)+0.0;
+			return Interpolate(Clip(smoothRate,0,1),smoothedAccumulator,newValue);
 		}
 
 		public static  function BlendIntoAccumulator2 (smoothRate:Number,newValue:Vector3,smoothedAccumulator:Vector3):Vector3

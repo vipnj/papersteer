@@ -68,7 +68,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		public function initPV3D():void
 		{
 			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
-			triangle = new Triangle3D(objectMesh, new Array, colMat, uvArr);
+			triangle = new Triangle3D(objectMesh, new Array(), colMat, uvArr);
 			
 			lines = new Lines3D(new LineMaterial(0x00000, 1));
 			
@@ -97,7 +97,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			MaxSpeed=1.5;
 
 			// for next instance: step starting location
-			startX+= 2.0;
+			startX+= 1.0;
 
 			// for next instance: step speed
 			startSpeed+= 0.15;

@@ -39,6 +39,7 @@ package tabinda.demo.plugins.Pedester
 	import org.papervision3d.materials.special.*;
 	import org.papervision3d.Papervision3D;
 	import org.papervision3d.typography.*;
+	import org.papervision3d.typography.fonts.HelveticaMedium;
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
@@ -84,9 +85,9 @@ package tabinda.demo.plugins.Pedester
 		public function AnnotatePathFollowing(future:Vector3, onPath:Vector3, target:Vector3, outside:Number):void
 		{
 			var yellow:uint = Colors.Yellow;
-			var lightOrange:uint = Colors.toHex(int(255.0 * 1.0), int(255.0 * 0.5), 0);
-			var darkOrange:uint = Colors.toHex(int(255.0 * 0.6), int(255.0 * 0.3), 0);
-			var yellowOrange:uint = Colors.toHex(int(255.0 * 1.0), int(255.0 * 0.75), 0);
+			var lightOrange:uint = Colors.RGBToHex(int(255.0 * 1.0), int(255.0 * 0.5), 0);
+			var darkOrange:uint = Colors.RGBToHex(int(255.0 * 0.6), int(255.0 * 0.3), 0);
+			var yellowOrange:uint = Colors.RGBToHex(int(255.0 * 1.0), int(255.0 * 0.75), 0);
 
 			// draw line from our position to our predicted future position
 			annotation.Line(Position, future, yellow);
@@ -98,7 +99,7 @@ package tabinda.demo.plugins.Pedester
 			// projection onto the path, the change from dark to light color
 			// indicates the boundary of the tube.
             var boundaryOffset:Vector3 = Vector3.VectorSubtraction(onPath , future);
-            boundaryOffset.fNormalize();
+            boundaryOffset.Normalize();
             boundaryOffset = Vector3.ScalarMultiplication(outside,boundaryOffset);
 			var onPathBoundary:Vector3 = Vector3.VectorAddition(future , boundaryOffset);
 			annotation.Line(onPath, onPathBoundary, darkOrange);
@@ -107,7 +108,7 @@ package tabinda.demo.plugins.Pedester
 			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
 			textFont = new Font3D();
-			text3D = new Text3D("", new Eurostile, textMat);
+			text3D = new Text3D("", new HelveticaMedium, textMat);
 			text3D.scale = 2;
 			
 			//Demo.container.addChild(text3D);
@@ -119,8 +120,8 @@ package tabinda.demo.plugins.Pedester
 		{
 			// draw the word "Ouch!" above colliding vehicles
             var headOn:Boolean = Forward.DotProduct(other.Forward) < 0;
-			var green:uint = Colors.toHex(int(255.0 * 0.4), int(255.0 * 0.8), int(255.0 * 0.1));
-			var red:uint = Colors.toHex((int(255.0 * 1), int(255.0 * 0.1), 0));
+			var green:uint = Colors.RGBToHex(int(255.0 * 0.4), int(255.0 * 0.8), int(255.0 * 0.1));
+			var red:uint = Colors.RGBToHex((int(255.0 * 1), int(255.0 * 0.1), 0));
 			var color:uint = headOn ? red : green;
 			var text:String = headOn ? "OUCH!" : "pardon me";
 			var location:Vector3 = Vector3.VectorAddition(Position , new Vector3(0, 0.5, 0));
@@ -135,7 +136,7 @@ package tabinda.demo.plugins.Pedester
 		// (parameter names commented out to prevent compiler warning from "-W")
 		public function AnnotateAvoidNeighbor(threat:IVehicle, steer:Number, ourFuture:Vector3, threatFuture:Vector3):void
 		{
-			var green:uint = Colors.toHex(int(255.0 * 0.15), int(255.0 * 0.6), 0);
+			var green:uint = Colors.RGBToHex(int(255.0 * 0.15), int(255.0 * 0.6), 0);
 
 			annotation.Line(Position, ourFuture, green);
 			annotation.Line(threat.Position, threatFuture, green);
@@ -254,7 +255,7 @@ package tabinda.demo.plugins.Pedester
 			}
 
 			// if obstacle avoidance is needed, do it
-			if (obstacleAvoidance != Vector3.Zero)
+			if (Vector3.isNotEqual(obstacleAvoidance, Vector3.Zero))
 			{
 				steeringForce = Vector3.VectorAddition(steeringForce,obstacleAvoidance);
 			}
@@ -275,7 +276,7 @@ package tabinda.demo.plugins.Pedester
 					collisionAvoidance = Vector3.ScalarMultiplication(10,SteerToAvoidNeighbors(caLeadTime, neighbors));
 
 				// if collision avoidance is needed, do it
-				if (collisionAvoidance != Vector3.Zero)
+				if (Vector3.isNotEqual(collisionAvoidance, Vector3.Zero))
 				{
 					steeringForce = Vector3.VectorAddition(steeringForce,collisionAvoidance);
 				}

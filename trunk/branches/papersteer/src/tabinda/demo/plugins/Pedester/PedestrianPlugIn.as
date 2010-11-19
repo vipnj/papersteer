@@ -33,6 +33,7 @@
 package tabinda.demo.plugins.Pedester
 {
 	import flash.ui.Keyboard;
+	import org.papervision3d.typography.fonts.HelveticaMedium;
 	
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
@@ -76,8 +77,18 @@ package tabinda.demo.plugins.Pedester
 		public var pluginReset:Boolean;
 		
 		public function PedestrianPlugIn()
+		{			
+			super();
+			crowd = new Vector.<Pedestrian>();
+		}
+
+		public override function get Name():String { return "Pedestrians"; }
+
+		public override function get SelectionOrderSortKey():Number { return 0.02;  }
+		
+		public function initPV3D():void
 		{
-			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+						uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
 			
 			colMat = new ColorMaterial(0x000000, 1);
 			colMat.doubleSided = false;
@@ -88,25 +99,19 @@ package tabinda.demo.plugins.Pedester
 			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
 			textFont = new Font3D();
-			text3D = new Text3D("", new Eurostile, textMat);
+			text3D = new Text3D("", new HelveticaMedium, textMat);
 			text3D.scale = 1;
 			
 			//Demo.container.addChild(text3D);
 			Demo.container.addChild(GridMesh);
 			Demo.container.addChild(lines);
-			
-			pluginReset = true;
-			
-			super();
-			crowd = new Vector.<Pedestrian>();
 		}
-
-		public override function get Name():String { return "Pedestrians"; }
-
-		public override function get SelectionOrderSortKey():Number { return 0.02;  }
 
 		public override function Open():void
 		{
+			initPV3D();
+			pluginReset = true;
+			
 			// make the database used to accelerate proximity queries
 			cyclePD = -1;
 			NextPD();
@@ -184,7 +189,7 @@ package tabinda.demo.plugins.Pedester
 			// textual annotation for selected Pedestrian
 			if (Demo.SelectedVehicle != null)//FIXME: && annotation.IsEnabled)
 			{
-				var color:uint = Colors.toHex(int(255.0 * 0.8), int(255.0 * 0.8), int(255.0 * 1.0));
+				var color:uint = Colors.RGBToHex(int(255.0 * 0.8), int(255.0 * 0.8), int(255.0 * 1.0));
 				var textOffset:Vector3 = new Vector3(0, 0.25, 0);
 				var textPosition:Vector3 = Vector3.VectorAddition(selected.Position , textOffset);
 				var camPosition:Vector3 = Demo.camera.Position;
@@ -306,7 +311,7 @@ package tabinda.demo.plugins.Pedester
 						(nearMouse != null && (Vector3.Distance(vp, np) < nearDistance))*/)
 					{
 						var sn:String = "#" + Pedestrian(vehicle).SerialNumber;
-						var textColor:uint = Colors.toHex(int(255.0 * 0.8), int(255.0 * 1), int(255.0 * 0.8));
+						var textColor:uint = Colors.RGBToHex(int(255.0 * 0.8), int(255.0 * 1), int(255.0 * 0.8));
 						var textOffset:Vector3 = new Vector3(0, 0.25, 0);
 						var textPos:Vector3 = Vector3.VectorAddition(vehicle.Position , textOffset);
 						text3D.text = sn;

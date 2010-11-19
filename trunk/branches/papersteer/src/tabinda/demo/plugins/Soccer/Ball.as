@@ -95,9 +95,10 @@ package tabinda.demo.plugins.Soccer
 		public function Update (currentTime:Number,elapsedTime:Number):void
 		{
 			ApplyBrakingForce (1.5,elapsedTime);
-			ApplySteeringForce (Velocity,elapsedTime);
+			ApplySteeringForce (Velocity, elapsedTime);
+			 
 			// are we now outside the field?
-			if (! m_bbox.IsInsideX(Position))
+			if (!m_bbox.IsInsideX(Position))
 			{
 				var d:Vector3=Velocity;
 				RegenerateOrthonormalBasis (new Vector3(- d.x,d.y,d.z));
@@ -105,10 +106,11 @@ package tabinda.demo.plugins.Soccer
 			}
 			if (! m_bbox.IsInsideZ(Position))
 			{
-				 d=Velocity;
+				d = Velocity;
 				RegenerateOrthonormalBasis (new Vector3(d.x,d.y,- d.z));
 				ApplySteeringForce (Velocity,elapsedTime);
 			}
+			
 			//trail.Record (currentTime,Position);
 		}
 

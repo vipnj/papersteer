@@ -89,7 +89,7 @@ package tabinda.demo.plugins.Soccer
 			MaxSpeed=10;// velocity is clipped to this magnitude
 
 			// Place me on my part of the field, looking at oponnents goal
-			SetPosition (b_ImTeamA?Math.random() * 20:- Math.random() * 20,0,Math.random() - 0.5 * 20);
+			SetPosition (b_ImTeamA?Math.random() * 20:- Math.random() * 20,0,(Math.random() - 0.5) * 20);
 			if (m_MyID < 9)
 			{
 				if (b_ImTeamA)
@@ -105,7 +105,7 @@ package tabinda.demo.plugins.Soccer
 
 			if (trail == null)
 			{
-				//trail=new Trail(10,60);
+				trail=new Trail(10,60);
 			}
 			//trail.Clear ();// prevent long streaks due to teleportation 
 		}
@@ -118,18 +118,18 @@ package tabinda.demo.plugins.Soccer
 			var sumOfRadii:Number=Radius + m_Ball.Radius;
 			if (distToBall < sumOfRadii)
 			{
-				m_Ball.Kick (Vector3.VectorSubtraction(m_Ball.Position , Vector3.ScalarMultiplication(50,Position)),elapsedTime);
+				m_Ball.Kick (Vector3.ScalarMultiplication(50,Vector3.VectorSubtraction(m_Ball.Position , Position)),elapsedTime);
 			}
 
 			// otherwise consider avoiding collisions with others
 			var collisionAvoidance:Vector3=SteerToAvoidNeighbors(1,Vector.<IVehicle>(m_AllPlayers));
-			if (collisionAvoidance != Vector3.Zero)
+			if (Vector3.isNotEqual(collisionAvoidance,Vector3.Zero))
 			{
-				ApplySteeringForce (collisionAvoidance,elapsedTime);
+				ApplySteeringForce (collisionAvoidance, elapsedTime);
 			}
 			else
 			{
-				var distHomeToBall:Number=Vector3.Distance(m_home,m_Ball.Position);
+				var distHomeToBall:Number = Vector3.Distance(m_home, m_Ball.Position);
 				if (distHomeToBall < 12)
 				{
 					// go for ball if I'm on the 'right' side of the ball
@@ -143,7 +143,7 @@ package tabinda.demo.plugins.Soccer
 						if (distHomeToBall < 12)
 						{
 							var Z:Number=m_Ball.Position.z - Position.z > 0?-1.0:1.0;
-							var behindBall:Vector3=m_Ball.Position + b_ImTeamA?new Vector3(2,0,Z):new Vector3(-2,0,Z);
+							var behindBall:Vector3 = Vector3.VectorAddition(m_Ball.Position , (b_ImTeamA ? new Vector3(2, 0, Z):new Vector3( -2, 0, Z)));	
 							var behindBallForce:Vector3=xxxSteerForSeek(behindBall);
 							annotation.Line (Position,behindBall,Colors.Green);
 							var evadeTarget:Vector3=xxxSteerForFlee(m_Ball.Position);
@@ -157,7 +157,6 @@ package tabinda.demo.plugins.Soccer
 					var seekHome:Vector3=xxxSteerForSeek(m_home);
 					ApplySteeringForce (Vector3.VectorAddition(seekTarget , seekHome),elapsedTime);
 				}
-
 			}
 		}
 

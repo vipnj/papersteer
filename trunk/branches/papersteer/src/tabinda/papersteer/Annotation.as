@@ -336,8 +336,8 @@ package tabinda.papersteer
 		public function VelocityAcceleration3 (vehicle:IVehicle,maxLengthAcceleration:Number,maxLengthVelocity:Number):void
 		{
 			const desat:int=102;
-			var vColor:uint = Colors.toHex(255, desat, 255);// pinkish
-			var aColor:uint = Colors.toHex(desat, desat, 255);// bluish
+			var vColor:uint = Colors.RGBToHex(255, desat, 255);// pinkish
+			var aColor:uint = Colors.RGBToHex(desat, desat, 255);// bluish
 
 			var aScale:Number=maxLengthAcceleration / vehicle.MaxForce;
 			var vScale:Number=maxLengthVelocity / vehicle.MaxSpeed;

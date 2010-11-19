@@ -198,11 +198,14 @@ package tabinda.demo.plugins.MapDrive
 			for (var i:int=1; i < pointCount; i++)
 			{
 				// return true if near enough to this waypoint
-				var r:Number=Math.max(radii[i],radii[i + 1 % pointCount]);
-				var d:Number=Vector3.VectorSubtraction(point , points[i]).Magnitude();
-				if (d < r)
+				if(i+1!=radii.length)
 				{
-					return true;
+					var r:Number = Math.max(radii[i], radii[i + 1]);
+					var d:Number=Vector3.VectorSubtraction(point , points[i]).Magnitude();
+					if (d < r)
+					{
+						return true;
+					}
 				}
 			}
 			return false;

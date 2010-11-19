@@ -32,7 +32,11 @@
 
 package tabinda.papersteer
 {		
+	import flash.display.DisplayObject;
 	import org.papervision3d.cameras.Camera3D;
+	import org.papervision3d.cameras.CameraType;
+	import org.papervision3d.core.math.Number3D;
+	import org.papervision3d.objects.DisplayObject3D;
 	import org.papervision3d.view.Viewport3D;
 	
 	public class PSCamera extends LocalSpace
@@ -77,6 +81,7 @@ package tabinda.papersteer
 		public var PovOffset:Vector3;
 		
 		public var pv3dcamera:Camera3D;
+		public var lookAtTarget:DisplayObject3D;
 		
 		public function xxxls ():LocalSpace
 		{
@@ -91,7 +96,7 @@ package tabinda.papersteer
 			pv3dcamera.z = 100;
 			pv3dcamera.focus = 30;
 			pv3dcamera.zoom = -20;
-			//pv3dcamera.useCulling = true;
+			lookAtTarget = new DisplayObject3D();
 			Reset ();
 		}
 
@@ -225,8 +230,18 @@ package tabinda.papersteer
 			//drawCameraLookAt(position(), target, up());
 			if(SimpleVehicle(VehicleToTrack).objectMesh)
 			{
-				pv3dcamera.lookAt(SimpleVehicle(VehicleToTrack).objectMesh, Up.ToNumber3D());
+				drawCameraLookAtCheck(Position, Target, Up);
+				lookAtTarget.position = Target.ToNumber3D();;
+				pv3dcamera.lookAt(lookAtTarget, Up.ToNumber3D());
 			}
+		}
+		
+		public function drawCameraLookAtCheck (cameraPosition:Vector3,pointToLookAt:Vector3,up:Vector3):void
+		{
+			const view:Vector3 = Vector3.VectorSubtraction(pointToLookAt, cameraPosition);
+			const perp:Vector3 = view.PerpendicularComponent(up);
+			if (Vector3.isEqual(perp,Vector3.Zero))
+				trace("OpenSteer - LookAt: degenerate camera");
 		}
 
 		public function callUpdate (currentTime:Number,elapsedTime:Number):void
@@ -257,7 +272,7 @@ package tabinda.papersteer
 			else
 			{
 				// unit vector along original offset
-				var unitOffset:Vector3=Vector3.ScalarDivision(offset,distance);
+				var unitOffset:Vector3=Vector3.ScalarMultiplication(1/distance,offset);
 
 				// new offset of length XXX
 				//var xxxDistance:Number = Number(Math.Sqrt(Utilities.Square(FixedDistanceDistance) - Utilities.Square(FixedDistanceVerticalOffset)));
@@ -287,14 +302,14 @@ package tabinda.papersteer
 				// xxx not sure if these are needed, seems like a good idea
 				// xxx (also if either up or oldUP are zero, use the other?)
 				// xxx (even better: force up to be perp to target-position axis))
-				if (Up == Vector3.Zero)
+				if (Vector3.isEqual(Up,Vector3.Zero))
 				{
 					Up=Vector3.Up;
 				
 				}
 				else
 				{
-					Up.fNormalize();
+					Up.Normalize();
 				}
 			}
 			else
@@ -307,7 +322,6 @@ package tabinda.papersteer
 			if(SimpleVehicle(VehicleToTrack).objectMesh)
 			{
 				pv3dcamera.position = Position.ToNumber3D();
-				
 			}
 		}
 

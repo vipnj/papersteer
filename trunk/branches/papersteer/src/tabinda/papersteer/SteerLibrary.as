@@ -200,7 +200,7 @@ package tabinda.papersteer
             var avoidance:Vector3 = obstacle.SteerToAvoid(this, minTimeToCollision);
 
 			// XXX more annotation modularity problems (assumes spherical obstacle)
-			if (avoidance != Vector3.Zero)
+			if (Vector3.isNotEqual(avoidance, Vector3.Zero))
 			{
 				annotation.AvoidObstacle(minTimeToCollision * this.Speed);
 			}
@@ -241,7 +241,7 @@ package tabinda.papersteer
 				// component (in capture the flag, we never want to slow down)
                 var offset:Vector3 = Vector3.VectorSubtraction(this.Position , nearest.obstacle.Center);
                 avoidance = VHelper.PerpendicularComponent(offset,(this.Forward));
-				avoidance.fNormalize();
+				avoidance.Normalize();
 				avoidance = Vector3.ScalarMultiplication(this.MaxForce,avoidance);
 				avoidance = Vector3.VectorAddition(avoidance,(Vector3.ScalarMultiplication(this.MaxForce * 0.75,this.Forward)));
 			}
@@ -259,7 +259,7 @@ package tabinda.papersteer
 		{
 			// first priority is to prevent immediate interpenetration
             var separation:Vector3 = SteerToAvoidCloseNeighbors(0, others);
-			if (separation != Vector3.Zero) return separation;
+			if (Vector3.isNotEqual(separation, Vector3.Zero)) return separation;
 
 			// otherwise, go on to consider potential future collisions
 			var steer:Number = 0;
@@ -366,7 +366,7 @@ package tabinda.papersteer
 			// the nearest approach.
 
 			// Take the unit tangent along the other this's path
-            var relTangent:Vector3 = Vector3.ScalarDivision(relVelocity,relSpeed);
+            var relTangent:Vector3 = Vector3.ScalarMultiplication(1/relSpeed,relVelocity);
 
 			// find distance from its path to origin (compute offset from
 			// other to us, find length of projection onto path)
@@ -458,7 +458,7 @@ package tabinda.papersteer
 					else
 					{
 						// otherwise, test angular offset from forward axis
-                        var unitOffset:Vector3 = Vector3.ScalarDivision(offset,Number(Math.sqrt(distanceSquared)));
+                        var unitOffset:Vector3 = Vector3.ScalarMultiplication(1/Number(Math.sqrt(distanceSquared)),offset);
                         var forwardness:Number = this.Forward.DotProduct(unitOffset);
 						return forwardness > cosMaxAngle;
 					}
@@ -485,7 +485,7 @@ package tabinda.papersteer
 					// to normalize, divided another time to get 1/d falloff)
 					var offset:Vector3 = Vector3.VectorSubtraction(other.Position , this.Position);
                     var distanceSquared:Number = offset.DotProduct(offset);
-					steering = Vector3.VectorAddition(steering,(Vector3.ScalarDivision(offset,-distanceSquared)));
+					steering = Vector3.VectorAddition(steering,(Vector3.ScalarMultiplication(1/-distanceSquared,offset)));
 
 					// count neighbors
 					neighbors++;
@@ -495,8 +495,8 @@ package tabinda.papersteer
 			// divide by neighbors, then normalize to pure direction
             if (neighbors > 0)
             {
-                steering = Vector3.ScalarDivision(steering,Number(neighbors));
-                steering.fNormalize();
+                steering = Vector3.ScalarMultiplication(1/Number(neighbors),steering);
+                steering.Normalize();
             }
 
 			return steering;
@@ -528,8 +528,8 @@ package tabinda.papersteer
 			// correcting direction, then normalize to pure direction
             if (neighbors > 0)
             {
-                steering = Vector3.VectorSubtraction(Vector3.ScalarDivision(steering,Number(neighbors)) , this.Forward);
-                steering.fNormalize();
+                steering = Vector3.VectorSubtraction(Vector3.ScalarMultiplication(1/Number(neighbors),steering) , this.Forward);
+                steering.Normalize();
             }
 
 			return steering;
@@ -561,8 +561,8 @@ package tabinda.papersteer
 			// correcting direction, then normalize to pure direction
 			if (neighbors > 0)
             {
-				steering = Vector3.VectorSubtraction(Vector3.ScalarDivision(steering,Number(neighbors)) , this.Position);
-                steering.fNormalize();
+				steering = Vector3.VectorSubtraction(Vector3.ScalarMultiplication(1/Number(neighbors),steering) , this.Position);
+                steering.Normalize();
             }
 
 			return steering;
@@ -580,7 +580,7 @@ package tabinda.papersteer
 			// offset from this to quarry, that distance, unit vector toward quarry
             var offset:Vector3 = Vector3.VectorSubtraction(quarry.Position , this.Position);
 			var distance:Number = offset.Magnitude();
-            var unitOffset:Vector3 = Vector3.ScalarDivision(offset,distance);
+            var unitOffset:Vector3 = Vector3.ScalarMultiplication(1/distance,offset);
 
 			// how parallel are the paths of "this" and the quarry
 			// (1 means parallel, 0 is pependicular, -1 is anti-parallel)
@@ -721,20 +721,20 @@ package tabinda.papersteer
         public function IsAhead2(target:Vector3, cosThreshold:Number):Boolean
 		{
 			var targetDirection:Vector3 = Vector3.VectorSubtraction(target, this.Position);
-            targetDirection.fNormalize();
+            targetDirection.Normalize();
             return this.Forward.DotProduct(targetDirection) > cosThreshold;
 		}
         public function IsAside2(target:Vector3, cosThreshold:Number):Boolean
 		{
 			var targetDirection:Vector3 = Vector3.VectorSubtraction(target , this.Position);
-            targetDirection.fNormalize();
+            targetDirection.Normalize();
             var dp:Number = this.Forward.DotProduct(targetDirection);
 			return (dp < cosThreshold) && (dp > -cosThreshold);
 		}
         public function IsBehind2(target:Vector3, cosThreshold:Number):Boolean
 		{
 			var targetDirection:Vector3 = Vector3.VectorSubtraction(target , this.Position);
-            targetDirection.fNormalize();
+            targetDirection.Normalize();
             return this.Forward.DotProduct(targetDirection) < cosThreshold;
 		}
 

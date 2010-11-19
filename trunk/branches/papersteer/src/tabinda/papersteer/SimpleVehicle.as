@@ -74,7 +74,6 @@ package tabinda.papersteer
 		public function SimpleVehicle ()
 		{
 			// set inital state
-			// set inital state
 			Reset ();
 
 			// maintain unique serial numbers
@@ -100,7 +99,7 @@ package tabinda.papersteer
 			MaxSpeed=1.0;// velocity is clipped to this magnitude
 
 			// reset bookkeeping to do running averages of these quanities
-			callResetSmoothedPosition ();
+			ResetSmoothedPosition (Vector3.Zero);
 			ResetSmoothedCurvature ();
 			ResetAcceleration ();
 		}
@@ -172,7 +171,7 @@ package tabinda.papersteer
 			var clippedForce:Vector3 = VHelper.TruncateLength(adjustedForce,MaxForce);
 
 			// compute acceleration and velocity
-			var newAcceleration:Vector3=Vector3.ScalarDivision(clippedForce,Mass);
+			var newAcceleration:Vector3=Vector3.ScalarMultiplication(1/Mass,clippedForce);
 			var newVelocity:Vector3=Velocity;
 
 			// damp out abrupt changes and oscillations in steering acceleration
@@ -180,7 +179,7 @@ package tabinda.papersteer
 			if (elapsedTime > 0)
 			{
 				var smoothRate:Number=Utilities.Clip(9 * elapsedTime,0.15,0.4);
-				acceleration = Utilities.BlendIntoAccumulator2 (smoothRate,newAcceleration,acceleration);
+				acceleration = Utilities.BlendIntoAccumulator2 (smoothRate, newAcceleration, acceleration);
 			}
 
 			// Euler integrate (per frame) acceleration into velocity
@@ -203,7 +202,7 @@ package tabinda.papersteer
 			MeasurePathCurvature (elapsedTime);
 
 			// running average of recent positions
-			smoothedPosition = Utilities.BlendIntoAccumulator2 (elapsedTime * 0.06,Position,smoothedPosition);
+			smoothedPosition = Utilities.BlendIntoAccumulator2 (elapsedTime * 0.06, Position, smoothedPosition);
 		}
 
 		// the default version: keep FORWARD parallel to velocity, change
@@ -213,7 +212,7 @@ package tabinda.papersteer
 			// adjust orthonormal basis vectors to be aligned with new velocity
 			if (Speed > 0)
 			{
-				RegenerateOrthonormalBasisUF (Vector3.ScalarDivision(newVelocity,Speed));
+				RegenerateOrthonormalBasisUF (Vector3.ScalarMultiplication(1/Speed,newVelocity));
 			}
 		}
 
@@ -238,7 +237,7 @@ package tabinda.papersteer
 			var tempUp:Vector3=Up;
 			tempUp = Utilities.BlendIntoAccumulator2 (smoothRate,bankUp,tempUp);
 			Up=tempUp;
-			Up.fNormalize ();
+			Up.Normalize ();
 
 			annotation.Line (Position,Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(4,globalUp)),0xFFFFFF);
 			annotation.Line (Position,Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(4,bankUp)),0xFF9900);
@@ -248,7 +247,7 @@ package tabinda.papersteer
 			// adjust orthonormal basis vectors to be aligned with new velocity
 			if (Speed > 0)
 			{
-				RegenerateOrthonormalBasisUF (Vector3.ScalarDivision(newVelocity,Speed));
+				RegenerateOrthonormalBasisUF (Vector3.ScalarMultiplication(1/Speed,newVelocity));
 			}
 		}
 
@@ -260,13 +259,13 @@ package tabinda.papersteer
 		{
 			var maxAdjustedSpeed:Number=0.2 * MaxSpeed;
 
-			if (Speed > maxAdjustedSpeed || force == Vector3.Zero)
+			if (Speed > maxAdjustedSpeed || Vector3.isEqual(force, Vector3.Zero))
 			{
 				return force;
 			}
 			else
 			{
-				var range:Number=(Speed / maxAdjustedSpeed)+0.0;
+				var range:Number=(Speed / maxAdjustedSpeed);
 				var cosine:Number = Utilities.Interpolate(Number(Math.pow(range, 20)), 1.0, -1.0);
 				return VHelper.LimitMaxDeviationAngle(force,cosine,Forward);
 			}
@@ -276,9 +275,9 @@ package tabinda.papersteer
 		// xxx experimental 9-6-02
 		public function ApplyBrakingForce (rate:Number,deltaTime:Number):void
 		{
-			var rawBraking:Number=(Speed * rate)+0.0;
-			var clipBraking:Number=rawBraking < MaxForce?rawBraking:MaxForce;
-			Speed=Speed - clipBraking * deltaTime;
+			var rawBraking:Number=(Speed * rate);
+			var clipBraking:Number=((rawBraking < MaxForce)?rawBraking:MaxForce);
+			Speed=(Speed - (clipBraking * deltaTime));
 		}
 
 		// predict position of this vehicle at some time in the future
@@ -354,8 +353,7 @@ package tabinda.papersteer
 			if (elapsedTime > 0)
 			{
 				var dP:Vector3=Vector3.VectorSubtraction(lastPosition , Position);
-				var dF:Vector3 = Vector3.VectorSubtraction(lastForward , Forward);
-				Vector3.ScalarDivision(dF,dP.Magnitude());
+				var dF:Vector3 = Vector3.ScalarMultiplication(1/dP.Magnitude(),Vector3.VectorSubtraction(lastForward , Forward));
 				var lateral:Vector3=VHelper.PerpendicularComponent(dF,Forward);
 				var sign:Number=lateral.DotProduct(Side) < 0?1.0:-1.0;
 				curvature=lateral.Magnitude() * sign;

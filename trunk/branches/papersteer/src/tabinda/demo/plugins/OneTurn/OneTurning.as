@@ -61,7 +61,7 @@ package tabinda.demo.plugins.OneTurn
 			colMat.doubleSided = false;
 			colMat.interactive = false;
 
-			triangle = new Triangle3D(objectMesh, new Array, colMat, uvArr);
+			triangle = new Triangle3D(objectMesh, new Array(), colMat, uvArr);
 			
 			objectMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
 			
@@ -123,6 +123,8 @@ package tabinda.demo.plugins.OneTurn
 			var e:Vertex3D = Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			
 			colMat.fillColor = Colors.Orange;
+			
+			trace(a, d, e);
 			
 			// draw double-sided triangle (that is: no (back) face culling)
 			objectMesh.geometry.vertices.push(a,d,e);

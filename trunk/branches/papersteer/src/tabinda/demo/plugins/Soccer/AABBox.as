@@ -65,7 +65,7 @@ package tabinda.demo.plugins.Soccer
 		{
 			var b:Vector3=new Vector3(m_min.x,0,m_max.z);
 			var c:Vector3=new Vector3(m_max.x,0,m_min.z);
-			var color:uint = Colors.toHex(255, 255, 0);
+			var color:uint = Colors.RGBToHex(255, 255, 0);
 			
 			/*Drawing.DrawLineAlpha (m_min,b,color,1.0);
 			Drawing.DrawLineAlpha (b,m_max,color,1.0);
