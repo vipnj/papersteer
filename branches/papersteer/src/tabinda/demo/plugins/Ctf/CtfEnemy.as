@@ -46,7 +46,7 @@ package tabinda.demo.plugins.Ctf
 		public override  function Reset ():void
 		{
 			super.Reset ();
-			BodyColor=Colors.toHex(int(255.0 * 0.6),int(255.0 * 0.4),int(255.0 * 0.4));// redish
+			BodyColor=Colors.RGBToHex(int(255.0 * 0.6),int(255.0 * 0.4),int(255.0 * 0.4));// redish
 		}
 
 		// per frame simulation update
@@ -65,7 +65,7 @@ package tabinda.demo.plugins.Ctf
 				var avoidance:Vector3=SteerToAvoidObstacles(Globals.AvoidancePredictTimeMin,Vector.<IObstacle>(AllObstacles));
 
 				// saved for annotation
-				Avoiding=avoidance == Vector3.Zero;
+				Avoiding=Vector3.isEqual(avoidance, Vector3.Zero);
 
 				if (Avoiding)
 				{
@@ -100,8 +100,8 @@ package tabinda.demo.plugins.Ctf
 				// annotation:
 				if (Globals.Seeker.State == SeekerState.Tagged)
 				{
-					var color:uint=Colors.toHex(int(255.0 * 0.8),int(255.0 * 0.5),int(255.0 * 0.5));
-					annotation.DiskXZ (sumOfRadii,Vector3.ScalarDivision(Vector3.VectorAddition(Position , Globals.Seeker.Position),2),color,20);
+					var color:uint=Colors.RGBToHex(int(255.0 * 0.8),int(255.0 * 0.5),int(255.0 * 0.5));
+					annotation.DiskXZ (sumOfRadii,Vector3.ScalarMultiplication(1/2,Vector3.VectorAddition(Position , Globals.Seeker.Position)),color,20);
 				}
 			}
 		}

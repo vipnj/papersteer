@@ -62,10 +62,7 @@ package tabinda.demo.plugins.MapDrive
 		public function MapDrivePlugIn ()
 		{
 			vehicles = new Vector.<MapDriver>();
-			
-			initPV3D();
 			super();
-			pluginReset = true;
 		}
 		
 		public function initPV3D():void
@@ -90,6 +87,10 @@ package tabinda.demo.plugins.MapDrive
 
 		public override  function Open ():void
 		{
+			initPV3D();
+			
+			pluginReset = true;
+			
 			// make new MapDriver
 			vehicle=new MapDriver();
 			vehicles.push (vehicle);
@@ -112,7 +113,7 @@ package tabinda.demo.plugins.MapDrive
 			// "look straight down at vehicle" camera mode parameters
 			Demo.camera.LookDownDistance=50.0;
 			// "static" camera mode parameters
-			Demo.camera.FixedPosition=new Vector3(145);
+			Demo.camera.FixedPosition=new Vector3(145,145,145);
 			Demo.camera.FixedTarget.x=40;
 			Demo.camera.FixedTarget.y=0;
 			Demo.camera.FixedTarget.z=40;
@@ -172,7 +173,7 @@ package tabinda.demo.plugins.MapDrive
 				
 				SandMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
 					
-				var color2:uint = Colors.toHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
+				var color2:uint = Colors.RGBToHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
 				
 				var t1:Triangle3D = new Triangle3D(SandMesh, [vertA,vertB,vertC], new ColorMaterial(color2, 1));
 				var t2:Triangle3D = new Triangle3D(SandMesh, [vertD,vertA,vertC], new ColorMaterial(color2, 1));
@@ -295,7 +296,7 @@ package tabinda.demo.plugins.MapDrive
 			var color:Vector3 = new Vector3(0.15, 0.15, 0.5);
 			
 			//Drawing.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
-			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
+			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.RGBToHex(0.15,0.15,0.5));
 			{
 				var v:Number=Demo.WindowHeight - 5.0;
 				var m:Number=10.0;

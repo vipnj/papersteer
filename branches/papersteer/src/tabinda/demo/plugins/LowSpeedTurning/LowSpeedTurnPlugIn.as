@@ -40,6 +40,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 	import org.papervision3d.materials.special.*;
 	import org.papervision3d.objects.*;
 	import org.papervision3d.typography.*;
+	import org.papervision3d.typography.fonts.HelveticaMedium;
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
@@ -67,26 +68,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		public function LowSpeedTurnPlugIn ()
 		{			
 			super ();
-			
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			
-			lines = new Lines3D(new LineMaterial(0x000000, 1));
-			
-			textMat = new Letter3DMaterial(0xffffff);
-			textMat.doubleSided = true;
-			textFont = new Font3D();
-			text3D = new Text3D("", new Eurostile, textMat);
-			text3D.scale = 0.02;
-			
-			//Demo.contanier.addChild(text3D);
-			Demo.container.addChild(GridMesh);
-			Demo.container.addChild(lines);
-			
 			all = new Vector.<LowSpeedTurn>();
-			
-			pluginReset = true;
 		}
 
 		public override  function get Name ():String
@@ -98,9 +80,32 @@ package tabinda.demo.plugins.LowSpeedTurning
 		{
 			return 0.05;
 		}
+		
+		public function initPV3D():void
+		{
+			colMat = new ColorMaterial(0x000000, 1);
+			colMat.doubleSided = false;
+			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			
+			lines = new Lines3D(new LineMaterial(0x000000, 1));
+			
+			textMat = new Letter3DMaterial(0xffffff);
+			textMat.doubleSided = true;
+			textFont = new Font3D();
+			text3D = new Text3D("", new HelveticaMedium, textMat);
+			text3D.scale = 0.02;
+			
+			//Demo.contanier.addChild(text3D);
+			Demo.container.addChild(GridMesh);
+			Demo.container.addChild(lines);
+		}
 
 		public override  function Open ():void
 		{
+			initPV3D();
+			
+			pluginReset = true;
+			
 			// create a given number of agents with stepped inital parameters,
 			// store pointers to them in an array.
 			LowSpeedTurn.ResetStarts ();
@@ -160,6 +165,10 @@ package tabinda.demo.plugins.LowSpeedTurning
 				pluginReset = false;
 			}
 			
+			lines.geometry.faces = [];
+			lines.geometry.vertices = [];
+			lines.removeAllLines();
+				
 			// update, draw and annotate each agent
 			for (var i:int=0; i < all.length; i++)
 			{
@@ -168,7 +177,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 				agent.Draw ();
 
 				// display speed near agent's screen position
-				var textColor:uint=Colors.toHex(0.8,0.8,1.0);
+				var textColor:uint=Colors.RGBToHex(0.8,0.8,1.0);
 				var textOffset:Vector3=new Vector3(0,0.25,0);
 				var textPosition:Vector3=Vector3.VectorAddition(agent.Position , textOffset);
 				var annote:String = String(agent.Speed);

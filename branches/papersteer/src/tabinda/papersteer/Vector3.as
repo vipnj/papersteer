@@ -52,8 +52,8 @@ package tabinda.papersteer
 		public static const Up:Vector3 = new Vector3(0, 1, 0);
 		public static const Left:Vector3 = new Vector3(-1, 0, 0);
 		public static const Right:Vector3 = new Vector3(1, 0, 0);
-		public static const Forward:Vector3 = new Vector3(0, 0, -1);
-		public static const Backward:Vector3 = new Vector3(0, 0, 1);
+		public static const Forward:Vector3 = new Vector3(0, 0, 1);
+		public static const Backward:Vector3 = new Vector3(0, 0, -1);
 		public static const Down:Vector3 = new Vector3(0, -1, 0);
 		public static const UnitX:Vector3=new Vector3(1,0,0);
 		public static const UnitY:Vector3=new Vector3(0,1,0);
@@ -134,16 +134,29 @@ package tabinda.papersteer
 			return DotProduct(this);
 		}
 
-		/* normalize: returns normalized version(parallel to this, length = 1)
-		public function fNormalize():Vector3
+		//normalize: returns normalized version(parallel to this, length = 1)
+		public function Normalize():void
 		{
+			// Technique 1: Skips divide if lenth is zero
 			// skip divide if length is zero
-			var len:Number = Magnitude();
-			return len > 0 ? ScalarDivision(this,len) : this;
-		}*/
+			//var len:Number = Magnitude();
+			//return len > 0 ? ScalarDivision(this, len) : this;
+			
+			// Technique 2: Skips divide if length is 0 or 1 AND uses Multiply instead if division
+			// Multiply is way faster than division. HUGE BOOST
+			var mag:Number = Math.sqrt( this.x*this.x + this.y*this.y + this.z*this.z );
+
+			if( mag != 0 && mag != 1)
+			{
+				mag = 1 / mag;
+				this.x *= mag;
+				this.y *= mag;
+				this.z *= mag;
+			}
+		}
 		
 		// normalize: returns normalized version(parallel to this, length = 1)
-		public function fNormalize():Number
+		/*public function fNormalize():Number
 		{
 			var fLength:Number=Number(Math.sqrt(x * x + y * y + z * z));
 
@@ -157,7 +170,7 @@ package tabinda.papersteer
 			}
 
 			return fLength;
-		}
+		}*/
 
 		public static function CrossProduct(lvec :Vector3, rvec:Vector3):Vector3
 		{
@@ -257,7 +270,7 @@ package tabinda.papersteer
 			var offset:Vector3 = VectorSubtraction(this , center);
 			var r:Number = offset.Magnitude();
 			if (r > radius)
-				return VectorAddition(this , ScalarMultiplication(radius * -2,ScalarDivision(offset,r)));
+				return VectorAddition(this , ScalarMultiplication(radius * -2,ScalarMultiplication(1/r,offset)));
 			else
 				return this;
 		}
@@ -315,7 +328,7 @@ package tabinda.papersteer
 		public static function RandomUnitVector():Vector3
 		{
 			var temp:Vector3 = RandomVectorInUnitRadiusSphere();
-			temp.fNormalize();
+			temp.Normalize();
 			return temp;
 		}
 
@@ -327,7 +340,7 @@ package tabinda.papersteer
 		{
 			var temp:Vector3 = RandomVectorInUnitRadiusSphere();
 			temp.SetYToZero();
-			temp.fNormalize();
+			temp.Normalize();
 			return temp;
 		}
 
@@ -343,7 +356,7 @@ package tabinda.papersteer
 			}
 
 			// measure the angular diviation of "source" from "basis"
-			var direction:Vector3 = ScalarDivision(source,sourceLength);
+			var direction:Vector3 = ScalarMultiplication(1/sourceLength,source);
 			var cosineOfSourceAngle:Number = direction.DotProduct(basis);
 
 			// Simply return "source" if it already meets the angle criteria.
@@ -369,7 +382,7 @@ package tabinda.papersteer
 			// find the portion of "source" that is perpendicular to "basis"
 			var perp:Vector3 = source.PerpendicularComponent(basis);
 
-			perp.fNormalize();
+			perp.Normalize();
 			// normalize that perpendicular
 			var unitPerp:Vector3 = perp;
 

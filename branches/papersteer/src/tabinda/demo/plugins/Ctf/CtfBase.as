@@ -124,7 +124,7 @@ package tabinda.demo.plugins.Ctf
 			triangle.reset(objectMesh, [a, d, e], colMat, uvArr);
 			
 			objectMesh.geometry.faces.push(triangle);
-
+			
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
@@ -221,7 +221,7 @@ package tabinda.demo.plugins.Ctf
 		public function DrawHomeBase ():void
 		{
 			var up:Vector3=new Vector3(0,0.01,0);
-			var atColor:uint=Colors.toHex(int(255.0 * 0.3),int(255.0 * 0.3),int(255.0 * 0.5));
+			var atColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.3),int(255.0 * 0.5));
 			var noColor:uint=Colors.Gray;
 			var reached:Boolean=Globals.ctfSeeker.State == SeekerState.AtGoal;
 			var baseColor:uint = reached?atColor:noColor;

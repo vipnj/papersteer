@@ -32,6 +32,8 @@
 
 package tabinda.demo.plugins.Boids
 {
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.math.*;
@@ -43,15 +45,11 @@ package tabinda.demo.plugins.Boids
 	import tabinda.papersteer.*;
 
 	public class Boid extends SimpleVehicle
-	{
-		//public static const AvoidancePredictTimeMin:Number=0.9;
-		//public static const AvoidancePredictTimeMax:Number=2;
-		//public static var AvoidancePredictTime:Number = AvoidancePredictTimeMin;
-		
+	{		
 		public var uvArr:Array;							// UV Array to assign texture
 		public var triArr:Vector.<Triangle3D>;			// Triangle Array for the Mesh
 		public var colArr:Vector.<ColorMaterial>;		// Used to assign a color Material to the Mesh
-
+		
 		// a pointer to this boid's interface object for the proximity database
 		public var proximityToken:ITokenForProximityDatabase;
 
@@ -130,7 +128,7 @@ package tabinda.demo.plugins.Boids
 		
 		private function DrawBasic3dSphericalVehicle():void
 		{
-			var vColor:Vector3 = Colors.toVector(Colors.LightGray);
+			var vColor:Vector3 = Colors.HexToVector(Colors.LightGray);
 			
 			// "aspect ratio" of body (as seen from above)
 			const x:Number = 0.5;
@@ -154,14 +152,14 @@ package tabinda.demo.plugins.Boids
 			var bottom:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u).ToVertex3D();;
 	
 			// colors
-			const j:Number = +0.5;
-			const k:Number = -0.5;
+			const j:Number = +0.05;
+			const k:Number = -0.05;
 			
-			colArr[0].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
-			colArr[1].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
-			colArr[2].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
-			colArr[3].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
-			colArr[4].fillColor = Colors.toHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
+			colArr[0].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
+			colArr[1].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
+			colArr[2].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
+			colArr[3].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
+			colArr[4].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
 			
 			objectMesh.geometry.vertices.push(nose,top,side1,side2,bottom);
 			
@@ -178,12 +176,7 @@ package tabinda.demo.plugins.Boids
 			objectMesh.geometry.faces.push(triArr[3]);
 			objectMesh.geometry.faces.push(triArr[4]);
 			objectMesh.geometry.faces.push(triArr[5]);
-			
-			if (Papervision3D.useRIGHTHANDED)
-			{
-				objectMesh.geometry.flipFaces();
-			}
-			
+
 			objectMesh.geometry.ready = true;
 		}
 
@@ -191,11 +184,10 @@ package tabinda.demo.plugins.Boids
 		public function Update (currentTime:Number,elapsedTime:Number):void
 		{
 			// steer to flock and perhaps to stay within the spherical boundary
-			ApplySteeringForce (Vector3.VectorAddition(SteerToFlock() , HandleBoundary()),elapsedTime);
+			ApplySteeringForce (Vector3.VectorAddition(SteerToFlock() , HandleBoundary()), elapsedTime);
 
 			// notify proximity database that our position has changed
 			proximityToken.UpdateForNewPosition (Position);
-
 		}
 
 		// basic flocking

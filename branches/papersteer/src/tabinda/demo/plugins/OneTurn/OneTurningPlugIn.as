@@ -38,6 +38,7 @@ package tabinda.demo.plugins.OneTurn
 	import org.papervision3d.materials.special.Letter3DMaterial;
 	import org.papervision3d.Papervision3D;
 	import org.papervision3d.typography.*;
+	import org.papervision3d.typography.fonts.HelveticaMedium;
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
@@ -62,25 +63,8 @@ package tabinda.demo.plugins.OneTurn
 				
 		public function OneTurningPlugIn ()
 		{
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-	
-			Demo.container.addChild(GridMesh);
-			
-			textMat = new Letter3DMaterial(0xffffff);
-			textMat.doubleSided = true;
-			textFont = new Font3D();
-			text3D1 = new Text3D("", new Eurostile, textMat);
-			text3D2 = new Text3D("", new Eurostile, textMat);
-			text3D1.scale = text3D2.scale = 1;
-			
-			//Demo.container.addChild(text3D1);
-			//Demo.container.addChild(text3D2);
 			super();
-			
 			theVehicle = new Vector.<OneTurning>();
-			pluginReset = true;
 		}
 
 		public override  function get Name ():String
@@ -92,9 +76,31 @@ package tabinda.demo.plugins.OneTurn
 		{
 			return 0.06;
 		}
+		
+		public function initPV3D():void
+		{
+			colMat = new ColorMaterial(0x000000, 1);
+			colMat.doubleSided = false;
+			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+	
+			Demo.container.addChild(GridMesh);
+			
+			textMat = new Letter3DMaterial(0xffffff);
+			textMat.doubleSided = true;
+			textFont = new Font3D();
+			text3D1 = new Text3D("", new HelveticaMedium, textMat);
+			text3D2 = new Text3D("", new HelveticaMedium, textMat);
+			text3D1.scale = text3D2.scale = 1;
+			
+			//Demo.container.addChild(text3D1);
+			//Demo.container.addChild(text3D2);
+		}
 
 		public override  function Open ():void
 		{
+			initPV3D();
+			pluginReset = true;
+			
 			oneTurning = new OneTurning();
 			Demo.container.addChild(oneTurning.objectMesh);
 			Demo.container.addChild(oneTurning.lines);
@@ -105,7 +111,7 @@ package tabinda.demo.plugins.OneTurn
 			// initialize camera
 			Demo.Init2dCamera (oneTurning);
 			Demo.camera.SetPosition (10,Demo.Camera2dElevation,10);
-			Demo.camera.FixedPosition=new Vector3(40);
+			Demo.camera.FixedPosition=new Vector3(40,40,40);
 		}
 
 		public override  function Update (currentTime:Number,elapsedTime:Number):void

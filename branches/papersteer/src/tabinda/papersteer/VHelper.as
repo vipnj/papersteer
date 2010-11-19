@@ -119,7 +119,7 @@ package tabinda.papersteer
             var offset:Vector3 = Vector3.VectorSubtraction(vector , center);
             var r:Number = offset.Magnitude();
             if (r > radius)
-                return Vector3.VectorAddition(vector , Vector3.ScalarMultiplication(radius * -2,(Vector3.ScalarDivision(offset,r))));
+                return Vector3.VectorAddition(vector , Vector3.ScalarMultiplication(radius * -2,(Vector3.ScalarMultiplication(1/r,offset))));
             else
                 return vector;
         }
@@ -166,7 +166,7 @@ package tabinda.papersteer
         public static function RandomUnitVector():Vector3
         {
             var temp:Vector3 = RandomVectorInUnitRadiusSphere();
-            temp.fNormalize();
+            temp.Normalize();
 
             return temp;
         }
@@ -180,7 +180,7 @@ package tabinda.papersteer
             var temp:Vector3 = RandomVectorInUnitRadiusSphere();
 
             temp.y = 0;
-            temp.fNormalize();
+            temp.Normalize();
 
             return temp;
         }
@@ -198,7 +198,7 @@ package tabinda.papersteer
 			}
 
             // measure the angular diviation of "source" from "basis"
-            var direction:Vector3 = Vector3.ScalarDivision(source,sourceLength);
+            var direction:Vector3 = Vector3.ScalarMultiplication(1/sourceLength,source);
 
             var cosineOfSourceAngle:Number = direction.DotProduct(basis);
 
@@ -223,7 +223,7 @@ package tabinda.papersteer
 
             // normalize that perpendicular
             var unitPerp:Vector3 = perp;
-            unitPerp.fNormalize();
+            unitPerp.Normalize();
 
             // construct a new vector whose length equals the source vector,
             // and lies on the intersection of a plane (formed the source and

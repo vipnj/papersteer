@@ -87,7 +87,7 @@ package tabinda.demo.plugins.MapDrive
 			var x:Number=localXZ.x;
 			var z:Number=localXZ.z;
 
-			var isOut:Boolean=x > + hxs || x < - hxs || z > + hzs || z < - hzs;
+			var isOut:Boolean=(x > + hxs) || (x < - hxs) || (z > + hzs) || (z < - hzs);
 
 			if (isOut)
 			{
@@ -95,7 +95,7 @@ package tabinda.demo.plugins.MapDrive
 			}
 			else
 			{
-				var r:Number=Number(resolution);// prevent VC7.1 warning
+				var r:Number=Number(resolution);
 				var i:int=int(Utilities.RemapInterval(x,- hxs,hxs,0.0,r));
 				var j:int=int(Utilities.RemapInterval(z,- hzs,hzs,0.0,r));
 				return GetMapBit(i,j);
@@ -108,8 +108,9 @@ package tabinda.demo.plugins.MapDrive
 			var zs:Number=zSize / Number(resolution);
 			var alongRow:Vector3=new Vector3(xs,0,0);
 			var nextRow:Vector3=new Vector3(- xSize,0,zs);
-			var g:Vector3=new Vector3(xSize - xs / -2,0,zSize - zs / -2);
-			g+= center;
+			var g:Vector3=new Vector3((xSize - xs) / -2,0,(zSize - zs) / -2);
+			g = Vector3.VectorAddition(g, center);
+			
 			for (var j:int=0; j < resolution; j++)
 			{
 				for (var i:int=0; i < resolution; i++)
@@ -127,9 +128,8 @@ package tabinda.demo.plugins.MapDrive
 						var v3:Vector3=new Vector3(- xs / 2,rockHeight,- zs / 2);
 						var v4:Vector3=new Vector3(- xs / 2,rockHeight,+ zs / 2);
 						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
-						var orangeRockColor:uint=Colors.toHex(int(255.0 * 0.5),int(255.0 * 0.2),int(255.0 * 0.0));
+						var orangeRockColor:uint=Colors.RGBToHex(int(255.0 * 0.5),int(255.0 * 0.2),int(255.0 * 0.0));
 						//Drawing.DrawQuadrangle (Vector3.VectorAddition(g , v1),Vector3.VectorAddition(g , v2),Vector3.VectorAddition(g , v3),Vector3.VectorAddition(g , v4),orangeRockColor);
-						DrawQuadrangle (Vector3.VectorAddition(g , v1),Vector3.VectorAddition(g , v2),Vector3.VectorAddition(g , v3),Vector3.VectorAddition(g , v4),orangeRockColor);
 						
 						// pyramids
 						// Vector3 top (0, xs/2, 0);
@@ -144,11 +144,6 @@ package tabinda.demo.plugins.MapDrive
 				}
 				g= Vector3.VectorAddition(g,nextRow);
 			}
-		}
-		
-		private function DrawQuadrangle(a:Vector3, b:Vector3, c:Vector3, d:Vector3, color:uint):void
-		{
-			
 		}
 
 		public function MinSpacing ():Number
@@ -217,7 +212,7 @@ package tabinda.demo.plugins.MapDrive
 
 		private function MapAddress (i:int,j:int):int
 		{
-			return i + j * resolution;
+			return i + (j * resolution);
 		}
 
 		private var map:Array;

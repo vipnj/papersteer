@@ -79,10 +79,6 @@ package tabinda.demo.plugins.Ctf
 		
 		public function CtfPlugIn ()
 		{			
-			initPV3D();
-			
-			pluginReset = true;
-			
 			super ();
 			all=new Vector.<CtfBase>();
 		}
@@ -114,11 +110,16 @@ package tabinda.demo.plugins.Ctf
 
 		public override  function Open ():void
 		{
+			initPV3D();
+			
+			pluginReset = true;
+			
 			// create the seeker ("hero"/"attacker")
 			Globals.ctfSeeker=new CtfSeeker();
 			all.push (Globals.ctfSeeker);
 			
 			Demo.container.addChild(Globals.ctfSeeker.objectMesh);
+			Globals.ctfSeeker.objectMesh.addChild(Globals.ctfSeeker.text3D);
 			Demo.container.addChild(Globals.ctfSeeker.lines);
 
 			// create the specified number of enemies, 
@@ -168,7 +169,7 @@ package tabinda.demo.plugins.Ctf
 			// draw "ground plane" centered between base and selected vehicle
 			var goalOffset:Vector3=Vector3.VectorSubtraction(Globals.HomeBaseCenter , Demo.camera.Position);
 			var goalDirection:Vector3=goalOffset;
-			goalDirection.fNormalize();
+			goalDirection.Normalize();
 			var cameraForward:Vector3=Demo.camera.xxxls().Forward;
 			var goalDot:Number=cameraForward.DotProduct(goalDirection);
 			var blend:Number=Utilities.RemapIntervalClip(goalDot,1,0,0.5,0);
@@ -422,7 +423,7 @@ package tabinda.demo.plugins.Ctf
 		public function DrawHomeBase ():void
 		{
 			var up:Vector3=new Vector3(0,0.01,0);
-			var atColor:uint=Colors.toHex(int(255.0 * 0.3),int(255.0 * 0.3),int(255.0 * 0.5));
+			var atColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.3),int(255.0 * 0.5));
 			var noColor:uint=Colors.Gray;
 			var reached:Boolean=Globals.ctfSeeker.State == SeekerState.AtGoal;
 			var baseColor:uint=reached?atColor:noColor;
@@ -433,7 +434,7 @@ package tabinda.demo.plugins.Ctf
 
 		public function DrawObstacles ():void
 		{
-			var color:uint=Colors.toHex(int(255.0 * 0.8),int(255.0 * 0.6),int(255.0 * 0.4));
+			var color:uint=Colors.RGBToHex(int(255.0 * 0.8),int(255.0 * 0.6),int(255.0 * 0.4));
 			var allSO:Vector.<SphericalObstacle>=Vector.<SphericalObstacle>(CtfBase.AllObstacles);
 			for (var so:int=0; so < allSO.length; so++)
 			{

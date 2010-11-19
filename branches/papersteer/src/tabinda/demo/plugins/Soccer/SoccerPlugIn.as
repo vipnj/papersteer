@@ -71,10 +71,6 @@ package tabinda.demo.plugins.Soccer
 		{
 			super();
 			
-			initPV3D();
-			
-			pluginReset = true;
-			
 			teamA = new Vector.<Player>();
 			teamB = new Vector.<Player>();
 			allPlayers = new Vector.<Player>();
@@ -97,6 +93,10 @@ package tabinda.demo.plugins.Soccer
 
 		public override function Open():void
 		{
+			initPV3D();
+			
+			pluginReset = true;
+			
 			// Make a field
 			bbox = new AABBox(new Vector3( -20, 0, -10), new Vector3(20, 0, 10));
 			Demo.container.addChild(bbox.lines);
@@ -136,8 +136,9 @@ package tabinda.demo.plugins.Soccer
 			// initialize camera
 			Demo.Init2dCamera(ball);
 			Demo.camera.SetPosition(10, Demo.Camera2dElevation, 10);
-			Demo.camera.FixedPosition = new Vector3(40);
+			Demo.camera.FixedPosition = new Vector3(40,40,40);
 			Demo.camera.Mode = CameraMode.Fixed;
+			Demo.Draw2dTextAt2dLocation("", new Vector3(20, 50, 0), Colors.Black);
 			redScore = 0;
 			blueScore = 0;
 		}

@@ -223,7 +223,7 @@ package tabinda.papersteer
 				side=Vector3.CrossProduct(up,forward);
 
 			}
-			side.fNormalize();
+			side.Normalize();
 		}
 
 		// ------------------------------------------------------------------------
@@ -252,7 +252,7 @@ package tabinda.papersteer
 		// for when the new forward is NOT know to have unit length
 		public function RegenerateOrthonormalBasis (newForward:Vector3):void
 		{
-			newForward.fNormalize ();
+			newForward.Normalize ();
 			RegenerateOrthonormalBasisUF (newForward);
 		}
 
@@ -260,7 +260,7 @@ package tabinda.papersteer
 		public function RegenerateOrthonormalBasis2 (newForward:Vector3,newUp:Vector3):void
 		{
 			up=newUp;
-			newForward.fNormalize ();
+			newForward.Normalize ();
 			RegenerateOrthonormalBasis (newForward);
 		}
 

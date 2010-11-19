@@ -53,20 +53,8 @@ package tabinda.demo.plugins.MultiplePursuit
 		
 		public function MpPlugIn ()
 		{
-			super();
-			
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			
-			lines = new Lines3D(new LineMaterial(0x000000, 1));
-			
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			
-			Demo.container.addChild(lines);
-			Demo.container.addChild(GridMesh);
-			
+			super();			
 			allMP = new Vector.<MpBase>();
-			pluginReset = true;
 		}
 
 		public override  function get Name ():String
@@ -78,9 +66,25 @@ package tabinda.demo.plugins.MultiplePursuit
 		{
 			return 0.04;
 		}
+		
+		public function initPV3D():void
+		{
+			colMat = new ColorMaterial(0x000000, 1);
+			colMat.doubleSided = false;
+			
+			lines = new Lines3D(new LineMaterial(0x000000, 1));
+			
+			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			
+			Demo.container.addChild(lines);
+			Demo.container.addChild(GridMesh);
+		}
 
 		public override  function Open ():void
 		{
+			initPV3D();
+			pluginReset = true;
+			
 			// create the wanderer, saving a pointer to it
 			wanderer = new MpWanderer() ;
 			Demo.container.addChild(wanderer.objectMesh);

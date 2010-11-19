@@ -57,44 +57,22 @@ package tabinda.papersteer
 		 * @param duration The amount of time the trail represents.
 		 * @param vertexCount The number of samples along the trails length
 		 */
-		public function Trail(...args):void
+		public function Trail(duration:Number=5,vertexCount:int=1000):void
 		{
-			//trace("Trail.constructor",args[0] is Number, args[1] is int);
-			
-			if (args.length == 2)
-			{
-				this.duration = args[0];
+			this.duration = duration;
 
-				// Set internal trail state
-				this.currentIndex = 0;
-				this.lastSampleTime = 0;
-				this.sampleInterval = this.duration / args[1];
-				this.dottedPhase = 1;
+			// Set internal trail state
+			this.currentIndex = 0;
+			this.lastSampleTime = 0;
+			this.sampleInterval = this.duration / vertexCount;
+			this.dottedPhase = 1;
 
-				// Initialize ring buffers
-				this.vertices = new Vector.<Vector3>(args[1]);
-				this.flags = new Vector.<int>(args[1]);
+			// Initialize ring buffers
+			this.vertices = new Vector.<Vector3>(vertexCount);
+			this.flags = new Vector.<int>(vertexCount);
 
-				trailColor = Colors.LightGray;
-				tickColor = Colors.White;
-			}
-			else
-			{
-				this.duration = 5;
-
-				// Set internal trail state
-				this.currentIndex = 0;
-				this.lastSampleTime = 0;
-				this.sampleInterval = this.duration / 1000;
-				this.dottedPhase = 1;
-
-				// Initialize ring buffers
-				this.vertices = new Vector.<Vector3>(1000);
-				this.flags = new Vector.<int>(1000);
-
-				trailColor = Colors.LightGray;
-				tickColor = Colors.White;
-			}
+			trailColor = Colors.LightGray;
+			tickColor = Colors.White;
 		}
 
 		/**

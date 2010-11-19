@@ -34,39 +34,111 @@ package tabinda.papersteer
 {
 	public class Colors
 	{
-		/**
-		 * Takes the following arguments
-		 * @param	...args Vector3 - will split a Vector3 into RGB values and return a hex color
-		 * 					r:int, g:int, b:int,a:int-optional
-		 * @return uint - hex color value
-		 */
-		public static function toHex(...args):uint
+		public static function RGBToHex(r:uint=255, g:uint=255, b:uint=255):uint
 		{
-			var tmp:String;
-			
-			if (args.length == 3)
-			{
-				tmp = "0x" + args[0].toString( 16 ) + args[1].toString( 16 ) + args[2].toString( 16 );
-				return uint(tmp);
-			}
-			else if(args.length == 1 && args[0] is Vector3)
-			{
-				tmp = "0x" + args[0].x.toString( 16 ) + args[0].y.toString( 16 ) + args[0].z.toString( 16 );
-				return uint(tmp);
-			}
-			else
-			{
-				tmp = "0x" + args[0].toString(16) + args[1].toString( 16 ) + args[2].toString( 16 ) + args[3].toString( 16 );
-				return uint(tmp);
-			}
+			var hex:uint = (r << 16 | g << 8 | b);
+			return hex;
+		}
+
+		public static function HexToRGB(hex:uint):Array
+		{
+			var rgb:Array = [];
+
+			var r:uint = hex >> 16 & 0xFF;
+			var g:uint = hex >> 8 & 0xFF;
+			var b:uint = hex & 0xFF;
+
+			rgb.push(r, g, b);
+			return rgb;
 		}
 		
-		public static function toVector(arg:uint):Vector3
+		public static function HexToVector(hex:uint):Vector3
 		{
-			var r:int = uint(arg >> 16 & 0xFF);
-			var g:int = uint(arg >> 8 & 0xFF)
-			var b:int = uint(arg & 0xFF);
-			return new Vector3(r, g, b);
+			var rgb:Vector3;
+
+			var r:uint = hex >> 16 & 0xFF;
+			var g:uint = hex >> 8 & 0xFF;
+			var b:uint = hex & 0xFF;
+
+			rgb = new Vector3(r, g, b);
+			return rgb;
+		}
+		
+		public static function VectorToHex(v:Vector3):uint
+		{
+			var hex:uint = (v.x << 16 | v.y << 8 | v.z);
+			return hex;
+		}
+
+		public static function RGBtoHSV(r:uint, g:uint, b:uint):Array
+		{
+			var max:uint = Math.max(r, g, b);
+			var min:uint = Math.min(r, g, b);
+
+			var hue:Number = 0;
+			var saturation:Number = 0;
+			var value:Number = 0;
+
+			var hsv:Array = [];
+
+			//get Hue
+			if(max == min){
+				hue = 0;
+			}else if(max == r){
+				hue = (60 * (g-b) / (max-min) + 360) % 360;
+			}else if(max == g){
+				hue = (60 * (b-r) / (max-min) + 120);
+			}else if(max == b){
+				hue = (60 * (r-g) / (max-min) + 240);
+			}
+
+			//get Value
+			value = max;
+
+			//get Saturation
+			if(max == 0){
+				saturation = 0;
+			}else{
+				saturation = (max - min) / max;
+			}
+
+			hsv = [Math.round(hue), Math.round(saturation * 100), Math.round(value / 255 * 100)];
+			return hsv;
+
+		}
+
+		public static function HSVtoRGB(h:Number, s:Number, v:Number):Array
+		{
+			var r:Number = 0;
+			var g:Number = 0;
+			var b:Number = 0;
+			var rgb:Array = [];
+
+			var tempS:Number = s / 100;
+			var tempV:Number = v / 100;
+
+			var hi:int = Math.floor(h/60) % 6;
+			var f:Number = h/60 - Math.floor(h/60);
+			var p:Number = (tempV * (1 - tempS));
+			var q:Number = (tempV * (1 - f * tempS));
+			var t:Number = (tempV * (1 - (1 - f) * tempS));
+
+			switch(hi){
+				case 0: r = tempV; g = t; b = p; break;
+				case 1: r = q; g = tempV; b = p; break;
+				case 2: r = p; g = tempV; b = t; break;
+				case 3: r = p; g = q; b = tempV; break;
+				case 4: r = t; g = p; b = tempV; break;
+				case 5: r = tempV; g = p; b = q; break;
+			}
+
+			rgb = [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+			return rgb;
+		}
+		
+		public function HexToDeci(hex:String):uint
+		{
+			return parseInt(hex, 16)
 		}
 		
 		public static const Black:uint = 0x000000;

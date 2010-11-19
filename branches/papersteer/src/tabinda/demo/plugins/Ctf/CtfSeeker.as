@@ -32,10 +32,10 @@
 
 package tabinda.demo.plugins.Ctf
 {
-	import flash.text.TextField;
 	import org.papervision3d.materials.special.Letter3DMaterial;
-	import org.papervision3d.typography.Font3D;
-	import org.papervision3d.typography.Text3D;
+	import org.papervision3d.typography.*;
+	import org.papervision3d.typography.fonts.HelveticaMedium;
+	
 	import tabinda.papersteer.*;
 	import tabinda.demo.*;
 	
@@ -45,9 +45,7 @@ package tabinda.demo.plugins.Ctf
 		private var evading:Boolean;// xxx store steer sub-state for anotation
 		private var lastRunningTime:Number;// for auto-reset
 		
-		//private var text3D:Text3D;
-		private var text3D:TextField;
-		private var textFont:Font3D;
+		public var text3D:Text3D;
 		private var textMat:Letter3DMaterial;
 		
 		// constructor
@@ -55,14 +53,13 @@ package tabinda.demo.plugins.Ctf
 		{
 			super ();
 			
-			/*textMat = new Letter3DMaterial(0xffffff);
+			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
-			textFont = new Font3D();
-			text3D = new Text3D("", new Eurostile, textMat);
-			text3D.scale = 1;*/
-			
-			text3D = new TextField();
-			//Demo.container.addChild(text3D);
+			textMat.opposite = true;
+		
+			text3D = new Text3D("", new HelveticaMedium, textMat);
+			text3D.align = "center";
+			text3D.scale = 0.05;
 			
 			Reset ();
 		}
@@ -71,7 +68,7 @@ package tabinda.demo.plugins.Ctf
 		public override  function Reset ():void
 		{
 			super.Reset ();
-			BodyColor=Colors.toHex(int(255.0 * 0.4),int(255.0 * 0.4),int(255.0 * 0.6));// blueish
+			BodyColor=Colors.RGBToHex(int(255.0 * 0.4),int(255.0 * 0.4),int(255.0 * 0.6));// blueish
 			Globals.Seeker = this;
 			State=SeekerState.Running;
 			evading=false;
@@ -109,7 +106,7 @@ package tabinda.demo.plugins.Ctf
 
 			var goalOffset:Vector3=Vector3.VectorAddition(Globals.HomeBaseCenter , Position);
 			var goalDistance:Number=goalOffset.Magnitude();
-			var goalDirection:Vector3=Vector3.ScalarDivision(goalOffset,goalDistance);
+			var goalDirection:Vector3=Vector3.ScalarMultiplication(1/goalDistance,goalOffset);
 
 			var goalIsAside:Boolean=IsAside2(Globals.HomeBaseCenter,0.5);
 
@@ -280,16 +277,12 @@ package tabinda.demo.plugins.Ctf
 			}
 
 			// annote seeker with its state as text
-			var textOrigin:Vector3=Vector3.VectorAddition(Position , new Vector3(0,0.25,0));
+			var textOrigin:Vector3=Vector3.VectorAddition(Position , new Vector3(0,1,0));
 			var annote:String = new String();
 			annote+=seekerStateString;
-			annote += "\n" + Speed;
+			annote += "\n" + Math.round(Speed);
 			text3D.text = annote;
-			//text3D.position = textOrigin.ToNumber3D();
-			text3D.x = textOrigin.x;
-			text3D.y = textOrigin.y;
-			text3D.z = textOrigin.z;
-			
+			text3D.position = textOrigin.ToNumber3D();
 			//Drawing.Draw2dTextAt3dLocation(annote, textOrigin, Colors.White);
 			
 			// display status in the upper left corner of the window
@@ -330,7 +323,7 @@ package tabinda.demo.plugins.Ctf
 						var lateral:Vector3=VHelper.PerpendicularComponent(offset,Forward);
 						var d:Number = lateral.Magnitude();
 						var weight:Number=-1000 / (d * d);
-						evade= Vector3.VectorAddition(evade,Vector3.ScalarMultiplication(weight,Vector3.ScalarDivision(lateral,d)));
+						evade= Vector3.VectorAddition(evade,Vector3.ScalarMultiplication(weight,Vector3.ScalarMultiplication(1/d,lateral)));
 					}
 				}
 			}
