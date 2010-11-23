@@ -33,6 +33,7 @@
 package tabinda.demo.plugins.Ctf
 {
 	import flash.ui.Keyboard;
+	import org.papervision3d.objects.primitives.Plane;
 	
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
@@ -72,6 +73,8 @@ package tabinda.demo.plugins.Ctf
 		public var obstacleGeometry:Lines3D;
 		public var highlightGeometry:Lines3D;
 		public var colMat:ColorMaterial;
+		public var uvArr1:Array;
+		public var uvArr2:Array;
 		
 		public var count:int = 0;
 		
@@ -85,8 +88,11 @@ package tabinda.demo.plugins.Ctf
 		
 		public function initPV3D():void
 		{
+			uvArr1 = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+            uvArr2 = new Array(new NumberUV(1, 1), new NumberUV(0, 1), new NumberUV(1, 0));
+			
 			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = true;
+			colMat.doubleSided = false;
 			colMat.interactive = false;
 			
 			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
@@ -217,21 +223,21 @@ package tabinda.demo.plugins.Ctf
 		public function Grid(gridTarget:Vector3):void
 		{		
 			var center:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
-											 Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
+											 Number(Math.round(gridTarget.y * 0.5) * 2),
 										     Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.LightGray
+			var gray1:uint = Colors.LightGray;
 			var gray2:uint = Colors.DarkGray;
 			
 			var size:int = 500;
 			var subsquares:int = 50;
 			
-			var half:Number = size / 2;
-			var spacing:Number = size / subsquares;
+			var half:int = int(size / 2);
+			var spacing:int= int(size / subsquares);
 
 			var flag1:Boolean = false;
-			var p:Number = -half;
+			var p:int = -half;
 			var corner:Vector3 = new Vector3();
 			
 			count = 0;
@@ -239,7 +245,7 @@ package tabinda.demo.plugins.Ctf
 			for (var i:int = 0; i < subsquares; i++)
 			{
 				var flag2:Boolean = flag1;
-				var q:Number = -half;
+				var q:int = -half;
 				for (var j:int = 0; j < subsquares; j++)
 				{
 					corner.x = p;
@@ -253,11 +259,11 @@ package tabinda.demo.plugins.Ctf
 					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
 					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
 					
-					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					GridMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
 					
 					var color:uint = flag2 ? gray1 : gray2;
-					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1),uvArr1);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1),uvArr2);
 			
 					GridMesh.geometry.faces.push(t1);
 					GridMesh.geometry.faces.push(t2);

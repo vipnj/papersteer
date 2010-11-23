@@ -38,6 +38,7 @@ package tabinda.papersteer
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.objects.DisplayObject3D;
 	import org.papervision3d.view.Viewport3D;
+	import tabinda.demo.Demo;
 	
 	public class PSCamera extends LocalSpace
 	{
@@ -93,9 +94,9 @@ package tabinda.papersteer
 		public function PSCamera ():void
 		{
 			pv3dcamera = new Camera3D();
-			pv3dcamera.z = 100;
 			pv3dcamera.focus = 30;
 			pv3dcamera.zoom = -20;
+			pv3dcamera.update(Demo.viewport.sizeRectangle);
 			lookAtTarget = new DisplayObject3D();
 			Reset ();
 		}
@@ -226,13 +227,22 @@ package tabinda.papersteer
 			// blend from current position/target/up towards new values
 			SmoothCameraMove (newPosition,newTarget,newUp,elapsedTime);
 
-			//TODO: set camera in draw module
-			//drawCameraLookAt(position(), target, up());
+			//HACK: Hijack OpenSteer Camera to fix for PV3D display
 			if(SimpleVehicle(VehicleToTrack).objectMesh)
 			{
 				drawCameraLookAtCheck(Position, Target, Up);
-				lookAtTarget.position = Target.ToNumber3D();;
-				pv3dcamera.lookAt(lookAtTarget, Up.ToNumber3D());
+				if (Mode == CameraMode.StraightDown)
+				{
+					var tempPos:Number3D = Position.ToNumber3D();
+					tempPos.y = 1;
+					lookAtTarget.position = tempPos;
+					pv3dcamera.lookAt(lookAtTarget,Up.ToNumber3D());
+				}
+				else
+				{
+					lookAtTarget.position = Target.ToNumber3D();
+					pv3dcamera.lookAt(lookAtTarget, Up.ToNumber3D());
+				}
 			}
 		}
 		
