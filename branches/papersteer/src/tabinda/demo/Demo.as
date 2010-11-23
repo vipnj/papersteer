@@ -141,6 +141,7 @@ package tabinda.demo
 		public function Demo()
 		{
 			viewport = new Viewport3D(WindowWidth, WindowHeight, true, false);
+			viewport.containerSprite.cacheAsBitmap = false;
 			addChild(viewport);
 		
 			renderer = new BasicRenderEngine();

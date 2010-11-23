@@ -55,11 +55,11 @@ package tabinda.demo.plugins.Soccer
 		}
 		public function IsInsideX (p:Vector3):Boolean
 		{
-			return ! p.x < m_min.x || p.x > m_max.x;
+			return ! (p.x < m_min.x || p.x > m_max.x);
 		}
 		public function IsInsideZ (p:Vector3):Boolean
 		{
-			return ! p.z < m_min.z || p.z > m_max.z;
+			return ! (p.z < m_min.z || p.z > m_max.z);
 		}
 		public function Draw ():void
 		{
