@@ -34,6 +34,7 @@ package tabinda.demo.plugins.MultiplePursuit
 {
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.materials.ColorMaterial;
 	import org.papervision3d.materials.special.LineMaterial;
 	import org.papervision3d.Papervision3D;
@@ -76,8 +77,8 @@ package tabinda.demo.plugins.MultiplePursuit
 			
 			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
 			
-			Demo.container.addChild(lines);
-			Demo.container.addChild(GridMesh);
+			addPV3DObject(lines);
+			addPV3DObject(GridMesh);
 		}
 
 		public override  function Open ():void
@@ -87,8 +88,8 @@ package tabinda.demo.plugins.MultiplePursuit
 			
 			// create the wanderer, saving a pointer to it
 			wanderer = new MpWanderer() ;
-			Demo.container.addChild(wanderer.objectMesh);
-			Demo.container.addChild(wanderer.lines);
+			addPV3DObject(wanderer.objectMesh);
+			addPV3DObject(wanderer.lines);
 			
 			allMP.push (wanderer);
 
@@ -98,8 +99,8 @@ package tabinda.demo.plugins.MultiplePursuit
 			{
 				var mpPursuer:MpPursuer = new MpPursuer(wanderer);
 				allMP.push (mpPursuer);
-				Demo.container.addChild(mpPursuer.objectMesh);
-				Demo.container.addChild(mpPursuer.lines);
+				addPV3DObject(mpPursuer.objectMesh);
+				addPV3DObject(mpPursuer.lines);
 			}
 			
 			//pBegin = allMP.begin() + 1;  // iterator pointing to first pursuer
@@ -134,7 +135,11 @@ package tabinda.demo.plugins.MultiplePursuit
 			var nearMouse:IVehicle = Demo.VehicleNearestToMouse();
 
 			// update camera
-			Demo.UpdateCamera (currentTime,elapsedTime,selected);
+			Demo.UpdateCamera (currentTime, elapsedTime, selected);
+			
+			lines.geometry.vertices = [];
+			lines.geometry.faces = [];
+			lines.removeAllLines();
 
 			if(pluginReset)
 			{
@@ -153,8 +158,10 @@ package tabinda.demo.plugins.MultiplePursuit
 			}
 
 			// highlight vehicle nearest mouse
-			Demo.HighlightVehicleUtility (nearMouse);
-			Demo.CircleHighlightVehicleUtility (selected);
+			//Demo.HighlightVehicleUtility (nearMouse);
+			//Demo.CircleHighlightVehicleUtility (selected);
+			HighlightVehicleUtility(nearMouse);
+			HighlightVehicleUtility(selected);
 		}
 		
 		public function Grid(gridTarget:Vector3):void
@@ -215,6 +222,75 @@ package tabinda.demo.plugins.MultiplePursuit
 			}
 			GridMesh.geometry.ready = true;
 		}
+		
+		/**
+		 * Draws a gray disk on the XZ plane under a given vehicle
+		 * @param	vehicle
+		 */
+		public function HighlightVehicleUtility(v:IVehicle):void
+		{
+			if (v != null)
+			{
+				var cPosition:Vector3 = Demo.camera.Position;
+				var radius:Number = v.Radius;  							 					 // adjusted radius
+				var	center:Vector3 = v.Position;                   							 // center
+				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
+				var color:uint = 	Colors.LightGray;                        				 // drawing color
+				var	segments:int = 7;                          						 	 // circle segments
+				var filled:Boolean = true;
+				var in3d:Boolean = false;
+				
+				if (Demo.IsDrawPhase())
+				{
+					var temp : Number3D = new Number3D(radius,0,0);
+					var tempcurve:Number3D = new Number3D(0,0,0);
+					var joinends : Boolean;
+					var i:int;
+					var pointcount : int;
+
+					var angle:Number = (0-360)/segments;
+					var curveangle : Number = angle/2;
+
+					tempcurve.x = radius/Math.cos(curveangle * Number3D.toRADIANS);
+					tempcurve.rotateY(curveangle+0);
+
+					if(360-0<360)
+					{
+						joinends = false;
+						pointcount = segments+1;
+					}
+				   else
+					{
+						joinends = true;
+						pointcount = segments;
+					}
+				   
+					temp.rotateY(0);
+
+					var vertices:Array = new Array();
+					var curvepoints:Array = new Array();
+
+					for(i = 0; i< pointcount;i++)
+					{
+						vertices.push(new Vertex3D(center.x+temp.x, center.y+temp.y, center.z+temp.z));
+						curvepoints.push(new Vertex3D(center.x+tempcurve.x, center.y+tempcurve.y, center.z+tempcurve.z));
+						temp.rotateY(angle);
+						tempcurve.rotateY(angle);
+					}
+
+					for(i = 0; i < segments ;i++)
+					{
+						var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+						line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
+						lines.addLine(line);
+					}	
+				}
+				else
+				{
+					DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+				}
+			}
+		}
 
 		public override  function Close ():void
 		{			
@@ -239,6 +315,11 @@ package tabinda.demo.plugins.MultiplePursuit
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		private function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override  function Reset ():void

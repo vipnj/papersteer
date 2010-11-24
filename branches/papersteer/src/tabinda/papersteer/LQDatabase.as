@@ -110,8 +110,8 @@ package tabinda.papersteer
 			/* has obj moved into a new bin? */
 			if (newBin != obj.Bin)
 			{
-				obj = RemoveFromBin(obj);
-				obj = AddToBin(obj, newBin);
+				RemoveFromBin(obj);
+				AddToBin(obj, newBin);
 			}
 			
 			return obj;
@@ -119,7 +119,7 @@ package tabinda.papersteer
 
 		/* Adds a given client obj to a given bin, linking it into the bin
 		   contents list. */
-		public function AddToBin(obj:ClientProxy, binIndex:int):ClientProxy
+		public function AddToBin(obj:ClientProxy, binIndex:int):void
 		{
 			/* if bin is currently empty */
 			if (bins[binIndex] == null)
@@ -138,7 +138,6 @@ package tabinda.papersteer
 
 			/* record bin ID in proxy obj */
 			obj.Bin = binIndex;
-			return obj;
 		}
 
 		/* Find the bin ID for a location in space.  The location is given in
@@ -337,7 +336,7 @@ package tabinda.papersteer
 
 		/* Removes a given client obj from its current bin, unlinking it
 		   from the bin contents list. */
-		public function RemoveFromBin(obj:ClientProxy):ClientProxy
+		public function RemoveFromBin(obj:ClientProxy):void
 		{
 			/* adjust pointers if obj is currently in a bin */
 			if (obj.Bin != 0)
@@ -362,8 +361,6 @@ package tabinda.papersteer
 			obj.Prev = null;
 			obj.Next = null;
 			obj.Bin = 0;
-			
-			return obj;
 		}
 
 		/* Removes (all proxies for) all objects from all bins */
@@ -381,7 +378,7 @@ package tabinda.papersteer
 		{
 			while (bin != null)
 			{
-				bin = RemoveFromBin(bin);
+				RemoveFromBin(bin);
 			}
 		}
 

@@ -48,7 +48,7 @@ package tabinda.demo.plugins.OneTurn
 		public var triangle:Triangle3D;
 		public var lines:Lines3D;
 		
-		private var trail:Trail;
+		public var trail:Trail;
 
 		// constructor
 		public function OneTurning ()
@@ -75,8 +75,8 @@ package tabinda.demo.plugins.OneTurn
 			Speed=1.5;// speed along Forward direction.
 			MaxForce=0.3;// steering force is clipped to this magnitude
 			MaxSpeed=5;// velocity is clipped to this magnitude
-			//trail=new Trail();
-			//trail.Clear ();// prevent long streaks due to teleportation 
+			trail=new Trail();
+			trail.Clear ();// prevent long streaks due to teleportation 
 		}
 
 		// per frame simulation update
@@ -84,7 +84,7 @@ package tabinda.demo.plugins.OneTurn
 		{
 			ApplySteeringForce (new Vector3(-2,0,-3),elapsedTime);
 			annotation.VelocityAcceleration (this);
-			//trail.Record (currentTime,Position);
+			trail.Record (currentTime,Position);
 		}
 
 		// draw this character/vehicle into the scene
@@ -99,7 +99,7 @@ package tabinda.demo.plugins.OneTurn
 			
 			//Drawing.DrawBasic2dCircularVehicle (this,OneMesh,triArr,uvArr,Colors.Gray);
 			DrawBasic2dCircularVehicle();
-			//trail.Draw (Annotation.drawer);
+			trail.Draw ();
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -124,8 +124,6 @@ package tabinda.demo.plugins.OneTurn
 			
 			colMat.fillColor = Colors.Orange;
 			
-			trace(a, d, e);
-			
 			// draw double-sided triangle (that is: no (back) face culling)
 			objectMesh.geometry.vertices.push(a,d,e);
 			
@@ -136,7 +134,7 @@ package tabinda.demo.plugins.OneTurn
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
-			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 20);
+			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 7);
 		}
 		
 		private function DrawXZCircle(radius:Number,center:Vector3,color:uint,segments:int):void

@@ -50,6 +50,12 @@ package tabinda.demo.plugins.Ctf
 		protected static const maxObstacleCount:int=100;
 		public static var AllObstacles:Array = new Array();
 		
+		// for draw method
+		public var BodyColor:uint;
+
+		// xxx store steer sub-state for anotation
+		public var Avoiding:Boolean;
+		
 		// PV3D variables
 		public var colMat:ColorMaterial;
 		public var uvArr:Array;
@@ -82,18 +88,19 @@ package tabinda.demo.plugins.Ctf
 		// reset state
 		public override function Reset ():void
 		{
-			super.Reset ();// reset the vehicle 
+			super.Reset ();									// reset the vehicle 
 
-			Speed=3;// speed along Forward direction.
-			MaxForce=3.0;// steering force is clipped to this magnitude
-			MaxSpeed=3.0;// velocity is clipped to this magnitude
+			Speed=3;										// speed along Forward direction.
+			MaxForce=3.0;									// steering force is clipped to this magnitude
+			MaxSpeed=3.0;									// velocity is clipped to this magnitude
 
-			Avoiding=false;// not actively avoiding
+			Avoiding=false;									// not actively avoiding
 
-			RandomizeStartingPositionAndHeading ();// new starting position
-
-			trail = new Trail();
-			trail.Clear ();// prevent long streaks due to teleportation
+			RandomizeStartingPositionAndHeading ();			// new starting position
+			if ( trail == null)
+				trail = new Trail();
+			
+			trail.Clear ();								// prevent long streaks due to teleportation
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -128,7 +135,7 @@ package tabinda.demo.plugins.Ctf
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
-			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 20,false,false);
+			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
 		}
 		
 		private function DrawCircleOrDisk(radius:Number,axis:Vector3,center:Vector3,color:uint,segments:int,filled:Boolean,in3d:Boolean):void
@@ -197,7 +204,7 @@ package tabinda.demo.plugins.Ctf
 			//Drawing.DrawBasic2dCircularVehicle (this, objectMesh, triArr,uvArr, BodyColor);
 			DrawBasic2dCircularVehicle();
 
-			//trail.Draw (Annotation.drawer);
+			trail.Draw ();
 		}
 
 		// annotate when actively avoiding obstacles
@@ -253,12 +260,6 @@ package tabinda.demo.plugins.Ctf
 				RandomizeHeadingOnXZPlane ();
 			}
 		}
-
-		// for draw method
-		public var BodyColor:uint;
-
-		// xxx store steer sub-state for anotation
-		public var Avoiding:Boolean;
 
 		// dynamic obstacle registry
 		public static  function InitializeObstacles ():void
@@ -328,7 +329,7 @@ package tabinda.demo.plugins.Ctf
 		private static function TestOneObstacleOverlap (minClearance:Number,r:Number,radius:Number,c:Vector3,center:Vector3):Number
 		{
 			var d:Number=Vector3.Distance(c,center);
-			var clearance:Number=d - r + radius;
+			var clearance:Number=d - (r + radius);
 			if (minClearance > clearance)
 			{
 				minClearance=clearance;

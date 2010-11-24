@@ -103,6 +103,7 @@ package tabinda.demo.plugins.OneTurn
 			
 			oneTurning = new OneTurning();
 			Demo.container.addChild(oneTurning.objectMesh);
+			Demo.container.addChild(oneTurning.trail.lines);
 			Demo.container.addChild(oneTurning.lines);
 			
 			Demo.SelectedVehicle=oneTurning;
@@ -217,6 +218,7 @@ package tabinda.demo.plugins.OneTurn
 			destoryPV3DObject(GridMesh);
 			
 			destoryPV3DObject(oneTurning.objectMesh);
+			destoryPV3DObject(oneTurning.trail.lines);
 			destoryPV3DObject(oneTurning.lines);
 			
 			theVehicle.splice(0, theVehicle.length);

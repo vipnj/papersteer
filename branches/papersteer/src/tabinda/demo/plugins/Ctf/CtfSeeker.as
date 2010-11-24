@@ -55,7 +55,6 @@ package tabinda.demo.plugins.Ctf
 			
 			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
-			textMat.opposite = true;
 		
 			text3D = new Text3D("", new HelveticaMedium, textMat);
 			text3D.align = "center";
@@ -108,7 +107,7 @@ package tabinda.demo.plugins.Ctf
 			var goalDistance:Number=goalOffset.Magnitude();
 			var goalDirection:Vector3=Vector3.ScalarMultiplication(1/goalDistance,goalOffset);
 
-			var goalIsAside:Boolean=IsAside2(Globals.HomeBaseCenter,0.5);
+			var goalIsAside:Boolean=IsAside(Globals.HomeBaseCenter,0.5);
 
 			// for annotation: loop over all and save result, instead of early return 
 			var xxxReturn:Boolean=true;
@@ -121,7 +120,7 @@ package tabinda.demo.plugins.Ctf
 				var eDistance:Number=Vector3.Distance(Position,e.Position);
 				var timeEstimate:Number=0.3 * eDistance / e.Speed;//xxx
 				var eFuture:Vector3=e.PredictFuturePosition(timeEstimate);
-				var eOffset:Vector3=Vector3.VectorAddition(eFuture , Position);
+				var eOffset:Vector3=Vector3.VectorSubtraction(eFuture , Position);
 				var alongCorridor:Number=goalDirection.DotProduct(eOffset);
 				var inCorridor:Boolean=((alongCorridor > - behindThreshold) && (alongCorridor < goalDistance));
 				var eForwardDistance:Number=Forward.DotProduct(eOffset);
@@ -291,7 +290,7 @@ package tabinda.demo.plugins.Ctf
 			status+="\n "+obstacleCount +" obstacles [F1/F2]";
 			status+="\n"+Globals.ResetCount+" restarts";
 			var screenLocation:Vector3=new Vector3(15,50,0);
-			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.LightGray);
+			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.Black);
 		}
 
 		public function SteerToEvadeAllDefenders ():Vector3
@@ -337,7 +336,7 @@ package tabinda.demo.plugins.Ctf
 			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
 			{
 				var e:CtfEnemy=Globals.CtfEnemies[i];
-				var eOffset:Vector3=Vector3.VectorAddition(e.Position , Position);
+				var eOffset:Vector3=Vector3.VectorSubtraction(e.Position , Position);
 				var eDistance:Number = eOffset.Magnitude();
 
 				// xxx maybe this should take into account e's heading? xxx
@@ -354,7 +353,7 @@ package tabinda.demo.plugins.Ctf
 				var behindThreshold:Number=Radius * -2;
 
 				var distanceWeight:Number=4 / eDistance;
-				var forwardWeight:Number=((eForwardDistance > behindThreshold)?1.0:0.5);
+				var forwardWeight:Number = ((eForwardDistance > behindThreshold)?1.0:0.5);
 
 				var adjustedFlee:Vector3=Vector3.ScalarMultiplication(distanceWeight * forwardWeight,flee);
 
@@ -369,7 +368,7 @@ package tabinda.demo.plugins.Ctf
 			{
 				evading=false;
 				var goalDistance:Number=Vector3.Distance(Globals.HomeBaseCenter,Position);
-				var headingTowardGoal:Boolean=IsAhead2(Globals.HomeBaseCenter,0.98);
+				var headingTowardGoal:Boolean=IsAhead(Globals.HomeBaseCenter,0.98);
 				var isNear:Boolean=(goalDistance / Speed) < Globals.AvoidancePredictTimeMax;
 				var useMax:Boolean=headingTowardGoal && ! isNear;
 				Globals.AvoidancePredictTime=(useMax?Globals.AvoidancePredictTimeMax:Globals.AvoidancePredictTimeMin);

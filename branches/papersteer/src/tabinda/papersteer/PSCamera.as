@@ -32,12 +32,10 @@
 
 package tabinda.papersteer
 {		
-	import flash.display.DisplayObject;
 	import org.papervision3d.cameras.Camera3D;
-	import org.papervision3d.cameras.CameraType;
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.objects.DisplayObject3D;
-	import org.papervision3d.view.Viewport3D;
+	
 	import tabinda.demo.Demo;
 	
 	public class PSCamera extends LocalSpace
@@ -46,7 +44,6 @@ package tabinda.papersteer
 		// xxx vectors are not being set, construct a temporary local space for
 		// xxx the camera view -- so as not to make the camera behave
 		// xxx differently (which is to say, correctly) during mouse adjustment.
-		
 		private var ls:LocalSpace;
 		
 		// "look at" point, center of view
@@ -81,16 +78,25 @@ package tabinda.papersteer
 		// "offset POV" camera mode parameters
 		public var PovOffset:Vector3;
 		
+		//PV3D Camera
 		public var pv3dcamera:Camera3D;
-		public var lookAtTarget:DisplayObject3D;
 		
+		//[internal-use] Temporary PV3D Target Object used for Aligning the Camera
+		private var lookAtTarget:DisplayObject3D;
+		
+		/**
+		 * Deprecated LocalSpace function
+		 * @return LocalSpace
+		 */
 		public function xxxls ():LocalSpace
 		{
 			ls.RegenerateOrthonormalBasis2 (Vector3.VectorSubtraction(Target, Position),Up);
 			return ls;
 		}
 
-		// constructor
+		/**
+		 * Constructor
+		 */
 		public function PSCamera ():void
 		{
 			pv3dcamera = new Camera3D();
@@ -101,7 +107,9 @@ package tabinda.papersteer
 			Reset ();
 		}
 
-		// reset all camera state to default values
+		/**
+		 * Reset all camera state to default values
+		 */ 
 		public function Reset ():void
 		{
 			// reset camera's position and orientation
@@ -146,7 +154,12 @@ package tabinda.papersteer
 			PovOffset = new Vector3(0, 1, -3);
 		}
 
-		// per frame simulation update
+		/**
+		 * Per frame simulation update
+		 * @param	currentTime Current System time. Taken from the Realtime OpenSteer Clock
+		 * @param	elapsedTime	Time elasped since the start of the last clock update.
+		 * @param	simulationPaused Flag that checks if the clock is paused.
+		 */ 
 		public function Update (currentTime:Number,elapsedTime:Number,simulationPaused:Boolean):void
 		{
 			// vehicle being tracked (just a reference with a more concise name)
@@ -246,6 +259,12 @@ package tabinda.papersteer
 			}
 		}
 		
+		/**
+		 * Checks for a degenerate camera Position
+		 * @param	cameraPosition The current Camera Position
+		 * @param	pointToLookAt The point at which the Camera is to look
+		 * @param	up The Up vector (Could be Vehicle or Stable)
+		 */
 		public function drawCameraLookAtCheck (cameraPosition:Vector3,pointToLookAt:Vector3,up:Vector3):void
 		{
 			const view:Vector3 = Vector3.VectorSubtraction(pointToLookAt, cameraPosition);
@@ -254,12 +273,21 @@ package tabinda.papersteer
 				trace("OpenSteer - LookAt: degenerate camera");
 		}
 
+		/**
+		 * Helper function that helps override the Update method.
+		 * @param	currentTime Current System time. Taken from the Realtime OpenSteer Clock
+		 * @param	elapsedTime Time elasped since the start of the last clock update.
+		 */
 		public function callUpdate (currentTime:Number,elapsedTime:Number):void
 		{
 			Update (currentTime,elapsedTime,false);
 		}
 
-		// helper function for "drag behind" mode
+		/**
+		 * Helper function for "drag behind" mode
+		 * @param	elapsedTime Time elasped since the start of the last clock update.
+		 * @return
+		 */ 
 		protected function ConstantDistanceHelper (elapsedTime:Number):Vector3
 		{
 			// is the "global up"/"vertical" offset constraint enabled?  (it forces
@@ -294,7 +322,13 @@ package tabinda.papersteer
 			}
 		}
 
-		// Smoothly move camera ...
+		/**
+		 * Smoothly move camera ...
+		 * @param	newPosition The Position to Smoothly move the camera to
+		 * @param	newTarget The new Target to look at
+		 * @param	newUp The Up Vector required to align the camera
+		 * @param	elapsedTime Time elasped since the start of the last clock update.
+		 */ 
 		public function SmoothCameraMove (newPosition:Vector3,newTarget:Vector3,newUp:Vector3,elapsedTime:Number):void
 		{
 			if (smoothNextMove)
@@ -340,8 +374,11 @@ package tabinda.papersteer
 			smoothNextMove=false;
 		}
 
-		// adjust the offset vector of the current camera mode based on a
-		// "mouse adjustment vector" from OpenSteerDemo (xxx experiment 10-17-02)
+		/**
+		 * Adjust the offset vector of the current camera mode based on a
+		 * "mouse adjustment vector" from OpenSteerDemo (xxx experiment 10-17-02)
+		 * @param	adjustment
+		 */
 		public function MouseAdjustOffset (adjustment:Vector3):void
 		{
 			// vehicle being tracked (just a reference with a more concise name)
@@ -416,6 +453,13 @@ package tabinda.papersteer
 			}
 		}
 
+		/**
+		 * Adjust the Camera to a Polar Offset
+		 * @param	polar Boolen flag that tells whether the adjustments is polar or not.
+		 * @param	adjustment The Adjustment vector
+		 * @param	offsetToAdjust The Offset for the adjustment
+		 * @return
+		 */
 		public function MouseAdjust2 (polar:Boolean,adjustment:Vector3,offsetToAdjust:Vector3):Vector3
 		{
 			// value to be returned
@@ -449,16 +493,31 @@ package tabinda.papersteer
 			return result;
 		}
 
+		/**
+		 * Polar Camera Adjustment
+		 * @param	adjustment
+		 * @param	offsetToAdjust
+		 * @return
+		 */
 		public function MouseAdjustPolar (adjustment:Vector3,offsetToAdjust:Vector3):Vector3
 		{
 			return MouseAdjust2(true,adjustment,offsetToAdjust);
 		}
+		
+		/**
+		 * Orthographic Camera Adjustment
+		 * @param	adjustment
+		 * @param	offsetToAdjust
+		 * @return
+		 */
 		public function MouseAdjustOrtho (adjustment:Vector3,offsetToAdjust:Vector3):Vector3
 		{
 			return MouseAdjust2(false,adjustment,offsetToAdjust);
 		}
 
-		// string naming current camera mode, used by OpenSteerDemo
+		/**
+		 * String naming current camera mode, used by OpenSteerDemo
+		 */ 
 		public function get ModeName ():String
 		{
 			switch (Mode)
@@ -478,7 +537,9 @@ package tabinda.papersteer
 			}
 		}
 
-		// select next camera mode, used by OpenSteerDemo
+		/**
+		 * Select next camera mode, used by OpenSteerDemo
+		 */ 
 		public function SelectNextMode ():void
 		{
 			Mode=SuccessorMode(Mode);
@@ -488,7 +549,9 @@ package tabinda.papersteer
 			}
 		}
 
-		// the mode that comes after the given mode (used by selectNextMode)
+		/**
+		 * The mode that comes after the given mode (used by selectNextMode)
+		 */ 
 		protected function SuccessorMode (cm:int):int
 		{
 			return (cm + 1);

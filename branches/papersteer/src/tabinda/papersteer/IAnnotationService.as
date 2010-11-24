@@ -60,7 +60,7 @@ package tabinda.papersteer
 		/// <summary>
 		/// Draws all registered Trails.
 		/// </summary>
-		function DrawTrails (drawer:IDraw):void;
+		function DrawTrails ():void;
 
 		// ------------------------------------------------------------------------
 		// drawing of lines, circles and (filled) disks to annotate steering

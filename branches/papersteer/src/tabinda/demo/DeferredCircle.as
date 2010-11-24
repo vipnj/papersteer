@@ -32,16 +32,16 @@
 
 package tabinda.demo
 {
-	import org.papervision3d.core.geom.renderables.Line3D;
-	import org.papervision3d.core.geom.renderables.Vertex3D;
+	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.materials.special.LineMaterial;
+	
 	import tabinda.papersteer.*;
 	
 	/**
 	 * Deferred Buffer for drawing circles
 	 * @author Mohammad Haseeb
-	 * @see Demo
+	 * @see Drawing Routines in plugins
 	 */
 	public class DeferredCircle
 	{		
@@ -49,6 +49,7 @@ package tabinda.demo
 		{
 			deferredCircleArray = new Vector.<DeferredCircle>(size);
 			private static var i:int = 0;
+			
 			for (i = 0; i < size; i++)
 			{
 				deferredCircleArray[i] = new DeferredCircle();

@@ -66,7 +66,8 @@ package tabinda.demo.plugins.Pedester
 		
 		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
 		public var GridMesh:TriangleMesh3D;
-		public var lines:Lines3D;
+		public var pathAndObsGeometry:Lines3D;
+		public var highlightGeometry:Lines3D;
 		public var colMat:ColorMaterial;
 		public var uvArr:Array;
 		
@@ -88,13 +89,14 @@ package tabinda.demo.plugins.Pedester
 		
 		public function initPV3D():void
 		{
-						uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
 			
 			colMat = new ColorMaterial(0x000000, 1);
 			colMat.doubleSided = false;
 			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
 		
-			lines = new Lines3D(new LineMaterial(0x000000,1));
+			pathAndObsGeometry = new Lines3D(new LineMaterial(0x000000,1));
+			highlightGeometry = new Lines3D(new LineMaterial(0x000000,1));
 			
 			textMat = new Letter3DMaterial(0xffffff);
 			textMat.doubleSided = true;
@@ -103,8 +105,9 @@ package tabinda.demo.plugins.Pedester
 			text3D.scale = 1;
 			
 			//Demo.container.addChild(text3D);
-			Demo.container.addChild(GridMesh);
-			Demo.container.addChild(lines);
+			addPV3DObject(GridMesh);
+			addPV3DObject(pathAndObsGeometry);
+			addPV3DObject(highlightGeometry);
 		}
 
 		public override function Open():void
@@ -162,9 +165,9 @@ package tabinda.demo.plugins.Pedester
 			// We do  this because PV3D and AS3 are not Canvas based Drawers
 			if(pluginReset)
 			{
-				lines.geometry.faces = [];
-				lines.geometry.vertices = [];
-				lines.removeAllLines();
+				pathAndObsGeometry.geometry.faces = [];
+				pathAndObsGeometry.geometry.vertices = [];
+				pathAndObsGeometry.removeAllLines();
 				
 				// Should be drawn once per restart or obstacle insertion/removal, PV3D is clumsy on constant Redrawing
 				// draw the path they follow and obstacles they avoid
@@ -176,13 +179,18 @@ package tabinda.demo.plugins.Pedester
 				
 				pluginReset = false;
 			}
+			
+			highlightGeometry.geometry.faces = [];
+			highlightGeometry.geometry.vertices = [];
+			highlightGeometry.removeAllLines();
 
 			// draw and annotate each Pedestrian
 			for (var i:int = 0; i < crowd.length; i++) crowd[i].Draw();
 
 			// highlight Pedestrian nearest mouse
-			Demo.HighlightVehicleUtility(nearMouse);
-
+			//Demo.HighlightVehicleUtility(nearMouse);
+			HighlightVehicleUtility(nearMouse);
+			
 			// textual annotation (at the vehicle's screen position)
 			SerialNumberAnnotationUtility(selected, nearMouse);
 
@@ -234,6 +242,27 @@ package tabinda.demo.plugins.Pedester
 			status +="\n";
 			var screenLocation:Vector3 = new Vector3(15, 50, 0);
 			Demo.Draw2dTextAt2dLocation(status, screenLocation, Colors.LightGray);
+		}
+		
+		/**
+		 * Draws a gray disk on the XZ plane under a given vehicle
+		 * @param	vehicle
+		 */
+		public function HighlightVehicleUtility(v:IVehicle):void
+		{
+			if (v != null)
+			{
+				var cPosition:Vector3 = Demo.camera.Position;
+				var radius:Number = v.Radius;  							 					 // adjusted radius
+				var	center:Vector3 = v.Position;                   							 // center
+				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
+				var color:uint = 	Colors.LightGray;                        				 // drawing color
+				var	segments:int = 7;                          						 	 // circle segments
+				var filled:Boolean = true;
+				var in3d:Boolean = false;
+				
+				DrawCircleOrDisk(highlightGeometry,radius, axis, center, color, segments, filled, in3d);
+			}
 		}
 		
 		public function Grid(gridTarget:Vector3):void
@@ -333,16 +362,16 @@ package tabinda.demo.plugins.Pedester
 			// draw obstacles
 			//Drawing.DrawXZCircle(Globals.Obstacle1.Radius, Globals.Obstacle1.Center, Colors.White, 40);
 			//Drawing.DrawXZCircle(Globals.Obstacle2.Radius, Globals.Obstacle2.Center, Colors.White, 40);			
-			DrawCircleOrDisk(Globals.Obstacle1.Radius, Vector3.Zero,Globals.Obstacle1.Center, Colors.White, 40,false,false);
-			DrawCircleOrDisk(Globals.Obstacle2.Radius, Vector3.Zero,Globals.Obstacle2.Center, Colors.White, 40,false,false);
+			DrawCircleOrDisk(pathAndObsGeometry,Globals.Obstacle1.Radius, Vector3.Zero,Globals.Obstacle1.Center, Colors.White, 7,false,false);
+			DrawCircleOrDisk(pathAndObsGeometry,Globals.Obstacle2.Radius, Vector3.Zero,Globals.Obstacle2.Center, Colors.White, 7,false,false);
 		}
 		
 		private function DrawLine(startPoint:Vector3, endPoint:Vector3, color:uint):void
 		{
-			lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+			pathAndObsGeometry.addLine(new Line3D(pathAndObsGeometry, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
 		}
 		
-		private function DrawCircleOrDisk(radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
+		private function DrawCircleOrDisk(lines:Lines3D,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
 		{
 			if (Demo.IsDrawPhase())
 			{
@@ -400,7 +429,8 @@ package tabinda.demo.plugins.Pedester
 			//TODO: Remove scene object once the plugin closes
 			destoryPV3DObject(GridMesh);
 			//Demo.container.removeChild(text3D);
-			destoryPV3DObject(lines);
+			destoryPV3DObject(highlightGeometry);
+			destoryPV3DObject(pathAndObsGeometry);
 			
 			// delete all Pedestrians
 			while (population > 0) RemovePedestrianFromCrowd();
@@ -411,6 +441,11 @@ package tabinda.demo.plugins.Pedester
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		private function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override function Reset():void
@@ -459,8 +494,9 @@ package tabinda.demo.plugins.Pedester
 			var pedestrian:Pedestrian = new Pedestrian(pd);
 			crowd.push(pedestrian);
 			
-			Demo.container.addChild(pedestrian.objectMesh);
-			Demo.container.addChild(pedestrian.lines);
+			addPV3DObject(pedestrian.objectMesh);
+			addPV3DObject(pedestrian.trail.lines);
+			addPV3DObject(pedestrian.lines);
 			
 			if (population == 1)
 			{
@@ -477,6 +513,7 @@ package tabinda.demo.plugins.Pedester
 				var pedestrian:Pedestrian = crowd[population];
 				
 				destoryPV3DObject(pedestrian.objectMesh);
+				destoryPV3DObject(pedestrian.trail.lines);
 				destoryPV3DObject(pedestrian.lines);
 				
 				crowd.splice(population,1);

@@ -57,7 +57,7 @@ package tabinda.demo.plugins.Pedester
 		private var textFont:Font3D;
 		private var textMat:Letter3DMaterial;
 		
-		private var trail:Trail;
+		public var trail:Trail;
 		
 		// constructor
 		public function Pedestrian(pd:IProximityDatabase)
@@ -141,8 +141,8 @@ package tabinda.demo.plugins.Pedester
 			annotation.Line(Position, ourFuture, green);
 			annotation.Line(threat.Position, threatFuture, green);
 			annotation.Line(ourFuture, threatFuture, Colors.Red);
-			annotation.CircleXZ(Radius, ourFuture, green, 12);
-			annotation.CircleXZ(Radius, threatFuture, green, 12);
+			annotation.CircleXZ(Radius, ourFuture, green, 7);
+			annotation.CircleXZ(Radius, threatFuture, green, 7);
 		}
 
 		// xxx perhaps this should be a call to a general purpose annotation for
@@ -196,7 +196,7 @@ package tabinda.demo.plugins.Pedester
 			pathDirection = (Math.random() > 0.5) ? -1 : +1;
 
 			// trail parameters: 3 seconds with 60 points along the trail
-			//trail = new Trail(3, 60);
+			trail = new Trail(3, 60);
 
 			// notify proximity database that our position has changed
 			if (proximityToken != null)
@@ -217,18 +217,18 @@ package tabinda.demo.plugins.Pedester
 				if (Vector3.Distance(Position, Globals.Endpoint0) < path.radius)
 				{
 					pathDirection = +1;
-					annotation.CircleXZ(path.radius, Globals.Endpoint0, Colors.DarkRed, 20);
+					annotation.CircleXZ(path.radius, Globals.Endpoint0, Colors.DarkRed, 7);
 				}
 				if (Vector3.Distance(Position, Globals.Endpoint1) < path.radius)
 				{
 					pathDirection = -1;
-					annotation.CircleXZ(path.radius, Globals.Endpoint1, Colors.DarkRed, 20);
+					annotation.CircleXZ(path.radius, Globals.Endpoint1, Colors.DarkRed, 7);
 				}
 			}
 
 			// annotation
 			annotation.VelocityAcceleration3(this, 5, 0);
-			//trail.Record(currentTime, Position);
+			trail.Record(currentTime, Position);
 
 			// notify proximity database that our position has changed
 			proximityToken.UpdateForNewPosition(Position);
@@ -316,7 +316,7 @@ package tabinda.demo.plugins.Pedester
 			
 			//Drawing.DrawBasic2dCircularVehicle(this, objectMesh,triArr,uvArr,Colors.Gray);
 			DrawBasic2dCircularVehicle();
-			//trail.Draw(Annotation.drawer);
+			trail.Draw();
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -351,7 +351,7 @@ package tabinda.demo.plugins.Pedester
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
-			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 20);
+			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 7);
 		}
 		
 		private function DrawXZCircle(radius:Number,center:Vector3,color:uint,segments:int):void

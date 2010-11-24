@@ -44,7 +44,7 @@ package tabinda.demo.plugins.Soccer
 	
 	public class Ball extends SimpleVehicle
 	{
-		private var trail:Trail;
+		public var trail:Trail;
 		
 		// PV3D variables
 		public var colMat:ColorMaterial;
@@ -86,9 +86,9 @@ package tabinda.demo.plugins.Soccer
 			SetPosition (0,0,0);
 			if (trail == null)
 			{
-				//trail=new Trail(100,6000);
+				trail=new Trail(100,6000);
 			}
-			//trail.Clear ();// prevent long streaks due to teleportation 
+			trail.Clear ();// prevent long streaks due to teleportation 
 		}
 
 		// per frame simulation update
@@ -111,7 +111,7 @@ package tabinda.demo.plugins.Soccer
 				ApplySteeringForce (Velocity,elapsedTime);
 			}
 			
-			//trail.Record (currentTime,Position);
+			trail.Record (currentTime,Position);
 		}
 
 		public function Kick (dir:Vector3,elapsedTime:Number):void
@@ -152,7 +152,7 @@ package tabinda.demo.plugins.Soccer
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
-			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 20,false,false);
+			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
 		}
 		
 		private function DrawCircleOrDisk(radius:Number,axis:Vector3,center:Vector3,color:uint,segments:int,filled:Boolean,in3d:Boolean):void
@@ -221,7 +221,7 @@ package tabinda.demo.plugins.Soccer
 
 			//Drawing.DrawBasic2dCircularVehicle (this, objectMesh, triArr,uvArr, BodyColor);
 			DrawBasic2dCircularVehicle();
-			//trail.Draw (Annotation.drawer);
+			trail.Draw ();
 		}
 
 		private var m_bbox:AABBox;

@@ -49,7 +49,7 @@ package tabinda.demo.plugins.Soccer
 		public var triangle:Triangle3D;
 		public var lines:Lines3D;
 		
-		private var trail:Trail;
+		public var trail:Trail;
 
 		// constructor
 		public function Player (others:Vector.<Player>,allplayers:Vector.<Player>,ball:Ball,isTeamA:Boolean,id:int)
@@ -107,7 +107,7 @@ package tabinda.demo.plugins.Soccer
 			{
 				trail=new Trail(10,60);
 			}
-			//trail.Clear ();// prevent long streaks due to teleportation 
+			trail.Clear ();// prevent long streaks due to teleportation 
 		}
 
 		// per frame simulation update
@@ -172,7 +172,7 @@ package tabinda.demo.plugins.Soccer
 
 			//Drawing.DrawBasic2dCircularVehicle (this, objectMesh, triArr,uvArr, BodyColor);
 			DrawBasic2dCircularVehicle();
-			//trail.Draw (Annotation.drawer);
+			trail.Draw ();
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -207,7 +207,7 @@ package tabinda.demo.plugins.Soccer
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
-			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 20,false,false);
+			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
 		}
 		
 		private function DrawCircleOrDisk(radius:Number,axis:Vector3,center:Vector3,color:uint,segments:int,filled:Boolean,in3d:Boolean):void

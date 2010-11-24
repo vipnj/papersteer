@@ -85,8 +85,8 @@ package tabinda.demo.plugins.Soccer
 			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
 			lines = new Lines3D(new LineMaterial(0x000000, 1));
 			
-			Demo.container.addChild(lines);
-			Demo.container.addChild(GridMesh);
+			addPV3DObject(lines);
+			addPV3DObject(GridMesh);
 		}
 
 		public override function get Name():String { return "Michael's Simple Soccer"; }
@@ -99,17 +99,18 @@ package tabinda.demo.plugins.Soccer
 			
 			// Make a field
 			bbox = new AABBox(new Vector3( -20, 0, -10), new Vector3(20, 0, 10));
-			Demo.container.addChild(bbox.lines);
+			addPV3DObject(bbox.lines);
 			// Red goal
 			teamAGoal = new AABBox(new Vector3( -21, 0, -7), new Vector3( -19, 0, 7));
-			Demo.container.addChild(teamAGoal.lines);
+			addPV3DObject(teamAGoal.lines);
 			// Blue Goal
 			teamBGoal = new AABBox(new Vector3(19, 0, -7), new Vector3(21, 0, 7));
-			Demo.container.addChild(teamBGoal.lines);
+			addPV3DObject(teamBGoal.lines);
 			// Make a ball
 			ball = new Ball(bbox);
-			Demo.container.addChild(ball.objectMesh);
-			Demo.container.addChild(ball.lines);
+			addPV3DObject(ball.objectMesh);
+			addPV3DObject(ball.trail.lines);
+			addPV3DObject(ball.lines);
 			
 			// Build team A
 			const PlayerCountA:int = 8;
@@ -118,8 +119,11 @@ package tabinda.demo.plugins.Soccer
 				var pMicTest:Player = new Player(teamA, allPlayers, ball, true, i);
 				Demo.SelectedVehicle = pMicTest;
 				teamA.push(pMicTest);
-				Demo.container.addChild(pMicTest.objectMesh);
-				Demo.container.addChild(pMicTest.lines);
+				
+				addPV3DObject(pMicTest.objectMesh);
+				addPV3DObject(pMicTest.trail.lines);
+				addPV3DObject(pMicTest.lines);
+				
 				allPlayers.push(pMicTest);
 			}
 			// Build Team B
@@ -129,8 +133,11 @@ package tabinda.demo.plugins.Soccer
 				pMicTest = new Player(teamB, allPlayers, ball, false, i);
 				Demo.SelectedVehicle = pMicTest;
 				teamB.push(pMicTest);
-				Demo.container.addChild(pMicTest.objectMesh);
-				Demo.container.addChild(pMicTest.lines);
+				
+				addPV3DObject(pMicTest.objectMesh);
+				addPV3DObject(pMicTest.trail.lines);
+				addPV3DObject(pMicTest.lines);
+				
 				allPlayers.push(pMicTest);
 			}
 			// initialize camera
@@ -280,6 +287,7 @@ package tabinda.demo.plugins.Soccer
 			destoryPV3DObject(lines);
 			
 			destoryPV3DObject(ball.objectMesh);
+			destoryPV3DObject(ball.trail.lines);
 			destoryPV3DObject(ball.lines);
 			
 			destoryPV3DObject(bbox.lines);
@@ -289,6 +297,7 @@ package tabinda.demo.plugins.Soccer
 			for (var i:int = 0; i < allPlayers.length; i++)
 			{
 				destoryPV3DObject(allPlayers[i].objectMesh);
+				destoryPV3DObject(allPlayers[i].trail.lines);
 				destoryPV3DObject(allPlayers[i].lines);
 			}
 			
@@ -302,6 +311,11 @@ package tabinda.demo.plugins.Soccer
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		private function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override function Reset():void

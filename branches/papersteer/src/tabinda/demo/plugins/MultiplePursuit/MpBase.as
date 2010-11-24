@@ -127,7 +127,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			objectMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
-			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 20);
+			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 7);
 		}
 		
 		private function DrawXZCircle(radius:Number,center:Vector3,color:uint,segments:int):void

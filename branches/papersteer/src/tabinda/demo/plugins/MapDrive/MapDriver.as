@@ -54,7 +54,7 @@ package tabinda.demo.plugins.MapDrive
 		public var uvArr:Array;
 		public var lines:Lines3D;
 		
-		private var trail:Trail;
+		public var trail:Trail;
 		
 		// map of obstacles
 		public var map:TerrainMap;
@@ -137,7 +137,7 @@ package tabinda.demo.plugins.MapDrive
 
 		// size of the world (the map actually)
 		public static var worldSize:Number = 200.0;
-		public static var worldDiag:Number = Number(Math.sqrt(worldSize * worldSize / 2));
+		public static var worldDiag:Number = Number(Math.sqrt(worldSize * worldSize) / 2);
 
 		// constructor
 		public function MapDriver()
@@ -152,8 +152,6 @@ package tabinda.demo.plugins.MapDrive
 			PathMesh = new TriangleMesh3D(colMat3 , new Array(), new Array());
 			
 			lines = new Lines3D(new LineMaterial(0x000000,1));
-			
-			trail = new Trail();
 			
 			map = MakeMap();
 			path = MakePath();
@@ -220,10 +218,10 @@ package tabinda.demo.plugins.MapDrive
 			annotateAvoid = Vector3.Zero;
 
 			// 10 seconds with 200 points along the trail
-			if (trail == null) //trail = new Trail(10, 200);
+			if (trail == null) trail = new Trail(10, 200);
 
 			// prevent long streaks due to teleportation 
-			//trail.Clear();
+			trail.Clear();
 
 			// first pass at detecting "stuck" state
 			stuck = false;
@@ -306,7 +304,8 @@ package tabinda.demo.plugins.MapDrive
 					annoteMaxRelSpeed = targetSpeed / MaxSpeed;
 					var avoidWeight:Number = 3 + (3 * RelativeSpeed()); // ad hoc
 					steering = Vector3.ScalarMultiplication(avoidWeight,avoid);
-					steering = Vector3.VectorAddition(steering,SteerForTargetSpeed(targetSpeed));
+					steering = Vector3.VectorAddition(steering, SteerForTargetSpeed(targetSpeed));
+					trace("no demo",steering);
 				}
 				else
 				{
@@ -323,7 +322,8 @@ package tabinda.demo.plugins.MapDrive
 						var weighted:Vector3 = Vector3.ScalarMultiplication(6,VHelper.TruncateLength(flat, MaxForce));
 						var a:Vector3 = Vector3.VectorAddition(Position , new Vector3(0, 0.2, 0));
 						annotation.Line(a, Vector3.VectorAddition(a , Vector3.ScalarMultiplication(0.3,weighted)), Colors.White);
-						steering = Vector3.VectorAddition(steering,weighted);
+						steering = Vector3.VectorAddition(steering, weighted);
+						trace("demo2",steering);
 					}
 
 					// follow the path in demo 2
@@ -341,6 +341,7 @@ package tabinda.demo.plugins.MapDrive
 							{
 								steering = Vector3.VectorAddition(pf , steering);
 							}
+							trace("demo1a",steering);
 						}
 						else
 						{
@@ -357,6 +358,7 @@ package tabinda.demo.plugins.MapDrive
 							steering = Vector3.VectorAddition(steering,(Vector3.ScalarMultiplication((path.NearWaypoint(Position) ?
 										  0.5 : 0.1),SteerTowardHeading(pathHeading)
 										 )));
+							trace("demo1b",steering);
 						}
 					}
 				}
@@ -388,12 +390,12 @@ package tabinda.demo.plugins.MapDrive
 				{
 					stuck = true;
 				}
-				annotation.CircleOrDisk(0.5, Up, SmoothedPosition(), Colors.White, 12, circles, false);
+				annotation.CircleOrDisk(0.5, Up, SmoothedPosition(), Colors.White, 7, circles, false);
 			}
 
 			// annotation
 			PerFrameAnnotation();
-			//trail.Record(currentTime, Position);
+			trail.Record(currentTime, Position);
 		}
 
 		public function AdjustVehicleRadiusForSpeed():void
@@ -496,12 +498,12 @@ package tabinda.demo.plugins.MapDrive
 								tmp.Normalize();
 								var q:Vector3= Vector3.VectorAddition(p , Vector3.ScalarMultiplication(5,tmp));
 								annotation.Line(p, q, Colors.Magenta);
-								annotation.CircleOrDisk(0.4, Up, o, Colors.White, 12, false, false);
+								annotation.CircleOrDisk(0.4, Up, o, Colors.White, 7, false, false);
 								return offset;
 							}
 						}
 					}
-					annotation.CircleOrDisk(0.4, Up, o, Colors.Black, 12, false, false);
+					annotation.CircleOrDisk(0.4, Up, o, Colors.Black,7, false, false);
 				}
 			}
 			// otherwise, no hint
@@ -543,7 +545,7 @@ package tabinda.demo.plugins.MapDrive
 			if (hintGiven && !dtZero)
 				hintGivenCount++;
 			if (hintGiven)
-				annotation.CircleOrDisk(halfWidth * 0.9, Up, Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(0.2,Up)), Colors.White, 12, false, false);
+				annotation.CircleOrDisk(halfWidth * 0.9, Up, Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(0.2,Up)), Colors.White, 7, false, false);
 
 			// QQQ temporary global QQQoaJustScraping
 			QQQoaJustScraping = true;
@@ -770,7 +772,7 @@ package tabinda.demo.plugins.MapDrive
 				var blue:uint = Colors.RGBToHex(0, 0, int(255.0 * 0.8));
 				AnnotationNoteOAClauseName("min turn radius");
 				annotation.CircleOrDisk(MinimumTurningRadius() * 1.2, Up,
-										center, blue, 40, false, false);
+										center, blue, 7, false, false);
 				return Vector3.ScalarMultiplication(sign,Side);
 			}
 
@@ -1305,7 +1307,7 @@ package tabinda.demo.plugins.MapDrive
 			var p:Vector3 = Position;
 
 			// draw the circular collision boundary
-			annotation.CircleOrDisk(Radius, Up, p, Colors.Black, 32, false, false);
+			annotation.CircleOrDisk(Radius, Up, p, Colors.Black, 7, false, false);
 
 			// draw forward sensing corridor and wings ( for non-curved case)
 			if (!curvedSteering)
@@ -1389,7 +1391,7 @@ package tabinda.demo.plugins.MapDrive
 			var darkGreen:uint = Colors.VectorToHex(new Vector3(0, (255.0 * 0.6), 0));
 			trail.TrailColor = darkGreen;
 			trail.TickColor = Colors.Black;
-			//trail.Draw(Annotation.drawer);
+			trail.Draw();
 		}
 
 		// called when steerToFollowPath decides steering is required
@@ -1446,10 +1448,10 @@ package tabinda.demo.plugins.MapDrive
 
 						// squares
 						var rockHeight:Number = 0.0;
-						var vertA:Vertex3D = Vector3.VectorAddition(new Vector3(+xs / 2, rockHeight, +zs / 2),g).ToVertex3D();
-						var vertB:Vertex3D = Vector3.VectorAddition(new Vector3(+xs / 2, rockHeight, -zs / 2),g).ToVertex3D();
-						var vertC:Vertex3D = Vector3.VectorAddition(new Vector3( -xs / 2, rockHeight, -zs / 2), g).ToVertex3D();
-						var vertD:Vertex3D = Vector3.VectorAddition(new Vector3( -xs / 2, rockHeight, +zs / 2),g).ToVertex3D();
+						var vertA:Vertex3D = new Vertex3D(+xs / 2, rockHeight, +zs / 2);
+						var vertB:Vertex3D = new Vertex3D(+xs / 2, rockHeight, -zs / 2);
+						var vertC:Vertex3D = new Vertex3D( -xs / 2, rockHeight, -zs / 2);
+						var vertD:Vertex3D = new Vertex3D( -xs / 2, rockHeight, +zs / 2);
 						
 						MapMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
 						
@@ -1513,8 +1515,8 @@ package tabinda.demo.plugins.MapDrive
 					Drawing.DrawXZDisk(legWidth, endPoint1, color, 24);	*/				
 					DrawXZWideLine(endPoint0, endPoint1, color, legWidth * 2);
 					DrawLine(path.points[i], path.points[i - 1], Colors.VectorToHex(pathColor));
-					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint0, color, 24,true,false);
-					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint1, color, 24,true,false);
+					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint0, color, 7,true,false);
+					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint1, color, 7,true,false);
 				}
 			}
 		}
@@ -1619,13 +1621,12 @@ package tabinda.demo.plugins.MapDrive
 			var v:Vector3 = new Vector3(n, 0, 0);
 			var w:Vector3 = new Vector3(0, 0, 0);
 
-
 			// path vertices
 			var a:Vector3 = Vector3.VectorSubtraction(t , p);
 			var b:Vector3 = Vector3.VectorSubtraction(Vector3.VectorAddition(s , v) , p);
 			var c:Vector3 = Vector3.VectorSubtraction(s , q);
 			var d:Vector3 = Vector3.VectorAddition(s , q);
-			var e:Vector3 = Vector3.VectorSubtraction(s , Vector3.VectorAddition(v , p));
+			var e:Vector3 = Vector3.VectorAddition(Vector3.VectorSubtraction(s, v) , p);
 			var f:Vector3 = Vector3.VectorSubtraction(p , w);
 			var g:Vector3 = Vector3.VectorSubtraction(r , w);
 			var h:Vector3 = Vector3.VectorSubtraction(Vector3.Negate(p) , w);
@@ -1696,7 +1697,7 @@ package tabinda.demo.plugins.MapDrive
 					Demo.camera.DoNotSmoothNextMove();
 
 					// prevent long streaks due to teleportation 
-					//trail.Clear();
+					trail.Clear();
 
 					return true;
 				}
@@ -1861,7 +1862,7 @@ package tabinda.demo.plugins.MapDrive
 					var localCenterOfCurvature:Vector3 = Vector3.ScalarMultiplication(signedRadius,Side);
 					var center:Vector3 = Vector3.VectorAddition(Position , localCenterOfCurvature);
 					annotation.CircleOrDisk(MinimumTurningRadius(), Up,
-											center, Colors.Blue, 40, false, false);
+											center, Colors.Blue, 7, false, false);
 				}
 				return Vector3.VectorAddition(trimmed , widenOut);
 			}

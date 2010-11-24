@@ -87,21 +87,12 @@ class TokenType implements ITokenForProximityDatabase
 	// destructor
 	public function Dispose ():void
 	{
-		Dispose2 (true);
-		System.gc();
-	}
-	protected function Dispose2 (disposing:Boolean):void
-	{
 		if (obj != null)
 		{
-			bfpd.group.some(check);
+			bfpd.group.splice(bfpd.group.indexOf(this), 1);
 			obj=null;
 		}
-	}
-	
-	private function check(item:TokenType, index:int, v:Vector.<TokenType>):Boolean
-	{
-		return item == this;
+		System.gc();
 	}
 
 	// the client obj calls this each time its position changes

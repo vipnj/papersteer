@@ -32,17 +32,16 @@
 
 package tabinda.demo.plugins.Boids
 {
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.math.*;
+	import org.papervision3d.events.InteractiveScene3DEvent;
 	import org.papervision3d.materials.ColorMaterial;
 	import org.papervision3d.objects.*;
-	import org.papervision3d.Papervision3D;
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
+	
 
 	public class Boid extends SimpleVehicle
 	{		
