@@ -94,9 +94,11 @@ package tabinda.demo.plugins.MapDrive
 			// make new MapDriver
 			vehicle=new MapDriver();
 			vehicles.push (vehicle);
-			Demo.container.addChild(vehicle.objectMesh);
-			Demo.container.addChild(vehicle.MapMesh);
-			Demo.container.addChild(vehicle.PathMesh);
+			
+			addPV3DObject(vehicle.objectMesh);
+			addPV3DObject(vehicle.trail.lines);
+			addPV3DObject(vehicle.MapMesh);
+			addPV3DObject(vehicle.PathMesh);
 			
 			Demo.SelectedVehicle=vehicle;
 
@@ -190,10 +192,10 @@ package tabinda.demo.plugins.MapDrive
 				// draw map and path
 				if (MapDriver.demoSelect == 2)
 				{
-					vehicle.DrawPath ();
+					vehicle.DrawPath ();	
 				}
-				vehicle.DrawMap ();
 				
+				vehicle.DrawMap ();
 				pluginReset = false;
 			}
 			
@@ -296,7 +298,8 @@ package tabinda.demo.plugins.MapDrive
 			var color:Vector3 = new Vector3(0.15, 0.15, 0.5);
 			
 			//Drawing.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
-			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.RGBToHex(0.15,0.15,0.5));
+			Demo.Draw2dTextAt2dLocation (status, screenLocation, Colors.RGBToHex(0.15, 0.15, 0.5));
+			
 			{
 				var v:Number=Demo.WindowHeight - 5.0;
 				var m:Number=10.0;
@@ -354,6 +357,7 @@ package tabinda.demo.plugins.MapDrive
 			destoryPV3DObject(SandMesh);
 			destoryPV3DObject(lines);
 			destoryPV3DObject(vehicle.objectMesh);
+			destoryPV3DObject(vehicle.trail.lines);
 			destoryPV3DObject(vehicle.MapMesh);
 			destoryPV3DObject(vehicle.PathMesh);
 			destoryPV3DObject(vehicle.lines);
@@ -366,6 +370,11 @@ package tabinda.demo.plugins.MapDrive
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		private function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override  function Reset ():void
@@ -485,13 +494,7 @@ package tabinda.demo.plugins.MapDrive
 			}
 			Demo.printMessage (message);
 		}
-
-		// random utility, worth moving to Utilities.h?
-		private function Random2 (min:int,max:int):int
-		{
-			return int(Utilities.random(Number(min),Number(max)));
-		}
-
+		
 		private function RegenerateMap ():void
 		{
 			// regenerate map: clear and add random "rocks"
@@ -534,18 +537,18 @@ package tabinda.demo.plugins.MapDrive
 			{
 				var spread:int=4;
 				var r:int=map.Cellwidth();
-				var k:int=Random2(50,150);
+				var k:int=Utilities.random(50,150);
 
 				for (var p:int=0; p < k; p++)
 				{
-					var i:int=Random2(0,r - spread);
-					var j:int=Random2(0,r - spread);
-					var c:int=Random2(0,10);
+					var i:int=Utilities.random(0,r - spread);
+					var j:int=Utilities.random(0,r - spread);
+					var c:int=Utilities.random(0,10);
 
 					for (var q:int=0; q < c; q++)
 					{
-						var m:int=Random2(0,spread);
-						var n:int=Random2(0,spread);
+						var m:int=Utilities.random(0,spread);
+						var n:int=Utilities.random(0,spread);
 						map.SetMapBit (i + m,j + n,true);
 					}
 				}

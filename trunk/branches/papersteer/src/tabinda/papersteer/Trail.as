@@ -32,12 +32,14 @@
 
 package tabinda.papersteer
 {
-	import flash.display.Sprite;
+	import org.papervision3d.core.geom.Lines3D;
+	import org.papervision3d.core.geom.renderables.Line3D;
+	import org.papervision3d.materials.special.LineMaterial;
 	
 	/**
 	 * Provides support to visualize the recent path of a vehicle.
 	 */
-	public class Trail extends Sprite
+	public class Trail
 	{
 		private var currentIndex:int;			// Array index of most recently recorded point
 		private var duration:Number;			// Duration (in seconds) of entire trail
@@ -49,6 +51,8 @@ package tabinda.papersteer
 		private var flags:Vector.<int>;			// Array (ring) of flag bits for trail points
 		private var trailColor:uint;			// Color of the trail
 		private var tickColor:uint;				// Color of the ticks
+		
+		public var lines:Lines3D;
 		
 		/**
 		 * Initializes a new instance of Trail
@@ -73,6 +77,8 @@ package tabinda.papersteer
 
 			trailColor = Colors.LightGray;
 			tickColor = Colors.White;
+			
+			lines = new Lines3D(new LineMaterial(0x000000, 1));
 		}
 
 		/**
@@ -125,8 +131,12 @@ package tabinda.papersteer
 		 * Draws the trail as a dotted line, fading away with age.
 		 * @param	drawer
 		 */
-		public function Draw(drawer:IDraw):void
+		public function Draw():void
 		{
+			lines.geometry.faces = [];
+			lines.geometry.vertices = [];
+			lines.removeAllLines();
+			
 			var index:int = currentIndex;
 			for (var j:int = 0; j < vertices.length; j++)
 			{
@@ -143,11 +153,8 @@ package tabinda.papersteer
 					if (j == 0)
 					{
 						// draw segment from current position to first trail point
-						graphics.clear();
-						graphics.lineStyle(1, color, opacity);
-						graphics.moveTo(currentPosition.x, currentPosition.y);
-						graphics.lineTo(vertices[index].x,vertices[index].y);
-						graphics.endFill();
+						var line:Line3D = new Line3D(lines, new LineMaterial(color, 1), 2, currentPosition.ToVertex3D(), vertices[index].ToVertex3D());
+						lines.addLine(line);
 					}
 					else
 					{
@@ -156,11 +163,8 @@ package tabinda.papersteer
 						var fraction:Number = Number(j) / vertices.length;
 						var opacity:Number = (fraction * (1 - minO)) + minO;
 						
-						graphics.clear();
-						graphics.lineStyle(1, color, opacity);
-						graphics.moveTo(vertices[index].x, vertices[index].y);
-						graphics.lineTo(vertices[next].x, vertices[next].y);
-						graphics.endFill();
+						var line2:Line3D = new Line3D(lines, new LineMaterial(color, 1), 2, vertices[index].ToVertex3D(), vertices[next].ToVertex3D());
+						lines.addLine(line2);
 					}
 				}
 				index = next;
@@ -181,6 +185,10 @@ package tabinda.papersteer
 				vertices[i] = Vector3.Zero;
 				flags[i] = 0;
 			}
+			
+			lines.geometry.faces = [];
+			lines.geometry.vertices = [];
+			lines.removeAllLines();
 		}
 	}
 }

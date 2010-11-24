@@ -55,7 +55,7 @@ package tabinda.demo.plugins.Ctf
 			// determine upper bound for pursuit prediction time
 			var seekerToGoalDist:Number=Vector3.Distance(Globals.HomeBaseCenter,Globals.Seeker.Position);
 			var adjustedDistance:Number=seekerToGoalDist - Radius - Globals.HomeBaseRadius;
-			var seekerToGoalTime:Number=adjustedDistance < 0?0:adjustedDistance / Globals.Seeker.Speed;
+			var seekerToGoalTime:Number=(adjustedDistance < 0)?0:(adjustedDistance / Globals.Seeker.Speed);
 			var maxPredictionTime:Number=seekerToGoalTime * 0.9;
 
 			// determine steering (pursuit, obstacle avoidance, or braking)

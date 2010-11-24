@@ -33,8 +33,6 @@
 package tabinda.demo.plugins.Boids
 {
 	import flash.ui.Keyboard;
-	import org.papervision3d.core.proto.DisplayObjectContainer3D;
-	import org.papervision3d.objects.DisplayObject3D;
 	
 	import org.papervision3d.core.geom.Lines3D;
 	import org.papervision3d.core.geom.renderables.*;
@@ -106,7 +104,7 @@ package tabinda.demo.plugins.Boids
 		public function initPV3D():void
 		{
 			lines = new Lines3D(new LineMaterial(0x000000,1));
-			Demo.container.addChild(lines);
+			addPV3DObject(lines);
 		}
 
 		public override function Update(currentTime:Number, elapsedTime:Number):void
@@ -125,7 +123,7 @@ package tabinda.demo.plugins.Boids
 
 			// vehicle nearest mouse (to be highlighted)
 			var nearMouse:IVehicle = Demo.VehicleNearestToMouse();
-
+			
 			// update camera
 			Demo.UpdateCamera(currentTime, elapsedTime, selected);
 
@@ -141,7 +139,7 @@ package tabinda.demo.plugins.Boids
             lines.removeAllLines();
 			
 			// highlight vehicle nearest mouse
-			DrawCircleHighlightOnVehicle(nearMouse, 1, Colors.LightGray);
+			//DrawCircleHighlightOnVehicle(nearMouse, 1, Colors.LightGray);
 			
 			// highlight selected vehicle
 			DrawCircleHighlightOnVehicle(selected, 1, Colors.Gray);
@@ -182,7 +180,7 @@ package tabinda.demo.plugins.Boids
 				var radius:Number = v.Radius * radiusMultiplier;  							 // adjusted radius
 				var	center:Vector3 = v.Position;                   							 // center
 				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
-				var	segments:int = 20;                          						 	 // circle segments
+				var	segments:int = 7;                          						 	 // circle segments
 				var filled:Boolean = false;
 				var in3d:Boolean = false;
 				
@@ -196,7 +194,7 @@ package tabinda.demo.plugins.Boids
 						// (XXX should this be a method on  LocalSpace?)
 						var unitAxis:Vector3 = axis;
 						unitAxis.Normalize();
-						var unitPerp:Vector3 = VHelper.FindPerpendicularIn3d(axis);
+						var unitPerp:Vector3 = Vector3.FindPerpendicularIn3d(axis);
 						unitPerp.Normalize();
 						ls.Up = unitAxis;
 						ls.Forward = unitPerp;
@@ -273,6 +271,11 @@ package tabinda.demo.plugins.Boids
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		public function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override function Reset():void
@@ -355,7 +358,7 @@ package tabinda.demo.plugins.Boids
 			flock.push(boid);
 			
 			// PV3D Mesh being added to DisplayList
-			Demo.container.addChild(boid.objectMesh);
+			addPV3DObject(boid.objectMesh);
 			
 			if (population == 1)
 			{

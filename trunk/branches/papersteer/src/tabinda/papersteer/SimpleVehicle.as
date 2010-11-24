@@ -38,7 +38,6 @@ package tabinda.papersteer
 	public class SimpleVehicle extends SteerLibrary
 	{
 		public var objectMesh:TriangleMesh3D;			// For Papervision3D
-		public var objectSprite:Sprite;					// For ActionScript 3
 		
 		// give each vehicle a unique number
 		private var _SerialNumber:int;

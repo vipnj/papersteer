@@ -33,7 +33,6 @@
 package tabinda.demo.plugins.Ctf
 {
 	import flash.ui.Keyboard;
-	import org.papervision3d.objects.primitives.Plane;
 	
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
@@ -44,6 +43,8 @@ package tabinda.demo.plugins.Ctf
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
+	
+	
 
 	// Capture the Flag   (a portion of the traditional game)
 	//
@@ -124,18 +125,20 @@ package tabinda.demo.plugins.Ctf
 			Globals.ctfSeeker=new CtfSeeker();
 			all.push (Globals.ctfSeeker);
 			
-			Demo.container.addChild(Globals.ctfSeeker.objectMesh);
+			addPV3DObject(Globals.ctfSeeker.objectMesh);
+			addPV3DObject(Globals.ctfSeeker.trail.lines);
+			addPV3DObject(Globals.ctfSeeker.lines);
 			Globals.ctfSeeker.objectMesh.addChild(Globals.ctfSeeker.text3D);
-			Demo.container.addChild(Globals.ctfSeeker.lines);
-
+			
 			// create the specified number of enemies, 
 			// storing pointers to them in an array.
 			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
 			{
 				Globals.CtfEnemies[i]=new CtfEnemy();
 				all.push (Globals.CtfEnemies[i]);
-				Demo.container.addChild(Globals.CtfEnemies[i].objectMesh);
-				Demo.container.addChild(Globals.CtfEnemies[i].lines);
+				addPV3DObject(Globals.CtfEnemies[i].objectMesh);
+				addPV3DObject(Globals.CtfEnemies[i].trail.lines);
+				addPV3DObject(Globals.CtfEnemies[i].lines);
 			}
 
 			// initialize camera
@@ -281,11 +284,26 @@ package tabinda.demo.plugins.Ctf
 			GridMesh.geometry.ready = true;
 		}
 		
+		/**
+		 * Draws a colored circle (perpendicular to view axis) around the center
+		 * of a given vehicle.  The circle's radius is the vehicle's radius times
+		 * radiusMultiplier.
+		 * @param	v is a Vehicle
+		 */
 		public function HighlightVehicleUtility(vehicle:IVehicle):void
 		{
 			if (vehicle != null)
 			{
-				DrawCircleOrDisk(highlightGeometry,vehicle.Radius, Vector3.Zero, vehicle.Position, Colors.LightGray, 20, true, false );
+				var cPosition:Vector3 = Demo.camera.Position;
+				var radius:Number = vehicle.Radius;  							 					 	// adjusted radius
+				var	center:Vector3 = vehicle.Position;                   							 	// center
+				var axis:Vector3 = 	Vector3.VectorSubtraction(vehicle.Position , cPosition);       		// view axis
+				var color:uint = 	Colors.LightGray;                        				 			// drawing color
+				var	segments:int = 7;                          						 	 				// circle segments
+				var filled:Boolean = true;
+				var in3d:Boolean = false;
+				
+				DrawCircleOrDisk(highlightGeometry, radius, axis, center, color, segments, filled, in3d);
 			}
 		}
 
@@ -293,7 +311,9 @@ package tabinda.demo.plugins.Ctf
 		{
 			// delete seeker
 			destoryPV3DObject(Globals.ctfSeeker.objectMesh);
+			destoryPV3DObject(Globals.ctfSeeker.text3D);
 			destoryPV3DObject(Globals.ctfSeeker.lines);
+			destoryPV3DObject(Globals.ctfSeeker.trail.lines);
 			
 			Globals.ctfSeeker = null;
 			
@@ -307,6 +327,7 @@ package tabinda.demo.plugins.Ctf
 			{
 				destoryPV3DObject(Globals.CtfEnemies[i].objectMesh);
 				destoryPV3DObject(Globals.CtfEnemies[i].lines);
+				destoryPV3DObject(Globals.CtfEnemies[i].trail.lines);
 				
 				Globals.CtfEnemies[i] = null;
 			}
@@ -320,6 +341,11 @@ package tabinda.demo.plugins.Ctf
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		private function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override  function Reset ():void
@@ -434,7 +460,7 @@ package tabinda.demo.plugins.Ctf
 			var reached:Boolean=Globals.ctfSeeker.State == SeekerState.AtGoal;
 			var baseColor:uint=reached?atColor:noColor;
 			
-			DrawCircleOrDisk (obstacleGeometry,Globals.HomeBaseRadius,Vector3.Zero,Globals.HomeBaseCenter,baseColor,40,true,false);
+			DrawCircleOrDisk (obstacleGeometry,Globals.HomeBaseRadius,Vector3.Zero,Globals.HomeBaseCenter,baseColor,7,true,false);
 			DrawCircleOrDisk (obstacleGeometry,Globals.HomeBaseRadius / 15,Vector3.Zero,Vector3.VectorAddition(Globals.HomeBaseCenter , up),Colors.Black,20,true,false);
 		}
 
@@ -444,7 +470,7 @@ package tabinda.demo.plugins.Ctf
 			var allSO:Vector.<SphericalObstacle>=Vector.<SphericalObstacle>(CtfBase.AllObstacles);
 			for (var so:int=0; so < allSO.length; so++)
 			{
-				DrawCircleOrDisk (obstacleGeometry,allSO[so].Radius, Vector3.Zero, allSO[so].Center, color, 40, false,false );
+				DrawCircleOrDisk (obstacleGeometry,allSO[so].Radius, Vector3.Zero, allSO[so].Center, color, 7, false,false );
 			}
 		}
 	}

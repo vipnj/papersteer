@@ -62,9 +62,6 @@ package tabinda.papersteer
 		protected var normals:Vector.<Vector3>;
 		protected var totalPathLength:Number;
 
-		//public PolylinePathway()
-		//{ }
-
 		// construct a PolylinePathway given the number of points (vertices),
 		// an array of points, and a path radius.
 		// takes _pointCount:int,_points:Array,_radius:Number,_cyclic:Boolean

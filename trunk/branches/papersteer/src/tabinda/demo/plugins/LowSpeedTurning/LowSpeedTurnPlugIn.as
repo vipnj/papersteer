@@ -114,8 +114,9 @@ package tabinda.demo.plugins.LowSpeedTurning
 			{
 				var lst:LowSpeedTurn =new LowSpeedTurn();
 				all.push (lst);
-				Demo.container.addChild(lst.objectMesh);
-				Demo.container.addChild(lst.lines);
+				addPV3DObject(lst.objectMesh);
+				addPV3DObject(lst.trail.lines);
+				addPV3DObject(lst.lines);
 			}
 
 			// initial selected vehicle
@@ -264,7 +265,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 				var	center:Vector3 = v.Position;                   							 // center
 				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
 				var color:uint = 	Colors.LightGray;                        				 // drawing color
-				var	segments:int = 20;                          						 	 // circle segments
+				var	segments:int = 7;                          						 	 // circle segments
 				var filled:Boolean = true;
 				var in3d:Boolean = false;
 				
@@ -325,6 +326,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			for (var i:int = 0; i < all.length; i++)
 			{
 				destoryPV3DObject(all[i].objectMesh);
+				destoryPV3DObject(all[i].trail.lines);
 				destoryPV3DObject(all[i].lines);
 			}
 			
@@ -339,6 +341,11 @@ package tabinda.demo.plugins.LowSpeedTurning
 			Demo.container.removeChild(object);
 			object.material.destroy();
 			object = null;
+		}
+		
+		private function addPV3DObject(object:*):void
+		{
+			Demo.container.addChild(object);
 		}
 
 		public override  function Reset ():void

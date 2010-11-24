@@ -49,7 +49,7 @@ package tabinda.papersteer
 			
 			if (args.length == 2)
 			{
-				Radius = args[0];+0.0
+				Radius = args[0];
 				Center = args[1];
 			}
 			else

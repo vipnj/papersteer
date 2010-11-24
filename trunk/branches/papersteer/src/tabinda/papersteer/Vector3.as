@@ -435,7 +435,7 @@ package tabinda.papersteer
 		public static function FindPerpendicularIn3d(direction:Vector3):Vector3
 		{
 			// to be filled in:
-			var quasiPerp:Vector3;  // a direction which is "almost perpendicular"
+			var quasiPerp:Vector3;  				// a direction which is "almost perpendicular"
 			var result:Vector3 = new Vector3();     // the computed perpendicular to be returned
 
 			// three mutually perpendicular basis vectors

@@ -32,12 +32,13 @@
 
 package tabinda.papersteer
 {
-	//FIXME: this class should not be abstract
-	// was an abstract class
 	public class SteerLibrary extends AbstractVehicle
 	{	
-		//HACK: This should not be... Find a way to access Game.Services
 		public static var annotation:IAnnotationService = new Annotation();
+		
+		// Wander behavior
+		public var WanderSide:Number;
+		public var WanderUp:Number;
 
 		// Constructor: initializes state
 		public function SteerLibrary()
@@ -59,14 +60,10 @@ package tabinda.papersteer
 
 		// -------------------------------------------------- steering behaviors
 
-		// Wander behavior
-		public var WanderSide:Number;
-		public var WanderUp:Number;
-
         public function SteerForWander(dt:Number):Vector3
 		{
 			// random walk WanderSide and WanderUp between -1 and +1
-			var speed:Number = (12 * dt)+0.0; // maybe this (12) should be an argument?
+			var speed:Number = 12 * dt; // maybe this (12) should be an argument?
 			WanderSide = Utilities.ScalarRandomWalk(WanderSide, speed, -1, +1);
 			WanderUp = Utilities.ScalarRandomWalk(WanderUp, speed, -1, +1);
 
@@ -101,7 +98,7 @@ package tabinda.papersteer
 		{
 			//  const Vector3 offset = target - position;
             var offset:Vector3 = Vector3.VectorSubtraction(target , this.Position);
-            var desiredVelocity:Vector3 = VHelper.TruncateLength(offset,(this.MaxSpeed)); //xxxnew
+            var desiredVelocity:Vector3 = VHelper.TruncateLength(offset,this.MaxSpeed); //xxxnew
 			return Vector3.VectorSubtraction(desiredVelocity , this.Velocity);
 		}
 
@@ -109,14 +106,14 @@ package tabinda.papersteer
         public function SteerToFollowPath(direction:int, predictionTime:Number, path:Pathway):Vector3
 		{
 			// our goal will be offset from our path distance by this amount
-			var pathDistanceOffset:Number = (direction * predictionTime * this.Speed)+0.0;
+			var pathDistanceOffset:Number = (direction * predictionTime * this.Speed);
 
 			// predict our future position
             var futurePosition:Vector3 = this.PredictFuturePosition(predictionTime);
 
 			// measure distance along path of our current and predicted positions
-			var nowPathDistance:Number = (path.MapPointToPathDistance(this.Position))+0.0;
-			var futurePathDistance:Number = (path.MapPointToPathDistance(futurePosition))+0.0;
+			var nowPathDistance:Number = (path.MapPointToPathDistance(this.Position));
+			var futurePathDistance:Number = (path.MapPointToPathDistance(futurePosition));
 
 			// are we facing in the correction direction?
 			var rightway:Boolean = ((pathDistanceOffset > 0) ?
@@ -705,33 +702,20 @@ package tabinda.papersteer
 		// XXX ("utility this"?)
 
 		// xxx cwr experimental 9-9-02 -- names OK?
-        public function IsAhead(target:Vector3):Boolean
-		{
-			return IsAhead2(target, 0.707);
-		}
-        public function IsAside(target:Vector3):Boolean
-		{
-			return IsAside2(target, 0.707);
-		}
-        public function IsBehind(target:Vector3):Boolean
-		{
-			return IsBehind2(target, -0.707);
-		}
-
-        public function IsAhead2(target:Vector3, cosThreshold:Number):Boolean
+        public function IsAhead(target:Vector3,cosThreshold:Number=0.707):Boolean
 		{
 			var targetDirection:Vector3 = Vector3.VectorSubtraction(target, this.Position);
             targetDirection.Normalize();
             return this.Forward.DotProduct(targetDirection) > cosThreshold;
 		}
-        public function IsAside2(target:Vector3, cosThreshold:Number):Boolean
+        public function IsAside(target:Vector3,cosThreshold:Number = 0.707):Boolean
 		{
 			var targetDirection:Vector3 = Vector3.VectorSubtraction(target , this.Position);
             targetDirection.Normalize();
             var dp:Number = this.Forward.DotProduct(targetDirection);
 			return (dp < cosThreshold) && (dp > -cosThreshold);
 		}
-        public function IsBehind2(target:Vector3, cosThreshold:Number):Boolean
+        public function IsBehind(target:Vector3,cosThreshold:Number=-0.707):Boolean
 		{
 			var targetDirection:Vector3 = Vector3.VectorSubtraction(target , this.Position);
             targetDirection.Normalize();

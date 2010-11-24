@@ -49,6 +49,7 @@ package tabinda.demo
 	import org.papervision3d.render.*;
 	import org.papervision3d.scenes.*;
 	import org.papervision3d.view.*;
+	import org.papervision3d.core.render.data.RenderHitData;
 	
 	// PaperSteer Imports
 	import tabinda.demo.plugins.Boids.*;
@@ -138,8 +139,13 @@ package tabinda.demo
 
 		public static var localSpace:LocalSpace = new LocalSpace();
 		
+		// Our ActionScript 3 Stage
+		public static var stg:Stage;
+		
 		public function Demo()
 		{
+			stg = stage;
+			
 			viewport = new Viewport3D(WindowWidth, WindowHeight, true, false);
 			viewport.containerSprite.cacheAsBitmap = false;
 			addChild(viewport);
@@ -427,7 +433,8 @@ package tabinda.demo
 		 */
 		private static function DirectionFromCameraToScreenPosition(x:int, y:int):Vector3
 		{
-			return Vector3.Up;
+			var renderHitData:RenderHitData = viewport.hitTestPoint2D(new Point(x, y));
+			return new Vector3(renderHitData.x, renderHitData.y, renderHitData.z);
 		}
 
 		/**

@@ -107,11 +107,11 @@ package tabinda.papersteer
 		/** Draws all registered Trails.
 		 * @param drawer An IDraw Object
 		*/
-		public function DrawTrails (drawer:IDraw):void
+		public function DrawTrails ():void
 		{
 			for (var i:int=0; i < trails.length; i++)
 			{
-				trails[i].Draw(drawer);
+				trails[i].Draw();
 			}
 		}
 

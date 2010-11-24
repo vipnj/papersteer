@@ -151,19 +151,13 @@ class TokenType2 implements ITokenForProximityDatabase
 
 	public function Dispose():void
 	{
-		Dispose2(true);
-		System.gc();
-	}
-	protected function Dispose2(disposing:Boolean):void
-	{
 		if (proxy != null)
 		{
-			//System.Diagnostics.Debug.Assert(disposing == true);
-
 			// remove this token from the database's vector
-			proxy = lq.RemoveFromBin(proxy);
+			lq.RemoveFromBin(proxy);
 			proxy = null;
 		}
+		System.gc();
 	}
 
 	// the client obj calls this each time its position changes

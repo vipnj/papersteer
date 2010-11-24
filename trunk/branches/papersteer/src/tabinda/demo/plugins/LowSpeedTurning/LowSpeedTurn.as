@@ -51,7 +51,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		
 		public var lines:Lines3D;
 		
-		private var trail:Trail;
+		public var trail:Trail;
 		
 		// for stepping the starting conditions for next vehicle
 		private static var startX:Number;
@@ -59,7 +59,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		
 		// constructor
 		public function LowSpeedTurn ():void
-		{
+		{			
 			initPV3D();
 			
 			Reset ();
@@ -100,10 +100,10 @@ package tabinda.demo.plugins.LowSpeedTurning
 			startX+= 1.0;
 
 			// for next instance: step speed
-			startSpeed+= 0.15;
-
+			startSpeed += 0.15;
+			
 			// 15 seconds and 150 points along the trail
-			//trail=new Trail(15,150);
+			trail = new Trail(15, 150);
 		}
 
 		// draw into the scene
@@ -118,7 +118,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			
 			//Drawing.DrawBasic2dCircularVehicle (this,LSTMesh,triArr,uvArr,Colors.Gray);
 			DrawBasic2dCircularVehicle ();
-			//trail.Draw (Annotation.drawer);
+			trail.Draw ();
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -153,7 +153,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			objectMesh.geometry.ready = true;
 			
 			// draw the circular collision boundary
-			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 20,false,false);
+			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
 		}
 		
 		private function DrawCircleOrDisk(radius:Number,axis:Vector3,center:Vector3,color:uint,segments:int,filled:Boolean,in3d:Boolean):void
@@ -217,7 +217,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 
 			// annotation
 			annotation.VelocityAcceleration (this);
-			//trail.Record (currentTime,Position);
+			trail.Record (currentTime,Position);
 		}
 
 		// reset starting positions
