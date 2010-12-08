@@ -45,7 +45,7 @@ package tabinda.demo.plugins.MapDrive
 			resolution=r;
 			outsideValue=false;
 
-			map=new Array(resolution * resolution);
+			map=new Vector.<Boolean>(resolution * resolution);
 			for (var i:int=0; i < resolution * resolution; i++)
 			{
 				map[i]=false;
@@ -99,50 +99,6 @@ package tabinda.demo.plugins.MapDrive
 				var i:int=int(Utilities.RemapInterval(x,- hxs,hxs,0.0,r));
 				var j:int=int(Utilities.RemapInterval(z,- hzs,hzs,0.0,r));
 				return GetMapBit(i,j);
-			}
-		}
-
-		public function xxxDrawMap ():void
-		{
-			var xs:Number=xSize / Number(resolution);
-			var zs:Number=zSize / Number(resolution);
-			var alongRow:Vector3=new Vector3(xs,0,0);
-			var nextRow:Vector3=new Vector3(- xSize,0,zs);
-			var g:Vector3=new Vector3((xSize - xs) / -2,0,(zSize - zs) / -2);
-			g = Vector3.VectorAddition(g, center);
-			
-			for (var j:int=0; j < resolution; j++)
-			{
-				for (var i:int=0; i < resolution; i++)
-				{
-					if (GetMapBit(i,j))
-					{
-						// spikes
-						// Vector3 spikeTop (0, 5.0f, 0);
-						// drawLine (g, g+spikeTop, gWhite);
-
-						// squares
-						var rockHeight:Number=0;
-						var v1:Vector3=new Vector3(+ xs / 2,rockHeight,+ zs / 2);
-						var v2:Vector3=new Vector3(+ xs / 2,rockHeight,- zs / 2);
-						var v3:Vector3=new Vector3(- xs / 2,rockHeight,- zs / 2);
-						var v4:Vector3=new Vector3(- xs / 2,rockHeight,+ zs / 2);
-						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
-						var orangeRockColor:uint=Colors.RGBToHex(int(255.0 * 0.5),int(255.0 * 0.2),int(255.0 * 0.0));
-						//Drawing.DrawQuadrangle (Vector3.VectorAddition(g , v1),Vector3.VectorAddition(g , v2),Vector3.VectorAddition(g , v3),Vector3.VectorAddition(g , v4),orangeRockColor);
-						
-						// pyramids
-						// Vector3 top (0, xs/2, 0);
-						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
-						// Vector3 orangeRockColor (0.5f, 0.2f, 0.0f);
-						// drawTriangle (g+v1, g+v2, g+top, redRockColor);
-						// drawTriangle (g+v2, g+v3, g+top, orangeRockColor);
-						// drawTriangle (g+v3, g+v4, g+top, redRockColor);
-						// drawTriangle (g+v4, g+v1, g+top, orangeRockColor);
-					}
-					g= Vector3.VectorAddition(g,alongRow);
-				}
-				g= Vector3.VectorAddition(g,nextRow);
 			}
 		}
 
@@ -215,6 +171,6 @@ package tabinda.demo.plugins.MapDrive
 			return i + (j * resolution);
 		}
 
-		private var map:Array;
+		private var map:Vector.<Boolean>;
 	}
 }

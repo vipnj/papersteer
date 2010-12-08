@@ -59,7 +59,7 @@ package tabinda.demo.plugins.OneTurn
 		private var oneTurning:OneTurning;
 		private var theVehicle:Vector.<OneTurning>;				// for allVehicles
 		
-		public var pluginReset:Boolean;
+		public var ForceRedraw:Boolean;
 				
 		public function OneTurningPlugIn ()
 		{
@@ -99,11 +99,11 @@ package tabinda.demo.plugins.OneTurn
 		public override  function Open ():void
 		{
 			initPV3D();
-			pluginReset = true;
+			ForceRedraw = true;
 			
 			oneTurning = new OneTurning();
-			Demo.container.addChild(oneTurning.objectMesh);
-			Demo.container.addChild(oneTurning.trail.lines);
+			Demo.container.addChild(oneTurning.VehicleMesh);
+			//Demo.container.addChild(oneTurning.trail.lines);
 			Demo.container.addChild(oneTurning.lines);
 			
 			Demo.SelectedVehicle=oneTurning;
@@ -126,14 +126,14 @@ package tabinda.demo.plugins.OneTurn
 			// draw "ground plane"
 			//Demo.GridUtility (oneTurning.Position,GridMesh);
 			// We do  this because PV3D and AS3 are not Canvas based Drawers
-			if(pluginReset)
+			if(ForceRedraw)
 			{				
 				GridMesh.geometry.faces = [];
 				GridMesh.geometry.vertices = [];
 				//Demo.GridUtility(gridCenter,GridMesh);
 				Grid(oneTurning.Position);
 				
-				pluginReset = false;
+				ForceRedraw = false;
 			}
 
 			// draw test vehicle
@@ -160,10 +160,10 @@ package tabinda.demo.plugins.OneTurn
 												 Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.LightGray
+			var gray1:uint = Colors.Gray
 			var gray2:uint = Colors.DarkGray;
 			
-			var size:int = 500;
+			var size:int = 100;
 			var subsquares:int = 50;
 			
 			var half:Number = size / 2;
@@ -190,11 +190,13 @@ package tabinda.demo.plugins.OneTurn
 					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
 					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
 					
-					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					GridMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
+					var colMaterial:ColorMaterial = new ColorMaterial(color, 1);
+					colMaterial.doubleSided = true;
 					
 					var color:uint = flag2 ? gray1 : gray2;
-					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], colMaterial);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], colMaterial);
 					
 					GridMesh.geometry.faces.push(t1);
 					GridMesh.geometry.faces.push(t2);
@@ -205,10 +207,6 @@ package tabinda.demo.plugins.OneTurn
 				flag1 = !flag1;
 				p += spacing;
 			}
-			if (Papervision3D.useRIGHTHANDED)
-			{
-				GridMesh.geometry.flipFaces();
-			}
 			GridMesh.geometry.ready = true;
 		}
 
@@ -217,8 +215,9 @@ package tabinda.demo.plugins.OneTurn
 			//TODO: Remove scene object once the plugin closes
 			destoryPV3DObject(GridMesh);
 			
-			destoryPV3DObject(oneTurning.objectMesh);
-			destoryPV3DObject(oneTurning.trail.lines);
+			destoryPV3DObject(oneTurning.VehicleMesh);
+			//destoryPV3DObject(oneTurning.trail.lines);
+			oneTurning.removeTrail();
 			destoryPV3DObject(oneTurning.lines);
 			
 			theVehicle.splice(0, theVehicle.length);
@@ -236,7 +235,7 @@ package tabinda.demo.plugins.OneTurn
 		{
 			// reset vehicle
 			oneTurning.Reset ();
-			pluginReset = true;
+			ForceRedraw = true;
 		}
 
 		public override  function get Vehicles ():Vector.<IVehicle>

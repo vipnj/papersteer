@@ -49,7 +49,7 @@ package tabinda.demo.plugins.Ctf
 		private var textMat:Letter3DMaterial;
 		
 		// constructor
-		public function CtfSeeker ():void
+		public function CtfSeeker ()
 		{
 			super ();
 			
@@ -68,7 +68,7 @@ package tabinda.demo.plugins.Ctf
 		{
 			super.Reset ();
 			BodyColor=Colors.RGBToHex(int(255.0 * 0.4),int(255.0 * 0.4),int(255.0 * 0.6));// blueish
-			Globals.Seeker = this;
+			CtfPlugIn.Seeker = this;
 			State=SeekerState.Running;
 			evading=false;
 		}
@@ -78,22 +78,20 @@ package tabinda.demo.plugins.Ctf
 		{
 			// do behavioral state transitions, as needed
 			UpdateState (currentTime);
-
 			// determine and apply steering/braking forces
 			var steer:Vector3=Vector3.Zero;
 			if (State == SeekerState.Running)
 			{
-				steer=SteeringForSeeker();
+				steer = SteeringForSeeker();
 			}
 			else
 			{
-				ApplyBrakingForce (Globals.BrakingRate,elapsedTime);
+				ApplyBrakingForce (Globals.BrakingRate, elapsedTime);
 			}
-			ApplySteeringForce (steer,elapsedTime);
+			ApplySteeringForce (steer, elapsedTime);
 
 			// annotation
 			annotation.VelocityAcceleration (this);
-			//objectMesh.position = Position.ToNumber3D();
 			trail.Record (currentTime,Position);
 		}
 
@@ -103,7 +101,7 @@ package tabinda.demo.plugins.Ctf
 			var sideThreshold:Number=Radius * 8.0;
 			var behindThreshold:Number=Radius * 2.0;
 
-			var goalOffset:Vector3=Vector3.VectorAddition(Globals.HomeBaseCenter , Position);
+			var goalOffset:Vector3=Vector3.VectorSubtraction(Globals.HomeBaseCenter , Position);
 			var goalDistance:Number=goalOffset.Magnitude();
 			var goalDirection:Vector3=Vector3.ScalarMultiplication(1/goalDistance,goalOffset);
 
@@ -113,10 +111,10 @@ package tabinda.demo.plugins.Ctf
 			var xxxReturn:Boolean=true;
 
 			// loop over enemies
-			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
+			for (var i:int=0; i < CtfPlugIn.CtfEnemyCount; i++)
 			{
 				// short name for this enemy
-				var e:CtfEnemy=Globals.CtfEnemies[i];
+				var e:CtfEnemy=CtfPlugIn.CtfEnemies[i];
 				var eDistance:Number=Vector3.Distance(Position,e.Position);
 				var timeEstimate:Number=0.3 * eDistance / e.Speed;//xxx
 				var eFuture:Vector3=e.PredictFuturePosition(timeEstimate);
@@ -201,15 +199,28 @@ package tabinda.demo.plugins.Ctf
 				}
 				else
 				{
-					var evade:Vector3=XXXSteerToEvadeAllDefenders();
-					var steer:Vector3=Vector3.LimitMaxDeviationAngle(Vector3.VectorAddition(seek , evade),0.707,Forward);
+					if (true)// xxx testing new evade code xxx
+					{
+						// combine seek and (forward facing portion of) evasion
+						var evade:Vector3 = SteerToEvadeAllDefenders();
+						var steer:Vector3 = Vector3.VectorAddition(seek , Vector3.LimitMaxDeviationAngle(evade, 0.5, Forward));
 
-					annotation.Line (Position,Vector3.VectorAddition(Position , seek),Colors.Red);
-					annotation.Line (Position,Vector3.VectorAddition(Position , evade),Colors.Green);
+						// annotation: show evasion steering force
+						annotation.Line (Position,Vector3.VectorAddition(Position,Vector3.ScalarMultiplication(0.2, steer)),Globals.EvadeColor);
+						return steer;
+					}
+					else
+					{
+						var evade:Vector3=XXXSteerToEvadeAllDefenders();
+						var steer:Vector3=Vector3.LimitMaxDeviationAngle(Vector3.VectorAddition(seek , evade),0.707,Forward);
 
-					// annotation: show evasion steering force
-					annotation.Line (Position,Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(0.2,steer)),Globals.EvadeColor);
-					return steer;
+						annotation.Line (Position,Vector3.VectorAddition(Position , seek),Colors.Red);
+						annotation.Line (Position,Vector3.VectorAddition(Position , evade),Colors.Green);
+
+						// annotation: show evasion steering force
+						annotation.Line (Position,Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(0.2,steer)),Globals.EvadeColor);
+						return steer;
+					}
 				}
 			}
 		}
@@ -290,7 +301,7 @@ package tabinda.demo.plugins.Ctf
 			status+="\n "+obstacleCount +" obstacles [F1/F2]";
 			status+="\n"+Globals.ResetCount+" restarts";
 			var screenLocation:Vector3=new Vector3(15,50,0);
-			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.Black);
+			Demo.Draw2dTextAt2dLocation (status,screenLocation,Colors.LightGray);
 		}
 
 		public function SteerToEvadeAllDefenders ():Vector3
@@ -299,9 +310,9 @@ package tabinda.demo.plugins.Ctf
 			var goalDistance:Number=Vector3.Distance(Globals.HomeBaseCenter,Position);
 
 			// sum up weighted evasion
-			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
+			for (var i:int=0; i < CtfPlugIn.CtfEnemyCount; i++)
 			{
-				var e:CtfEnemy=Globals.CtfEnemies[i];
+				var e:CtfEnemy=CtfPlugIn.CtfEnemies[i];
 				var eOffset:Vector3=Vector3.VectorSubtraction(e.Position , Position);
 				var eDistance:Number = eOffset.Magnitude();
 
@@ -333,9 +344,9 @@ package tabinda.demo.plugins.Ctf
 		{
 			// sum up weighted evasion
 			var evade:Vector3=Vector3.Zero;
-			for (var i:int=0; i < Globals.CtfEnemyCount; i++)
+			for (var i:int=0; i < CtfPlugIn.CtfEnemyCount; i++)
 			{
-				var e:CtfEnemy=Globals.CtfEnemies[i];
+				var e:CtfEnemy=CtfPlugIn.CtfEnemies[i];
 				var eOffset:Vector3=Vector3.VectorSubtraction(e.Position , Position);
 				var eDistance:Number = eOffset.Magnitude();
 
@@ -366,17 +377,17 @@ package tabinda.demo.plugins.Ctf
 		{
 			if (clearPath)
 			{
-				evading=false;
-				var goalDistance:Number=Vector3.Distance(Globals.HomeBaseCenter,Position);
-				var headingTowardGoal:Boolean=IsAhead(Globals.HomeBaseCenter,0.98);
-				var isNear:Boolean=(goalDistance / Speed) < Globals.AvoidancePredictTimeMax;
-				var useMax:Boolean=headingTowardGoal && ! isNear;
-				Globals.AvoidancePredictTime=(useMax?Globals.AvoidancePredictTimeMax:Globals.AvoidancePredictTimeMin);
+				evading = false;
+				var goalDistance:Number = Vector3.Distance(Globals.HomeBaseCenter, Position);
+				var headingTowardGoal:Boolean = IsAhead(Globals.HomeBaseCenter, 0.98);
+				var isNear:Boolean = (goalDistance / Speed) < Globals.AvoidancePredictTimeMax;
+				var useMax:Boolean = headingTowardGoal && ! isNear;
+				Globals.AvoidancePredictTime = (useMax?Globals.AvoidancePredictTimeMax:Globals.AvoidancePredictTimeMin);
 			}
 			else
 			{
-				evading=true;
-				Globals.AvoidancePredictTime=Globals.AvoidancePredictTimeMin;
+				evading = true;
+				Globals.AvoidancePredictTime = Globals.AvoidancePredictTimeMin;
 			}
 		}
 
@@ -387,7 +398,8 @@ package tabinda.demo.plugins.Ctf
 			var pbb:Vector3=Vector3.VectorAddition(Position , behindBack);
 			var gun:Vector3=LocalRotateForwardToSide(goalDirection);
 			var gn:Vector3=Vector3.ScalarMultiplication(sideThreshold,gun);
-			var hbc:Vector3=Globals.HomeBaseCenter;
+			var hbc:Vector3 = Globals.HomeBaseCenter;
+			
 			annotation.Line (Vector3.VectorAddition(pbb ,gn),Vector3.VectorAddition(hbc , gn),Globals.ClearPathColor);
 			annotation.Line (Vector3.VectorSubtraction(pbb , gn),Vector3.VectorSubtraction(hbc , gn),Globals.ClearPathColor);
 			annotation.Line (Vector3.VectorSubtraction(hbc , gn),Vector3.VectorAddition(hbc , gn),Globals.ClearPathColor);

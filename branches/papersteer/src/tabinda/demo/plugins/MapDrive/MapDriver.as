@@ -33,6 +33,7 @@
 package tabinda.demo.plugins.MapDrive
 {
 	import flash.display.DisplayObject;
+	import flash.filters.ColorMatrixFilter;
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.math.*;
@@ -40,7 +41,7 @@ package tabinda.demo.plugins.MapDrive
 	import org.papervision3d.materials.special.LineMaterial;
 	import org.papervision3d.objects.DisplayObject3D;
 	import org.papervision3d.Papervision3D;
-	
+
 	import tabinda.papersteer.*;
 	import tabinda.demo.*;
 	
@@ -148,7 +149,7 @@ package tabinda.demo.plugins.MapDrive
 			colMat1.doubleSided = colMat2.doubleSided = colMat3.doubleSided = false;
 			
 			MapMesh = new TriangleMesh3D(colMat1 , new Array(), new Array());
-			objectMesh = new TriangleMesh3D(colMat2 , new Array(), new Array());
+			VehicleMesh = new TriangleMesh3D(colMat2 , new Array(), new Array());
 			PathMesh = new TriangleMesh3D(colMat3 , new Array(), new Array());
 			
 			lines = new Lines3D(new LineMaterial(0x000000,1));
@@ -218,10 +219,14 @@ package tabinda.demo.plugins.MapDrive
 			annotateAvoid = Vector3.Zero;
 
 			// 10 seconds with 200 points along the trail
-			if (trail == null) trail = new Trail(10, 200);
+			if (trail == null) 
+			{
+				trail = new Trail(10, 200);
+				annotation.AddTrail(trail);
+			}
 
 			// prevent long streaks due to teleportation 
-			trail.Clear();
+			annotation.ClearTrail(trail);
 
 			// first pass at detecting "stuck" state
 			stuck = false;
@@ -256,6 +261,11 @@ package tabinda.demo.plugins.MapDrive
 			// state saved for speedometer
 			annoteMaxRelSpeed = annoteMaxRelSpeedCurve = annoteMaxRelSpeedPath = 0;
 			annoteMaxRelSpeed = annoteMaxRelSpeedCurve = annoteMaxRelSpeedPath = 1;
+		}
+		
+		public function removeTrail():void
+		{
+			annotation.RemoveTrail(trail);
 		}
 
 
@@ -305,7 +315,6 @@ package tabinda.demo.plugins.MapDrive
 					var avoidWeight:Number = 3 + (3 * RelativeSpeed()); // ad hoc
 					steering = Vector3.ScalarMultiplication(avoidWeight,avoid);
 					steering = Vector3.VectorAddition(steering, SteerForTargetSpeed(targetSpeed));
-					trace("no demo",steering);
 				}
 				else
 				{
@@ -323,7 +332,6 @@ package tabinda.demo.plugins.MapDrive
 						var a:Vector3 = Vector3.VectorAddition(Position , new Vector3(0, 0.2, 0));
 						annotation.Line(a, Vector3.VectorAddition(a , Vector3.ScalarMultiplication(0.3,weighted)), Colors.White);
 						steering = Vector3.VectorAddition(steering, weighted);
-						trace("demo2",steering);
 					}
 
 					// follow the path in demo 2
@@ -341,7 +349,6 @@ package tabinda.demo.plugins.MapDrive
 							{
 								steering = Vector3.VectorAddition(pf , steering);
 							}
-							trace("demo1a",steering);
 						}
 						else
 						{
@@ -358,7 +365,6 @@ package tabinda.demo.plugins.MapDrive
 							steering = Vector3.VectorAddition(steering,(Vector3.ScalarMultiplication((path.NearWaypoint(Position) ?
 										  0.5 : 0.1),SteerTowardHeading(pathHeading)
 										 )));
-							trace("demo1b",steering);
 						}
 					}
 				}
@@ -400,7 +406,7 @@ package tabinda.demo.plugins.MapDrive
 
 		public function AdjustVehicleRadiusForSpeed():void
 		{
-			var minRadius:Number = Number(Math.sqrt(Utilities.Square(halfWidth) + Utilities.Square(halfLength)));
+			var minRadius:Number = Number(Math.sqrt((halfWidth * halfWidth) + (halfLength * halfLength)));
 			var safetyMargin:Number = (curvedSteering ? Utilities.Interpolate(RelativeSpeed(), 0.0, 1.5) : 0.0);
 			Radius = (minRadius + safetyMargin);
 		}
@@ -471,9 +477,10 @@ package tabinda.demo.plugins.MapDrive
 				{
 					// get offset, distance from obstacle to its image on path
 					var outside:Number;
+					var onPath:Vector3;
 					var temp:Array = path.callMapPointToPath(obstacle, outside);
-					var onPath:Vector3 = temp[0];
-					outside = temp[1];
+					onPath = temp[0];
+					outside = temp[2];
 					var offset:Vector3 = Vector3.VectorSubtraction(onPath , obstacle);
 					var offsetDistance:Number = offset.Magnitude();
 
@@ -589,28 +596,31 @@ package tabinda.demo.plugins.MapDrive
 				var lObsPos:Vector3 = Vector3.Zero;
 				var rObsPos:Vector3 = Vector3.Zero;
 
-				var L:int = (curvedSteering ?
-							   int(ScanObstacleMap(lOffset,
+				var tmpArr1:Array = ScanObstacleMap(lOffset,
 													   center,
 													   arcAngle,
 													   maxSamples,
 													   0,
 													   Colors.Yellow,
 													   Colors.Red,
-													  lObsPos)
-									  / spacing) :
-							   map.ScanXZray(lOffset, step, maxSamples));
-				var R:int = (curvedSteering ?
-							   int(ScanObstacleMap(rOffset,
-														center,
+													  lObsPos);
+				var tmpInt:int = tmpArr1[0];
+				lObsPos = tmpArr1[1];
+				
+				var L:int = (curvedSteering ?  (tmpInt  / spacing) :  map.ScanXZray(lOffset, step, maxSamples));
+				
+				var tmpArr2:Array = ScanObstacleMap(rOffset,
+													   center,
 													   arcAngle,
 													   maxSamples,
 													   0,
 													   Colors.Yellow,
 													   Colors.Red,
-													   rObsPos)
-									  / spacing):
-							   map.ScanXZray(rOffset, step, maxSamples));
+													  rObsPos);
+				var tmpInt2:int = tmpArr2[0];
+				rObsPos = tmpArr2[1];
+				
+				var R:int = (curvedSteering ? (tmpInt2 / spacing):  map.ScanXZray(rOffset, step, maxSamples));
 
 				if ((L > 0) && (L < nearestL))
 				{
@@ -670,23 +680,24 @@ package tabinda.demo.plugins.MapDrive
 						var end:Vector3 = Vector3.VectorAddition(fOffset , Vector3.VectorAddition(corridorFront , Vector3.ScalarMultiplication(k,endside)));
 						var ray:Vector3 = Vector3.VectorSubtraction(end , start);
 						var rayLength:Number = ray.Magnitude();
-						var step2:Vector3 = Vector3.ScalarMultiplication(1/rawLength,Vector3.ScalarMultiplication(spacing,ray));
+						var step2:Vector3 = Vector3.ScalarMultiplication(1/rayLength,Vector3.ScalarMultiplication(spacing,ray));
 						var raySamples:int = int(rayLength / spacing);
 						var endRadius:Number =
 							WingSlope() * maxForward * fraction *
 							(signedRadius < 0 ? 1 : -1) * (j == 1 ? 1 : -1);
 						var ignore:Vector3;
-						var scan:int = (curvedSteering ?
-										  int((ScanObstacleMap(start,
+						
+						var tmpArr3:Array = ScanObstacleMap(start,
 																  center,
 																  arcAngle,
 																  raySamples,
 																  endRadius,
 																  beforeColor,
 																  afterColor,
-																 ignore)
-												 / spacing)) :
-										  map.ScanXZray(start, step2, raySamples));
+																 ignore);
+						var tmpInt3:int = tmpArr3[0];
+						ignore = tmpArr3[1];
+						var scan:int = (curvedSteering ? (tmpInt3 / spacing) :  map.ScanXZray(start, step2, raySamples));
 
 						if (!curvedSteering)
 							AnnotateAvoidObstaclesOnMap(start, scan, step2);
@@ -912,11 +923,11 @@ package tabinda.demo.plugins.MapDrive
 		//        return a "scan results object" with a flag for obstacle found,
 		//        plus distant and position if so.
 		//
-		public function ScanObstacleMap(start:Vector3, center:Vector3, arcAngle:Number,segments:int, endRadiusChange:Number, beforeColor:uint, afterColor:uint, returnObstaclePosition:Vector3):Number
+		public function ScanObstacleMap(start:Vector3, center:Vector3, arcAngle:Number,segments:int, endRadiusChange:Number, beforeColor:uint, afterColor:uint, returnObstaclePosition:Vector3):Array
 		{
 			// "spoke" is initially the vector from center to start,
 			// which is then rotated step by step around center
-			var  spoke:Vector3 = Vector3.VectorSubtraction(start , center);
+			var spoke:Vector3 = Vector3.VectorSubtraction(start , center);
 			// determine the angular step per segment
 			var step:Number = arcAngle / segments;
 			// store distance to, and position of first obstacle
@@ -977,7 +988,10 @@ package tabinda.demo.plugins.MapDrive
 				oldPoint = newPoint;
 			}
 			// return distance to first obstacle (or zero if none found)
-			return obstacleDistance;
+			var tmpArr2:Array = new Array();
+			tmpArr2.push(obstacleDistance);
+			tmpArr2.push(returnObstaclePosition);
+			return tmpArr2;
 		}
 
 		public function  DetectImminentCollision():Boolean
@@ -1018,28 +1032,31 @@ package tabinda.demo.plugins.MapDrive
 													 maxForward * bevel));
 				var angle:Number = (scanDist * twoPi * sign) / circumference;
 				var samples:int = int(scanDist / spacing);
-				var L:int = (curvedSteering ?
-							   int((ScanObstacleMap(Vector3.VectorAddition(lOffset , qqqLift),
+				
+				var tmpArr1:Array = ScanObstacleMap(Vector3.VectorAddition(lOffset , qqqLift),
 													   center,
 													   angle,
 													   samples,
 													   0,
 													   Colors.Magenta,
 													   Colors.Cyan,
-													   ignore)
-									  / spacing)) :
-							   map.ScanXZray(lOffset, step, samples));
-				var R:int = (curvedSteering ?
-							   int((ScanObstacleMap(Vector3.VectorAddition(rOffset , qqqLift),
+													   ignore);
+				var tmpInt:int = int(tmpArr1[0]);
+				ignore = tmpArr1[1];
+				
+				var L:int = (curvedSteering ? (tmpInt / spacing) :  map.ScanXZray(lOffset, step, samples));
+				
+				var tmpArr2:Array = ScanObstacleMap(Vector3.VectorAddition(rOffset , qqqLift),
 													   center,
 													   angle,
 													   samples,
 													   0,
 													   Colors.Magenta,
 													   Colors.Cyan,
-													   ignore)
-									  / spacing)) :
-							   map.ScanXZray(rOffset, step, samples));
+													   ignore);
+				var tmpInt2:int = int(tmpArr2[0]);
+				ignore = tmpArr2[1];
+				var R:int = (curvedSteering ? (tmpInt2 / spacing) :  map.ScanXZray(rOffset, step, samples));
 
 				returnFlag = returnFlag || (L > 0);
 				returnFlag = returnFlag || (R > 0);
@@ -1073,7 +1090,7 @@ package tabinda.demo.plugins.MapDrive
 				// QQQ and now, worse, I rearranged it to try the "limit arc
 				// QQQ angle" trick
 				var signedRadius:Number = 1 / NonZeroCurvatureQQQ();
-				var localCenterOfCurvature:Vector3 = Vector3.ScalarMultiplication(signedRadius,Side);
+				var localCenterOfCurvature:Vector3 = Vector3.ScalarMultiplication(signedRadius, Side);
 				var center:Vector3 = Vector3.VectorAddition(Position , localCenterOfCurvature);
 				var sign:Number = signedRadius < 0 ? 1.0 : -1.0;
 				var arcRadius:Number = signedRadius * -sign;
@@ -1156,13 +1173,13 @@ package tabinda.demo.plugins.MapDrive
 			var futureOutside:Number;
 			var temp:Array = path.callMapPointToPath(futurePosition, futureOutside);
 			var onPath:Vector3 = temp[0];
-			futureOutside = temp[1];
+			futureOutside = temp[2];
 
 			// determine if we are currently inside the path tube
 			var nowOutside:Number;
 			var temp2:Array = path.callMapPointToPath(Position,  nowOutside);
 			var nowOnPath:Vector3 = temp2[0];
-			nowOutside = temp2[1];
+			nowOutside = temp2[2];
 			
 			// no steering is required if our present and future positions are
 			// inside the path tube and we are facing in the correct direction
@@ -1296,7 +1313,7 @@ package tabinda.demo.plugins.MapDrive
 					// are heading for
 					var pathSide:Vector3 = LocalRotateForwardToSide(pathHeading);
 					var towardFP:Vector3 = Vector3.VectorAddition(futurePosition , onPath);
-					var whichSide:Number = pathSide.DotProduct(towardFP) < 0 ? 1.0 : -1.0;
+					var whichSide:Number = (pathSide.DotProduct(towardFP) < 0) ? 1.0 : -1.0;
 					return Vector3.VectorAddition(Vector3.ScalarMultiplication(MaxForce * whichSide,Side) , braking);
 				}
 			}
@@ -1349,8 +1366,8 @@ package tabinda.demo.plugins.MapDrive
 		// draw vehicle's body and annotation
 		public function Draw():void
 		{
-			objectMesh.geometry.faces = [];
-			objectMesh.geometry.vertices = [];
+			VehicleMesh.geometry.faces = [];
+			VehicleMesh.geometry.vertices = [];
 				
 			// for now: draw as a 2d bounding box on the groundq
 			var bodyColor:uint = Colors.Black;
@@ -1364,34 +1381,30 @@ package tabinda.demo.plugins.MapDrive
 			var bbFront:Vector3 = Vector3.ScalarMultiplication(halfLength, Forward);
 			var bbHeight:Vector3 = new Vector3(0, 0.1, 0);
 			
-			/*Drawing.DrawQuadrangle(p - bbFront + bbSide + bbHeight,
-							p + bbFront + bbSide + bbHeight,
-							p + bbFront - bbSide + bbHeight,
-							p - bbFront - bbSide + bbHeight,
-							bodyColor);*/
-			
 			var vertA:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(Vector3.VectorSubtraction(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
 			var vertB:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(Vector3.VectorAddition(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
 			var vertC:Vertex3D = Vector3.VectorAddition(Vector3.VectorSubtraction(Vector3.VectorAddition(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
 			var vertD:Vertex3D = Vector3.VectorAddition(Vector3.VectorSubtraction(Vector3.VectorSubtraction(p , bbFront) , bbSide) , bbHeight).ToVertex3D();
 			
-			objectMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+			VehicleMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
 				
 			var color:uint = bodyColor;
+			var colMaterial:ColorMaterial = new ColorMaterial(color, 1);
+			colMaterial.doubleSided = true;
 			
-			var t1:Triangle3D = new Triangle3D(objectMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-			var t2:Triangle3D = new Triangle3D(objectMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+			var t1:Triangle3D = new Triangle3D(VehicleMesh, [vertA,vertB,vertC], colMaterial);
+			var t2:Triangle3D = new Triangle3D(VehicleMesh, [vertD,vertA,vertC], colMaterial);
 				
-			objectMesh.geometry.faces.push(t1);
-			objectMesh.geometry.faces.push(t2);
+			VehicleMesh.geometry.faces.push(t1);
+			VehicleMesh.geometry.faces.push(t2);
 				
-			objectMesh.geometry.ready = true;
+			VehicleMesh.geometry.ready = true;
 
 			// annotate trail
 			var darkGreen:uint = Colors.VectorToHex(new Vector3(0, (255.0 * 0.6), 0));
 			trail.TrailColor = darkGreen;
 			trail.TickColor = Colors.Black;
-			trail.Draw();
+			annotation.DrawAllTrails();
 		}
 
 		// called when steerToFollowPath decides steering is required
@@ -1435,44 +1448,35 @@ package tabinda.demo.plugins.MapDrive
 			var alongRow:Vector3 = new Vector3(xs, 0, 0);
 			var nextRow:Vector3 = new Vector3(-map.xSize, 0, zs);
 			var g:Vector3 = new Vector3((map.xSize - xs) / -2, 0, (map.zSize - zs) / -2);
-			g = Vector3.VectorAddition(g,map.center);
+			g = Vector3.VectorAddition(g, map.center);
+			var orangeRockColor:uint = Colors.VectorToHex(new Vector3((255.0 * 0.5), (255.0 * 0.2), (255.0 * 0.0)));
+			var colMaterial:ColorMaterial = new ColorMaterial(orangeRockColor, 1);
+			colMaterial.doubleSided = true;
 			for (var j:int = 0; j < map.resolution; j++)
 			{
 				for (var i:int = 0; i < map.resolution; i++)
-				{
+				{	
 					if (map.GetMapBit(i, j))
 					{
-						// spikes
-						// Vector3 spikeTop (0, 5.0f, 0);
-						// drawLine (g, g+spikeTop, Color.White);
-
 						// squares
 						var rockHeight:Number = 0.0;
-						var vertA:Vertex3D = new Vertex3D(+xs / 2, rockHeight, +zs / 2);
-						var vertB:Vertex3D = new Vertex3D(+xs / 2, rockHeight, -zs / 2);
-						var vertC:Vertex3D = new Vertex3D( -xs / 2, rockHeight, -zs / 2);
-						var vertD:Vertex3D = new Vertex3D( -xs / 2, rockHeight, +zs / 2);
+						var v1:Vector3 = new Vector3(+xs / 2, rockHeight, +zs / 2);
+						var v2:Vector3 = new Vector3(+xs / 2, rockHeight, -zs / 2);
+						var v3:Vector3 = new Vector3( -xs / 2, rockHeight, -zs / 2);
+						var v4:Vector3 = new Vector3( -xs / 2, rockHeight, +zs / 2);
+						
+						var vertA:Vertex3D = Vector3.VectorAddition(g, v1).ToVertex3D();
+						var vertB:Vertex3D = Vector3.VectorAddition(g, v2).ToVertex3D();
+						var vertC:Vertex3D = Vector3.VectorAddition(g, v3).ToVertex3D();
+						var vertD:Vertex3D = Vector3.VectorAddition(g, v4).ToVertex3D();
 						
 						MapMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
-						
-						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
-						var orangeRockColor:uint = Colors.VectorToHex(new Vector3((255.0 * 0.5), (255.0 * 0.2), (255.0 * 0.0)));
-						//Drawing.DrawQuadrangle(g + v1, g + v2, g + v3, g + v4, orangeRockColor);
 
-						var t1:Triangle3D = new Triangle3D(MapMesh, [vertA,vertB,vertC], new ColorMaterial(orangeRockColor, 1));
-						var t2:Triangle3D = new Triangle3D(MapMesh, [vertD,vertA,vertC], new ColorMaterial(orangeRockColor, 1));
+						var t1:Triangle3D = new Triangle3D(MapMesh, [vertA,vertB,vertC], colMaterial);
+						var t2:Triangle3D = new Triangle3D(MapMesh, [vertD,vertA,vertC], colMaterial);
 							
 						MapMesh.geometry.faces.push(t1);
 						MapMesh.geometry.faces.push(t2);
-				
-						// pyramids
-						// Vector3 top (0, xs/2, 0);
-						// Vector3 redRockColor (0.6f, 0.1f, 0.0f);
-						// Vector3 orangeRockColor (0.5f, 0.2f, 0.0f);
-						// drawTriangle (g+v1, g+v2, g+top, redRockColor);
-						// drawTriangle (g+v2, g+v3, g+top, orangeRockColor);
-						// drawTriangle (g+v3, g+v4, g+top, redRockColor);
-						// drawTriangle (g+v4, g+v1, g+top, orangeRockColor);
 					}
 					g = Vector3.VectorAddition(g,alongRow);
 				}
@@ -1508,11 +1512,7 @@ package tabinda.demo.plugins.MapDrive
 					var endPoint1:Vector3 = Vector3.VectorAddition(path.points[i - 1] , down);
 
 					var legWidth:Number = path.radii[i];
-
-					/*Drawing.DrawXZWideLine(endPoint0, endPoint1, color, legWidth * 2);
-					Drawing.DrawLine(path.points[i], path.points[i - 1], new Color(pathColor));
-					Drawing.DrawXZDisk(legWidth, endPoint0, color, 24);
-					Drawing.DrawXZDisk(legWidth, endPoint1, color, 24);	*/				
+				
 					DrawXZWideLine(endPoint0, endPoint1, color, legWidth * 2);
 					DrawLine(path.points[i], path.points[i - 1], Colors.VectorToHex(pathColor));
 					DrawCircleOrDisk(legWidth, Vector3.Zero,endPoint0, color, 7,true,false);
@@ -1522,12 +1522,12 @@ package tabinda.demo.plugins.MapDrive
 		}
 		
 		private function DrawXZWideLine(startPoint:Vector3, endPoint:Vector3, color:uint, width:Number):void
-		{
+		{			
 			var offset:Vector3 = Vector3.VectorSubtraction(endPoint , startPoint);
 			offset.Normalize();
             var perp:Vector3 = Demo.localSpace.LocalRotateForwardToSide(offset);
 			var radius:Vector3 = Vector3.ScalarMultiplication(width / 2, perp);
-
+			
 			var vertA:Vertex3D = Vector3.VectorAddition(startPoint , radius).ToVertex3D();
 			var vertB:Vertex3D = Vector3.VectorAddition(endPoint , radius).ToVertex3D();
 			var vertC:Vertex3D = Vector3.VectorSubtraction(endPoint , radius).ToVertex3D();
@@ -1536,13 +1536,15 @@ package tabinda.demo.plugins.MapDrive
 			PathMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
 					
 			var color:uint = Colors.RGBToHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
+			var colMaterial:ColorMaterial = new ColorMaterial(color, 1);
+			colMaterial.doubleSided = true;
 			
-			var t1:Triangle3D = new Triangle3D(PathMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-			var t2:Triangle3D = new Triangle3D(PathMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+			var t1:Triangle3D = new Triangle3D(PathMesh, [vertA,vertB,vertC], colMaterial);
+			var t2:Triangle3D = new Triangle3D(PathMesh, [vertD,vertA,vertC], colMaterial);
 				
 			PathMesh.geometry.faces.push(t1);
 			PathMesh.geometry.faces.push(t2);
-				
+			
 			PathMesh.geometry.ready = true;
 		}
 		

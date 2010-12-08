@@ -52,8 +52,6 @@ package tabinda.papersteer
 		private var trailColor:uint;			// Color of the trail
 		private var tickColor:uint;				// Color of the ticks
 		
-		public var lines:Lines3D;
-		
 		/**
 		 * Initializes a new instance of Trail
 		 *
@@ -61,7 +59,7 @@ package tabinda.papersteer
 		 * @param duration The amount of time the trail represents.
 		 * @param vertexCount The number of samples along the trails length
 		 */
-		public function Trail(duration:Number=5,vertexCount:int=1000):void
+		public function Trail(duration:Number=5,vertexCount:int=100)
 		{
 			this.duration = duration;
 
@@ -77,35 +75,19 @@ package tabinda.papersteer
 
 			trailColor = Colors.LightGray;
 			tickColor = Colors.White;
-			
-			lines = new Lines3D(new LineMaterial(0x000000, 1));
 		}
 
 		/**
 		 * Gets or sets the color of the trail.
 		 */
-		public function get TrailColor():uint
-		{
-			return trailColor;
-		}
-		
-		public function set TrailColor(val:uint):void
-		{
-			trailColor = val;
-		}
+		public function get TrailColor():uint { return trailColor; }
+		public function set TrailColor(val:uint):void { trailColor = val; }
 
 		/**
 		 * Gets or sets the color of the ticks.
 		 */
-		public function get TickColor():uint
-		{
-			return tickColor;
-		}
-		
-		public function set TickColor(val:uint):void
-		{
-			tickColor = val;
-		}
+		public function get TickColor():uint { return tickColor; }
+		public function set TickColor(val:uint):void { tickColor = val }
 
 		/**
 		 * Records a position for the current time, called once per update.
@@ -131,12 +113,8 @@ package tabinda.papersteer
 		 * Draws the trail as a dotted line, fading away with age.
 		 * @param	drawer
 		 */
-		public function Draw():void
-		{
-			lines.geometry.faces = [];
-			lines.geometry.vertices = [];
-			lines.removeAllLines();
-			
+		public function Draw(lines:Lines3D):void
+		{			
 			var index:int = currentIndex;
 			for (var j:int = 0; j < vertices.length; j++)
 			{
@@ -159,11 +137,11 @@ package tabinda.papersteer
 					else
 					{
 						// draw trail segments with opacity decreasing with age
-						var minO:Number = 0.05; // minimum opacity
+						var minO:Number = 0.5; // minimum opacity
 						var fraction:Number = Number(j) / vertices.length;
-						var opacity:Number = (fraction * (1 - minO)) + minO;
+						var opacity:Number = fraction - minO;
 						
-						var line2:Line3D = new Line3D(lines, new LineMaterial(color, 1), 2, vertices[index].ToVertex3D(), vertices[next].ToVertex3D());
+						var line2:Line3D = new Line3D(lines, new LineMaterial(color, opacity), 2, vertices[index].ToVertex3D(), vertices[next].ToVertex3D());
 						lines.addLine(line2);
 					}
 				}
@@ -185,10 +163,6 @@ package tabinda.papersteer
 				vertices[i] = Vector3.Zero;
 				flags[i] = 0;
 			}
-			
-			lines.geometry.faces = [];
-			lines.geometry.vertices = [];
-			lines.removeAllLines();
 		}
 	}
 }

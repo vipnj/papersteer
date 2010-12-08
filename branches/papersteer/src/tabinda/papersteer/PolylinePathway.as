@@ -65,7 +65,7 @@ package tabinda.papersteer
 		// construct a PolylinePathway given the number of points (vertices),
 		// an array of points, and a path radius.
 		// takes _pointCount:int,_points:Array,_radius:Number,_cyclic:Boolean
-		public function PolylinePathway(...args):void
+		public function PolylinePathway(...args)
 		{
 			//trace("PolylinePathway.constructor",args[0] is int, args[1] is Vector.<Vector3>, args[2] is Number,args[3] is Boolean);
 			

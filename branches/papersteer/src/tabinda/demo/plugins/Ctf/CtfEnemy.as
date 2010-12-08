@@ -37,7 +37,7 @@ package tabinda.demo.plugins.Ctf
 	public class CtfEnemy extends CtfBase
 	{
 		// constructor
-		public function CtfEnemy ():void
+		public function CtfEnemy ()
 		{
 			Reset ();
 		}
@@ -53,14 +53,14 @@ package tabinda.demo.plugins.Ctf
 		public function Update (currentTime:Number,elapsedTime:Number):void
 		{
 			// determine upper bound for pursuit prediction time
-			var seekerToGoalDist:Number=Vector3.Distance(Globals.HomeBaseCenter,Globals.Seeker.Position);
+			var seekerToGoalDist:Number=Vector3.Distance(Globals.HomeBaseCenter,CtfPlugIn.Seeker.Position);
 			var adjustedDistance:Number=seekerToGoalDist - Radius - Globals.HomeBaseRadius;
-			var seekerToGoalTime:Number=(adjustedDistance < 0)?0:(adjustedDistance / Globals.Seeker.Speed);
+			var seekerToGoalTime:Number=((adjustedDistance < 0)?0:(adjustedDistance / CtfPlugIn.Seeker.Speed));
 			var maxPredictionTime:Number=seekerToGoalTime * 0.9;
 
 			// determine steering (pursuit, obstacle avoidance, or braking)
 			var steer:Vector3=Vector3.Zero;
-			if (Globals.Seeker.State == SeekerState.Running)
+			if (CtfPlugIn.Seeker.State == SeekerState.Running)
 			{
 				var avoidance:Vector3=SteerToAvoidObstacles(Globals.AvoidancePredictTimeMin,Vector.<IObstacle>(AllObstacles));
 
@@ -69,7 +69,7 @@ package tabinda.demo.plugins.Ctf
 
 				if (Avoiding)
 				{
-					steer=SteerForPursuit2(Globals.Seeker,maxPredictionTime);
+					steer=SteerForPursuit2(CtfPlugIn.Seeker,maxPredictionTime);
 				}
 				else
 				{
@@ -84,24 +84,23 @@ package tabinda.demo.plugins.Ctf
 
 			// annotation
 			annotation.VelocityAcceleration (this);
-			//objectMesh.position = Position.ToNumber3D();
 			trail.Record (currentTime,Position);
 
 			// detect and record interceptions ("tags") of seeker
-			var seekerToMeDist:Number=Vector3.Distance(Position,Globals.Seeker.Position);
-			var sumOfRadii:Number=Radius + Globals.Seeker.Radius;
+			var seekerToMeDist:Number=Vector3.Distance(Position,CtfPlugIn.Seeker.Position);
+			var sumOfRadii:Number=Radius + CtfPlugIn.Seeker.Radius;
 			if (seekerToMeDist < sumOfRadii)
 			{
-				if (Globals.Seeker.State == SeekerState.Running)
+				if (CtfPlugIn.Seeker.State == SeekerState.Running)
 				{
-					Globals.Seeker.State=SeekerState.Tagged;
+					CtfPlugIn.Seeker.State=SeekerState.Tagged;
 				}
 
 				// annotation:
-				if (Globals.Seeker.State == SeekerState.Tagged)
+				if (CtfPlugIn.Seeker.State == SeekerState.Tagged)
 				{
 					var color:uint=Colors.RGBToHex(int(255.0 * 0.8),int(255.0 * 0.5),int(255.0 * 0.5));
-					annotation.DiskXZ (sumOfRadii,Vector3.ScalarMultiplication(1/2,Vector3.VectorAddition(Position , Globals.Seeker.Position)),color,20);
+					annotation.DiskXZ (sumOfRadii,Vector3.ScalarMultiplication(1/2,Vector3.VectorAddition(Position , CtfPlugIn.Seeker.Position)),color,20);
 				}
 			}
 		}

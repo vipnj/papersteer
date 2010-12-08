@@ -47,10 +47,10 @@ package tabinda.demo.plugins.Soccer
 		public var trail:Trail;
 		
 		// PV3D variables
-		public var colMat:ColorMaterial;
-		public var uvArr:Array;
-		public var triangle:Triangle3D;
-		public var lines:Lines3D;
+		public var ColorTexture:ColorMaterial;
+		public var UVCoord:Array;
+		public var VehicleFace:Triangle3D;
+		public var LineList:Lines3D;
 		
 		public function Ball (bbox:AABBox)
 		{
@@ -62,17 +62,17 @@ package tabinda.demo.plugins.Soccer
 		
 		public function initPV3D():void
 		{
-			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+			UVCoord = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
 			
-			lines = new Lines3D(new LineMaterial(0x000000, 1));
+			LineList = new Lines3D(new LineMaterial(0x000000, 1));
 			
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			colMat.interactive = false;
+			ColorTexture = new ColorMaterial(0x000000, 1);
+			ColorTexture.doubleSided = false;
+			ColorTexture.interactive = false;
 
-			triangle = new Triangle3D(objectMesh, new Array, colMat, uvArr);
+			VehicleFace = new Triangle3D(VehicleMesh, new Array, ColorTexture, UVCoord);
 			
-			objectMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			VehicleMesh = new TriangleMesh3D(ColorTexture , new Array(), new Array(), null);
 		}
 
 		// reset state
@@ -86,9 +86,15 @@ package tabinda.demo.plugins.Soccer
 			SetPosition (0,0,0);
 			if (trail == null)
 			{
-				trail=new Trail(100,6000);
+				trail = new Trail(100, 6000);
+				annotation.AddTrail(trail);
 			}
-			trail.Clear ();// prevent long streaks due to teleportation 
+			annotation.ClearTrail(trail);// prevent long streaks due to teleportation 
+		}
+		
+		public function removeTrail():void
+		{
+			annotation.RemoveTrail(trail);
 		}
 
 		// per frame simulation update
@@ -131,7 +137,7 @@ package tabinda.demo.plugins.Soccer
 			var p:Vector3 = Position;
 
 			// shape of triangular body
-			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 1, 0)); // slightly up
+			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 0, 0)); // slightly up
 			var f:Vector3 = Vector3.ScalarMultiplication(r,Forward);
 			var s:Vector3 = Vector3.ScalarMultiplication(x * r, Side);
 			var b:Vector3 = Vector3.ScalarMultiplication(-y*r,Forward);
@@ -140,16 +146,16 @@ package tabinda.demo.plugins.Soccer
 			var d:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			var e:Vertex3D = Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			
-			colMat.fillColor = Colors.Green;
+			ColorTexture.fillColor = Colors.Green;
 			
 			// draw double-sided triangle (that is: no (back) face culling)
-			objectMesh.geometry.vertices.push(a,d,e);
+			VehicleMesh.geometry.vertices.push(a,d,e);
 			
-			triangle.reset(objectMesh, [a, d, e], colMat, uvArr);
+			VehicleFace.reset(VehicleMesh, [a, d, e], ColorTexture, UVCoord);
 			
-			objectMesh.geometry.faces.push(triangle);
+			VehicleMesh.geometry.faces.push(VehicleFace);
 
-			objectMesh.geometry.ready = true;
+			VehicleMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
 			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
@@ -159,7 +165,7 @@ package tabinda.demo.plugins.Soccer
 		{
 			if (Demo.IsDrawPhase())
 			{
-				var temp : Number3D = new Number3D(Radius,0,0);
+				var temp : Number3D = new Number3D(radius,0,0);
 				var tempcurve:Number3D = new Number3D(0,0,0);
 				var joinends : Boolean;
 				var i:int;
@@ -197,14 +203,14 @@ package tabinda.demo.plugins.Soccer
 
 				for(i = 0; i < segments ;i++)
 				{
-					var line:Line3D = new Line3D(lines, new LineMaterial(Colors.White), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+					var line:Line3D = new Line3D(LineList, new LineMaterial(Colors.White), 2, vertices[i], vertices[(i+1)%vertices.length]);	
 					line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
-					lines.addLine(line);
+					LineList.addLine(line);
 				}
 			}
 			else
 			{
-				DeferredCircle.AddToBuffer(lines,Radius, axis, center, color, segments, filled, in3d);
+				DeferredCircle.AddToBuffer(LineList,Radius, axis, center, color, segments, filled, in3d);
 			}
 		}
 
@@ -212,16 +218,15 @@ package tabinda.demo.plugins.Soccer
 		// draw this character/vehicle into the scene
 		public function Draw ():void
 		{
-			objectMesh.geometry.vertices = [];
-			objectMesh.geometry.faces = [];
+			VehicleMesh.geometry.vertices = [];
+			VehicleMesh.geometry.faces = [];
 			
-			lines.geometry.faces = [];
-            lines.geometry.vertices = [];
-            lines.removeAllLines();
+			LineList.geometry.faces = [];
+            LineList.geometry.vertices = [];
+            LineList.removeAllLines();
 
-			//Drawing.DrawBasic2dCircularVehicle (this, objectMesh, triArr,uvArr, BodyColor);
 			DrawBasic2dCircularVehicle();
-			trail.Draw ();
+			annotation.DrawTrail(trail);
 		}
 
 		private var m_bbox:AABBox;

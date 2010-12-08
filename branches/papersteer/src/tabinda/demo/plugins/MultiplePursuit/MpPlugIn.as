@@ -50,7 +50,7 @@ package tabinda.demo.plugins.MultiplePursuit
 		public var lines:Lines3D;
 		public var colMat:ColorMaterial
 		
-		public var pluginReset:Boolean;
+		public var ForceRedraw:Boolean;
 		
 		public function MpPlugIn ()
 		{
@@ -84,11 +84,11 @@ package tabinda.demo.plugins.MultiplePursuit
 		public override  function Open ():void
 		{
 			initPV3D();
-			pluginReset = true;
+			ForceRedraw = true;
 			
 			// create the wanderer, saving a pointer to it
 			wanderer = new MpWanderer() ;
-			addPV3DObject(wanderer.objectMesh);
+			addPV3DObject(wanderer.VehicleMesh);
 			addPV3DObject(wanderer.lines);
 			
 			allMP.push (wanderer);
@@ -99,7 +99,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			{
 				var mpPursuer:MpPursuer = new MpPursuer(wanderer);
 				allMP.push (mpPursuer);
-				addPV3DObject(mpPursuer.objectMesh);
+				addPV3DObject(mpPursuer.VehicleMesh);
 				addPV3DObject(mpPursuer.lines);
 			}
 			
@@ -141,7 +141,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			lines.geometry.faces = [];
 			lines.removeAllLines();
 
-			if(pluginReset)
+			if(ForceRedraw)
 			{
 				GridMesh.geometry.faces = [];
 				GridMesh.geometry.vertices = [];
@@ -149,7 +149,7 @@ package tabinda.demo.plugins.MultiplePursuit
 				// draw "ground plane"
 				//Demo.GridUtility (selected.Position,GridMesh);
 				Grid(selected.Position);
-				pluginReset = false;
+				ForceRedraw = false;
 			}
 			// draw each vehicles
 			for (var i:int=0; i < allMP.length; i++)
@@ -171,10 +171,10 @@ package tabinda.demo.plugins.MultiplePursuit
 												 Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.LightGray
+			var gray1:uint = Colors.Gray
 			var gray2:uint = Colors.DarkGray;
 			
-			var size:int = 500;
+			var size:int = 100;
 			var subsquares:int = 50;
 			
 			var half:Number = size / 2;
@@ -201,11 +201,13 @@ package tabinda.demo.plugins.MultiplePursuit
 					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
 					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
 					
-					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					GridMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
+					var colMaterial:ColorMaterial = new ColorMaterial(color, 1);
+					colMaterial.doubleSided = true;
 					
 					var color:uint = flag2 ? gray1 : gray2;
-					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], colMaterial);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], colMaterial);
 					
 					GridMesh.geometry.faces.push(t1);
 					GridMesh.geometry.faces.push(t2);
@@ -215,10 +217,6 @@ package tabinda.demo.plugins.MultiplePursuit
 				}
 				flag1 = !flag1;
 				p += spacing;
-			}
-			if (Papervision3D.useRIGHTHANDED)
-			{
-				GridMesh.geometry.flipFaces();
 			}
 			GridMesh.geometry.ready = true;
 		}
@@ -297,12 +295,12 @@ package tabinda.demo.plugins.MultiplePursuit
 			destoryPV3DObject(lines);
 			destoryPV3DObject(GridMesh);
 			
-			destoryPV3DObject(wanderer.objectMesh);
+			destoryPV3DObject(wanderer.VehicleMesh);
 			destoryPV3DObject(wanderer.lines);
 			
 			for (var i:int=1; i < allMP.length; i++)
 			{
-				destoryPV3DObject(MpPursuer(allMP[i]).objectMesh);
+				destoryPV3DObject(MpPursuer(allMP[i]).VehicleMesh);
 				destoryPV3DObject(MpPursuer(allMP[i]).lines);
 			}
 
@@ -335,7 +333,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			Demo.camera.DoNotSmoothNextMove ();
 			Demo.camera.ResetLocalSpace ();
 			
-			pluginReset = true;
+			ForceRedraw = true;
 		}
 
 		//const AVGroup& allVehicles () {return (const AVGroup&) allMP;}

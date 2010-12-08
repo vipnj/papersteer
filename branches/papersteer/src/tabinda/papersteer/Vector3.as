@@ -50,10 +50,10 @@ package tabinda.papersteer
 		// Special points in Vector Space
 		public static const Zero:Vector3 = new Vector3(0, 0, 0);
 		public static const Up:Vector3 = new Vector3(0, 1, 0);
-		public static const Left:Vector3 = new Vector3(-1, 0, 0);
-		public static const Right:Vector3 = new Vector3(1, 0, 0);
-		public static const Forward:Vector3 = new Vector3(0, 0, 1);
-		public static const Backward:Vector3 = new Vector3(0, 0, -1);
+		public static const Left:Vector3 = new Vector3(-1, 0, 0);		// Right Handed			
+		public static const Right:Vector3 = new Vector3(1, 0, 0);		// Right Handed
+		public static const Forward:Vector3 = new Vector3(0, 0, -1);	// Right Handed
+		public static const Backward:Vector3 = new Vector3(0, 0, 1);	// Right Handed
 		public static const Down:Vector3 = new Vector3(0, -1, 0);
 		public static const UnitX:Vector3=new Vector3(1,0,0);
 		public static const UnitY:Vector3=new Vector3(0,1,0);
@@ -140,10 +140,10 @@ package tabinda.papersteer
 			// Technique 1: Skips divide if lenth is zero
 			// skip divide if length is zero
 			//var len:Number = Magnitude();
-			//return len > 0 ? ScalarDivision(this, len) : this;
+			//return (len>0) ? ScalarDivision(this,len) : (this);
 			
 			// Technique 2: Skips divide if length is 0 or 1 AND uses Multiply instead if division
-			// Multiply is way faster than division. HUGE BOOST
+			// Multiply is way faster than division.
 			var mag:Number = Math.sqrt( this.x*this.x + this.y*this.y + this.z*this.z );
 
 			if( mag != 0 && mag != 1)

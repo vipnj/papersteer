@@ -42,10 +42,12 @@ package tabinda.demo.plugins.Boids
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
+	
+	
 
 	public class BoidsPlugIn extends PlugIn
 	{
-		public var lines:Lines3D;
+		public var highlightGeometry:Lines3D;
 		
 		// flock: a group (STL vector) of pointers to all boids
 		public var flock:Vector.<Boid>;
@@ -65,13 +67,9 @@ package tabinda.demo.plugins.Boids
 			flock = new Vector.<Boid>();
 		}
 		
-		public override function get Name():String 
-		{ return "Boids";}
+		public override function get Name():String { return "Boids"; }
 
-		public override function get SelectionOrderSortKey():Number
-		{
-			return -0.03; 
-		}
+		public override function get SelectionOrderSortKey():Number { return -0.03; }
 
 		public override function Open():void
 		{
@@ -103,8 +101,8 @@ package tabinda.demo.plugins.Boids
 		
 		public function initPV3D():void
 		{
-			lines = new Lines3D(new LineMaterial(0x000000,1));
-			addPV3DObject(lines);
+			highlightGeometry = new Lines3D(new LineMaterial(0x000000,1));
+			addPV3DObject(highlightGeometry);
 		}
 
 		public override function Update(currentTime:Number, elapsedTime:Number):void
@@ -134,12 +132,12 @@ package tabinda.demo.plugins.Boids
 			}
 
 			// Refresh PV3D Lines Object
-			lines.geometry.faces = [];
-            lines.geometry.vertices = [];
-            lines.removeAllLines();
+			highlightGeometry.geometry.faces = [];
+            highlightGeometry.geometry.vertices = [];
+			highlightGeometry.removeAllLines();
 			
 			// highlight vehicle nearest mouse
-			//DrawCircleHighlightOnVehicle(nearMouse, 1, Colors.LightGray);
+			DrawCircleHighlightOnVehicle(nearMouse, 1, Colors.LightGray);
 			
 			// highlight selected vehicle
 			DrawCircleHighlightOnVehicle(selected, 1, Colors.Gray);
@@ -180,28 +178,12 @@ package tabinda.demo.plugins.Boids
 				var radius:Number = v.Radius * radiusMultiplier;  							 // adjusted radius
 				var	center:Vector3 = v.Position;                   							 // center
 				var axis:Vector3 = 	Vector3.VectorSubtraction(v.Position , cPosition);       // view axis
-				var	segments:int = 7;                          						 	 // circle segments
+				var	segments:int = 7;                          						 	 	 // circle segments
 				var filled:Boolean = false;
 				var in3d:Boolean = false;
 				
 				if (Demo.IsDrawPhase())
-				{
-					var ls:LocalSpace = new LocalSpace();
-					
-					if (in3d)
-					{
-						// define a local space with "axis" as the Y/up direction
-						// (XXX should this be a method on  LocalSpace?)
-						var unitAxis:Vector3 = axis;
-						unitAxis.Normalize();
-						var unitPerp:Vector3 = Vector3.FindPerpendicularIn3d(axis);
-						unitPerp.Normalize();
-						ls.Up = unitAxis;
-						ls.Forward = unitPerp;
-						ls.Position = (center);
-						ls.SetUnitSideFromForwardAndUp();
-					}
-					
+				{					
 					var temp : Number3D = new Number3D(radius,0,0);
 					var tempcurve:Number3D = new Number3D(0,0,0);
 					var joinends : Boolean;
@@ -240,14 +222,14 @@ package tabinda.demo.plugins.Boids
 
 					for(i = 0; i < segments ;i++)
 					{
-						var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+						var line:Line3D = new Line3D(highlightGeometry, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
 						line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
-						lines.addLine(line);
+						highlightGeometry.addLine(line);
 					}
 				}
 				else
 				{
-					DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+					DeferredCircle.AddToBuffer(highlightGeometry,radius, axis, center, color, segments, filled, in3d);
 				}
 			}
 		}
@@ -260,7 +242,7 @@ package tabinda.demo.plugins.Boids
 				RemoveBoidFromFlock();
 			}
 			
-			destoryPV3DObject(lines);
+			destoryPV3DObject(highlightGeometry);
 			
 			// delete the proximity database
 			pd = null;
@@ -358,7 +340,7 @@ package tabinda.demo.plugins.Boids
 			flock.push(boid);
 			
 			// PV3D Mesh being added to DisplayList
-			addPV3DObject(boid.objectMesh);
+			addPV3DObject(boid.VehicleMesh);
 			
 			if (population == 1)
 			{
@@ -376,7 +358,7 @@ package tabinda.demo.plugins.Boids
 				flock.splice(population, 1);
 				
 				// PV3D Mesh being Removed from DisplayList
-				destoryPV3DObject(boid.objectMesh);
+				destoryPV3DObject(boid.VehicleMesh);
 				
 				// if it is Demo's selected vehicle, unselect it
 				if (boid == Demo.SelectedVehicle)

@@ -33,7 +33,7 @@
 package tabinda.papersteer
 {
 	/** 
-	 * Pure virtual base class for generic steerable vehicles
+	 * Base class for generic steerable vehicles
 	 * @author Mohammad Haseeb
 	 */
 	public class AbstractVehicle extends LocalSpace implements IVehicle
@@ -42,16 +42,14 @@ package tabinda.papersteer
 		public function get Radius():Number { return 0.0; }
 		public function set Mass(param:Number):void { }
 		public function set Radius(param:Number):void { }
-		
 		public function get Velocity():Vector3 { return new Vector3(); }
 		public function get Acceleration():Vector3 { return new Vector3(); }
-		
 		public function get Speed():Number { return 0.0; }
 		public function set Speed(param:Number):void {}
-        public function PredictFuturePosition(predictionTime:Number):Vector3 { return new Vector3(); }
-		public function get MaxForce():Number { return 0.0; }
+        public function get MaxForce():Number { return 0.0; }
 		public function get MaxSpeed():Number { return 0.0; }
 		public function set MaxForce(param:Number):void{}
 		public function set MaxSpeed(param:Number):void { }
+		public function PredictFuturePosition(predictionTime:Number):Vector3 { return new Vector3(); }
 	}
 }

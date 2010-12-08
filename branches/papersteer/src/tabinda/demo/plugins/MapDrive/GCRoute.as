@@ -48,7 +48,7 @@ package tabinda.demo.plugins.MapDrive
 		// construct a GCRoute given the number of points (vertices), an
 		// array of points, an array of per-segment path radii, and a flag
 		// indiating if the path is connected at the end.
-		public function GCRoute (_pointCount:int,_points:Vector.<Vector3>,_radii:Vector.<Number>,_cyclic:Boolean):void
+		public function GCRoute (_pointCount:int,_points:Vector.<Vector3>,_radii:Vector.<Number>,_cyclic:Boolean)
 		{
 			Initialize (_pointCount,_points,_radii[0],_cyclic);
 

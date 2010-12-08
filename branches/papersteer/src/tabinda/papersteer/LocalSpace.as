@@ -33,8 +33,6 @@
 package tabinda.papersteer
 {
 	import org.papervision3d.Papervision3D;
-	import tabinda.papersteer.Vector3;
-	
 	/// <summary>
 	/// LocalSpaceMixin is a mixin layer, a class template with a paramterized base
 	/// class.  Allows "LocalSpace-ness" to be layered on any class.
@@ -53,48 +51,24 @@ package tabinda.papersteer
 		/// <summary>
 		/// Gets or sets the side.
 		/// </summary>
-		public function get Side ():Vector3
-		{
-			return side;
-		}
-		public function set Side (val:Vector3):void
-		{
-			side = val;
-		}
+		public function get Side ():Vector3	{ return side; }
+		public function set Side (val:Vector3):void { side = val; }
 
 		/// <summary>
 		/// Gets or sets the up.
 		/// </summary>
-		public function get Up ():Vector3
-		{
-			return up;
-		}
-		public function set Up (val:Vector3):void
-		{
-			up = val;
-		}
+		public function get Up ():Vector3 { return up; }
+		public function set Up (val:Vector3):void { up = val; }
 		/// <summary>
 		/// Gets or sets the forward.
 		/// </summary>
-		public function get Forward ():Vector3
-		{
-			return forward;
-		}
-		public function set Forward (val:Vector3):void
-		{
-			forward = val;
-		}
+		public function get Forward ():Vector3 { return forward; }
+		public function set Forward (val:Vector3):void { forward = val; }
 		/// <summary>
 		/// Gets or sets the position.
 		/// </summary>
-		public function get Position ():Vector3
-		{
-			return position;
-		}
-		public function set Position (val:Vector3):void
-		{
-			position = val;
-		}
+		public function get Position ():Vector3 { return position; }
+		public function set Position (val:Vector3):void	{ position = val; }
 		
 		public function SetUp (x:Number,y:Number,z:Number):Vector3
 		{
@@ -127,7 +101,6 @@ package tabinda.papersteer
 		// overloaded in derived types (e.g. vehicles) to change handedness.
 		public function get IsRightHanded ():Boolean
 		{
-			Papervision3D.useRIGHTHANDED = true;
 			return true;
 		}
 
@@ -135,7 +108,7 @@ package tabinda.papersteer
 		// constructor
 
 		// Takes param1=up, param2=forward, param3=position, param4=side=can be null
-		public function LocalSpace (...args):void
+		public function LocalSpace (...args)
 		{
 			//trace("LocalSpace.constructor", args[0] is Vector3, args[1] is Vector3, args[2] is Vector3, args[3] is Vector3);
 			if (args.length == 4)

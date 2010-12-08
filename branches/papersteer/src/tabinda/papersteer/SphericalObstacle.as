@@ -43,7 +43,7 @@ package tabinda.papersteer
         public var Center:Vector3;
 
 		// constructor
-		public function SphericalObstacle(...args):void
+		public function SphericalObstacle(...args)
 		{
 			//trace("SphericalObstacle.constructor",args[0] is Number, args[1] is Vector3);
 			
@@ -58,16 +58,8 @@ package tabinda.papersteer
 			}
 		}
 
-		public function get SeenFrom():int
-		{
-			return seenfrom;
-			
-		}
-		public function set SeenFrom(val:int):void
-		{
-			seenfrom = val;
-		}
-		
+		public function get SeenFrom():int { return seenfrom; }
+		public function set SeenFrom(val:int):void { seenfrom = val; }
 
 		// XXX 4-23-03: Temporary work around (see comment above)
 		//
@@ -90,7 +82,7 @@ package tabinda.papersteer
 			var minDistanceToCenter:Number = (minDistanceToCollision + Radius)+0.0;
 
 			// contact distance: sum of radii of obstacle and vehicle
-			var totalRadius:Number = (Radius + v.Radius)+0.0;
+			var totalRadius:Number = (Radius + v.Radius);
 
 			// obstacle center relative to vehicle position
 			var localOffset: Vector3 = Vector3.VectorSubtraction(Center, v.Position);

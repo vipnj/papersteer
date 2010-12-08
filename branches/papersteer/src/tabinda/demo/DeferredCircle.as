@@ -32,6 +32,7 @@
 
 package tabinda.demo
 {
+	import org.papervision3d.core.geom.Lines3D;
 	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.materials.special.LineMaterial;
@@ -56,12 +57,12 @@ package tabinda.demo
 			}
 		}
 
-		public static function AddToBuffer(object:*,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int,filled:Boolean, in3d:Boolean):void
+		public static function AddToBuffer(drawer:Lines3D,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int,filled:Boolean, in3d:Boolean):void
 		{
 			
 			if (index < size)
 			{
-				deferredCircleArray[index].object = object;
+				deferredCircleArray[index].drawer = drawer;
 				deferredCircleArray[index].radius = radius;
 				deferredCircleArray[index].axis = axis;
 				deferredCircleArray[index].center = center;
@@ -83,14 +84,14 @@ package tabinda.demo
 			for (var i:int = 0; i < index; i++)
 			{
 				var dc:DeferredCircle = deferredCircleArray[i];
-				DrawCircleOrDisk(dc.object,dc.radius, dc.axis, dc.center, dc.color, dc.segments, dc.filled, dc.in3d);
+				DrawCircle(dc.drawer,dc.radius, dc.axis, dc.center, dc.color, dc.segments, dc.filled, dc.in3d);
 			}
 
 			// reset buffer index
 			index = 0;
 		}
 		
-		public static function DrawCircleOrDisk(object:*,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
+		public static function DrawCircle(drawer:Lines3D,radius:Number, axis:Vector3, center:Vector3, color:uint, segments:int, filled:Boolean, in3d:Boolean):void
 		{
 			var temp : Number3D = new Number3D(radius,0,0);
 			var tempcurve:Number3D = new Number3D(0,0,0);
@@ -117,8 +118,8 @@ package tabinda.demo
 		   
 			temp.rotateY(0);
 
-			var vertices:Array = new Array();
-			var curvepoints:Array = new Array();
+			var vertices:Vector.<Vertex3D> = new Vector.<Vertex3D>();
+			var curvepoints:Vector.<Vertex3D> = new Vector.<Vertex3D>();
 
 			for(i = 0; i< pointcount;i++)
 			{
@@ -130,13 +131,13 @@ package tabinda.demo
 
 			for(i = 0; i < segments ;i++)
 			{
-				var line:Line3D = new Line3D(object, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+				var line:Line3D = new Line3D(drawer, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
 				line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
-				object.addLine(line);
+				drawer.addLine(line);
 			}
 		}
 		
-		private var object:*;
+		private var drawer:Lines3D;
 		private var radius:Number;
 		private var axis:Vector3;
 		private var center:Vector3;

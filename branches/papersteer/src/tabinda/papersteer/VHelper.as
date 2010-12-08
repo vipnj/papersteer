@@ -302,7 +302,7 @@ package tabinda.papersteer
 
             // return the cross product (direction x quasiPerp)
             // which is guaranteed to be perpendicular to both of them
-            result = Vector3.CrossProduct(direction, quasiPerp);
+            result = new Vector3((direction.y * quasiPerp.z) - (direction.z * quasiPerp.y), (direction.z * quasiPerp.x) - (direction.x * quasiPerp.z), (direction.x * quasiPerp.y) - (direction.y * quasiPerp.x));
 
             return result;
         }

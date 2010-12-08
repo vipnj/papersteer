@@ -40,5 +40,25 @@ package tabinda.papersteer
 		public var surfacePoint:Vector3;
 		public var surfaceNormal:Vector3;
 		public var obstacle:SphericalObstacle;
+		
+		public function PathIntersection(_intersect:Boolean=false,_distance:Number=0,_surfacePoint:Vector3=null,_surfaceNormal:Vector3=null,_obstacle:SphericalObstacle=null):void
+		{
+			intersect = _intersect;
+			distance = _distance;
+			if (_surfacePoint == null) 
+				surfacePoint = new Vector3(0, 0, 0);
+			else 
+				surfacePoint = _surfacePoint;
+				
+			if (_surfaceNormal == null) 
+				surfaceNormal = new Vector3(0, 0, 0);
+			else 
+				surfaceNormal = _surfaceNormal;
+			
+			if (_obstacle == null) 
+				obstacle = new SphericalObstacle();
+			else 
+				obstacle = _obstacle;	
+		}
 	}
 }

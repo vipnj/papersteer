@@ -103,7 +103,7 @@ package tabinda.papersteer
 		public static  function RemapInterval (x:Number,in0:Number,in1:Number,out0:Number,out1:Number):Number
 		{
 			// uninterpolate: what is x relative to the interval in0:in1?
-			var relative:Number=((x - in0) / (in1 - in0))+0.0;
+			var relative:Number=((x - in0) / (in1 - in0));
 
 			// now interpolate between output interval based on relative x
 			return Interpolate(relative,out0,out1);
@@ -161,7 +161,7 @@ package tabinda.papersteer
 		 */
 		public static  function ScalarRandomWalk (initial:Number,walkspeed:Number,min:Number,max:Number):Number
 		{
-			var next:Number=initial + (((Math.random() * 2) - 1) * walkspeed)+0.0;
+			var next:Number=initial + (((Math.random() * 2) - 1) * walkspeed);
 			if (next < min)
 			{
 				return min;
