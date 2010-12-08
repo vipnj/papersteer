@@ -90,7 +90,9 @@ package tabinda.papersteer
 		// constructor
 		public function Clock()
 		{
-			instance = getTimer()+0.0;
+			// calendar time when this clock was first started
+			instance = getTimer() + 0.0;
+			
 			// default is "real time, variable frame rate" and not paused
 			FixedFrameRate = 0;
 			PausedState = false;
@@ -199,7 +201,7 @@ package tabinda.papersteer
 		{
 			if (instance == 0)
 			{
-				instance = getTimer();
+				instance = getTimer()/1000;
 			}
 			return (getTimer() - instance)/1000;
 		}
@@ -248,52 +250,7 @@ package tabinda.papersteer
 				do { } while (RealTimeSinceFirstClockUpdate() < nextFrameTime);
 			}
 		}
-
-		public function get FixedFrameRate():int
-		{
-			return fixedFrameRate;
-		}
 		
-		public function set FixedFrameRate(val:int):void
-		{
-			fixedFrameRate = val;
-		}
-
-		public function get AnimationMode():Boolean
-		{
-			return animationMode; 
-		}
-		
-		public function set AnimationMode(val:Boolean):void
-		{
-			animationMode = val; 
-		}
-		
-		public function get VariableFrameRateMode():Boolean
-		{
-			return variableFrameRateMode; 
-		}
-		
-		public function set VariableFrameRateMode(val:Boolean):void
-		{
-			variableFrameRateMode = val; 
-		}
-		
-		public function TogglePausedState():Boolean
-		{
-			return (paused = !paused);
-		}
-
-		public function get PausedState():Boolean
-		{
-			return paused;
-		}
-		
-		public function set PausedState(val:Boolean):void
-		{
-			paused = val; 
-		}
-
 		private function UpdateSmoothedRegisters():void
 		{
 			var rate:Number = SmoothingRate;
@@ -306,52 +263,28 @@ package tabinda.papersteer
 					smoothedUsage = Utilities.BlendIntoAccumulator(rate, Usage, smoothedUsage);
 			}
 		}
+		
+		public function TogglePausedState():Boolean	{ return (paused = !paused); }
 
-		public function get SmoothedFPS():Number
-		{
-			return smoothedFPS;
-		}
-		public function get SmoothedUsage():Number
-		{
-			 return smoothedUsage;
-		}
-		public function get SmoothingRate():Number
-		{
-			return smoothedFPS == 0.0 ? 1.0 : elapsedRealTime * 1.5; 
-		}
-		public function get Usage():Number
-		{
-			// run time per frame over target frame time (as a percentage)
-			return ((100 * elapsedNonWaitRealTime) / (1.0 / fixedFrameRate)); 
-		}
-
-		public function get TotalRealTime():Number
-		{
-			 return totalRealTime; 
-		}
-		public function get TotalSimulationTime():Number
-		{
-			 return totalSimulationTime; 
-		}
-		public function get TotalPausedTime():Number
-		{
-			return totalPausedTime; 
-		}
-		public function get TotalAdvanceTime():Number
-		{
-			 return totalAdvanceTime; 
-		}
-		public function get ElapsedSimulationTime():Number
-		{
-			return elapsedSimulationTime; 
-		}
-		public function get ElapsedRealTime():Number
-		{
-			 return elapsedRealTime; 
-		}
-		public function get ElapsedNonWaitRealTime():Number
-		{
-			return elapsedNonWaitRealTime; 
-		}
+		// run time per frame over target frame time (as a percentage)
+		public function get Usage():Number { return ((60 * elapsedNonWaitRealTime) / (1.0 / fixedFrameRate)); }
+		public function get FixedFrameRate():int { return fixedFrameRate;	}
+		public function set FixedFrameRate(val:int):void { fixedFrameRate = val; }
+		public function get AnimationMode():Boolean { return animationMode; }
+		public function set AnimationMode(val:Boolean):void { animationMode = val; }
+		public function get VariableFrameRateMode():Boolean { return variableFrameRateMode; }		
+		public function set VariableFrameRateMode(val:Boolean):void { variableFrameRateMode = val; }
+		public function get PausedState():Boolean{return paused;}	
+		public function set PausedState(val:Boolean):void { paused = val; }
+		public function get SmoothedFPS():Number { return smoothedFPS; }
+		public function get SmoothedUsage():Number { return smoothedUsage; }
+		public function get SmoothingRate():Number { return smoothedFPS == 0.0 ? 1.0 : elapsedRealTime * 1.5; }
+		public function get TotalRealTime():Number { return totalRealTime; }
+		public function get TotalSimulationTime():Number { return totalSimulationTime; }
+		public function get TotalPausedTime():Number { return totalPausedTime; }
+		public function get TotalAdvanceTime():Number { return totalAdvanceTime; }
+		public function get ElapsedSimulationTime():Number { return elapsedSimulationTime; }
+		public function get ElapsedRealTime():Number { return elapsedRealTime; }
+		public function get ElapsedNonWaitRealTime():Number { return elapsedNonWaitRealTime; }
 	}
 }

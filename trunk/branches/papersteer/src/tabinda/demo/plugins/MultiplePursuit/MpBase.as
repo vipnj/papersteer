@@ -62,8 +62,8 @@ package tabinda.demo.plugins.MultiplePursuit
 			colMat.doubleSided = false;
 			colMat.interactive = false;
 
-			triangle = new Triangle3D(objectMesh, new Array, colMat, uvArr);
-			objectMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			triangle = new Triangle3D(VehicleMesh, new Array, colMat, uvArr);
+			VehicleMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
 			
 			Reset ();
 		}
@@ -84,16 +84,16 @@ package tabinda.demo.plugins.MultiplePursuit
 		// draw into the scene
 		public function Draw ():void
 		{
-			objectMesh.geometry.vertices = [];
-			objectMesh.geometry.faces = [];
+			VehicleMesh.geometry.vertices = [];
+			VehicleMesh.geometry.faces = [];
 			
 			lines.geometry.faces = [];
             lines.geometry.vertices = [];
             lines.removeAllLines();
 			
-			//Drawing.DrawBasic2dCircularVehicle (this,objectMesh,triArr,uvArr,bodyColor);
 			DrawBasic2dCircularVehicle ();
-			//trail.Draw (Annotation.drawer);
+			
+			annotation.DrawAllTrails();
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -107,7 +107,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			var p:Vector3 = Position;
 
 			// shape of triangular body
-			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 1, 0)); // slightly up
+			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 0, 0)); // slightly up
 			var f:Vector3 = Vector3.ScalarMultiplication(r,Forward);
 			var s:Vector3 = Vector3.ScalarMultiplication(x * r, Side);
 			var b:Vector3 = Vector3.ScalarMultiplication(-y*r,Forward);
@@ -116,15 +116,16 @@ package tabinda.demo.plugins.MultiplePursuit
 			var d:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			var e:Vertex3D = Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			
-			colMat.fillColor = Colors.Gray;
+			colMat.fillColor = bodyColor;
+			
 			// draw double-sided triangle (that is: no (back) face culling)
-			objectMesh.geometry.vertices.push(a,d,e);
+			VehicleMesh.geometry.vertices.push(a,d,e);
 			
-			triangle.reset(objectMesh, [a, d, e], colMat, uvArr);
+			triangle.reset(VehicleMesh, [a, d, e], colMat, uvArr);
 			
-			objectMesh.geometry.faces.push(triangle);
+			VehicleMesh.geometry.faces.push(triangle);
 
-			objectMesh.geometry.ready = true;
+			VehicleMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
 			DrawXZCircle(r, Vector3.VectorAddition(p , u), Colors.White, 7);
@@ -135,7 +136,7 @@ package tabinda.demo.plugins.MultiplePursuit
 			if (Demo.IsDrawPhase())
 			{
 				var axis:Vector3 = Vector3.Zero;
-				var temp : Number3D = new Number3D(Radius,0,0);
+				var temp : Number3D = new Number3D(radius,0,0);
 				var tempcurve:Number3D = new Number3D(0,0,0);
 				var joinends : Boolean;
 				var i:int;

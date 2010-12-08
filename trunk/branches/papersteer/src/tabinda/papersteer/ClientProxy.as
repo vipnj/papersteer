@@ -57,7 +57,7 @@ package tabinda.papersteer
 			// the obj's location ("key point") used for spatial sorting
 			public var Position:Vector3;
 
-			public function ClientProxy(obj:Object):void
+			public function ClientProxy(obj:Object)
 			{
 				Obj = obj;
 			}

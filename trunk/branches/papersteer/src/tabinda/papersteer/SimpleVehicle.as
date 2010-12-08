@@ -37,7 +37,7 @@ package tabinda.papersteer
 	
 	public class SimpleVehicle extends SteerLibrary
 	{
-		public var objectMesh:TriangleMesh3D;			// For Papervision3D
+		public var VehicleMesh:TriangleMesh3D;			// For Papervision3D
 		
 		// give each vehicle a unique number
 		private var _SerialNumber:int;
@@ -104,61 +104,27 @@ package tabinda.papersteer
 		}
 
 		// get/set Mass
-		public override function get Mass ():Number
-		{
-			return mass;
-		}
-		public override function set Mass (val:Number):void
-		{
-			mass=val;
-		}
+		public override function get Mass ():Number { return mass; }
+		public override function set Mass (val:Number):void { mass = val; }
 
 		// get velocity of vehicle
-		public override function get Velocity ():Vector3
-		{
-			return Vector3.ScalarMultiplication(speed,Forward);
-		}
+		public override function get Velocity ():Vector3 { return Vector3.ScalarMultiplication(speed, Forward); }
 
 		// get/set speed of vehicle  (may be faster than taking mag of velocity)
-		public override function get Speed ():Number
-		{
-			return speed;
-		}
-		public override function set Speed (val:Number):void
-		{
-			speed=val;
-		}
+		public override function get Speed ():Number { return speed; }
+		public override function set Speed (val:Number):void { speed = val; }
 
 		// size of bounding sphere, for obstacle avoidance, etc.
-		public override function get Radius ():Number
-		{
-			return radius;
-		}
-		public override  function set Radius (val:Number):void
-		{
-			radius=val;
-		}
+		public override function get Radius ():Number { return radius; }
+		public override  function set Radius (val:Number):void { radius = val; }
 
 		// get/set maxForce
-		public override function get MaxForce ():Number
-		{
-			return maxForce;
-		}
-		public override function set MaxForce (val:Number):void
-		{
-			maxForce=val;
-		}
+		public override function get MaxForce ():Number { return maxForce; }
+		public override function set MaxForce (val:Number):void { maxForce = val; }
 
 		// get/set maxSpeed
-		public override function get MaxSpeed ():Number
-		{
-			return maxSpeed;
-		}
-		public override function set MaxSpeed (val:Number):void
-		{
-			maxSpeed=val;
-		}
-
+		public override function get MaxSpeed ():Number{return maxSpeed;}
+		public override function set MaxSpeed (val:Number):void { maxSpeed = val; }
 
 		// apply a given steering force to our momentum,
 		// adjusting our orientation to maintain velocity-alignment.
@@ -189,7 +155,7 @@ package tabinda.papersteer
 
 			// update Speed
 			Speed=newVelocity.Magnitude();
-
+			
 			// Euler integrate (per frame) velocity into position
 			Position=Vector3.VectorAddition(Position , Vector3.ScalarMultiplication(elapsedTime,newVelocity));
 
@@ -276,7 +242,7 @@ package tabinda.papersteer
 		{
 			var rawBraking:Number=(Speed * rate);
 			var clipBraking:Number=((rawBraking < MaxForce)?rawBraking:MaxForce);
-			Speed=(Speed - (clipBraking * deltaTime));
+			Speed = (Speed - (clipBraking * deltaTime));
 		}
 
 		// predict position of this vehicle at some time in the future
@@ -287,62 +253,37 @@ package tabinda.papersteer
 		}
 
 		// get instantaneous curvature (since last update)
-		public function get Curvature ():Number
-		{
-			return curvature;
-		}
+		public function get Curvature ():Number	{return curvature;}
 
 		// get/reset smoothedCurvature, smoothedAcceleration and smoothedPosition
-		public function get SmoothedCurvature ():Number
-		{
-			return smoothedCurvature;
-		}
-		public function ResetSmoothedCurvature ():Number
-		{
-			return ResetSmoothedCurvature2(0);
-		}
-		public function ResetSmoothedCurvature2 (val:Number):Number
-		{
+		public function get SmoothedCurvature ():Number	{ return smoothedCurvature; }
+		
+		public function ResetSmoothedCurvature (val:Number = 0):Number 
+		{ 
 			lastForward=Vector3.Zero;
 			lastPosition=Vector3.Zero;
 			return smoothedCurvature=curvature=val;
 		}
 
-		public override function get Acceleration ():Vector3
-		{
-			return acceleration;
-		}
+		public override function get Acceleration ():Vector3 { return acceleration; }
 		
 		public function get SerialNumber():int { return _SerialNumber; }
 		
-		public function ResetAcceleration ():Vector3
-		{
-			return ResetAcceleration2(Vector3.Zero);
-		}
-		public function ResetAcceleration2 (val:Vector3):Vector3
-		{
-			return acceleration=val;
-		}
+		public function ResetAcceleration ():Vector3 { return ResetAcceleration2(Vector3.Zero); }
+		public function ResetAcceleration2 (val:Vector3):Vector3 { return acceleration = val; }
 
-		public function SmoothedPosition ():Vector3
-		{
-			return smoothedPosition;
-		}
-		public function callResetSmoothedPosition ():Vector3
-		{
-			return ResetSmoothedPosition(Vector3.Zero);
-		}
-		public function ResetSmoothedPosition (val:Vector3):Vector3
-		{
-			return smoothedPosition=val;
-		}
+		public function SmoothedPosition ():Vector3 { return smoothedPosition; }
+		
+		public function callResetSmoothedPosition ():Vector3 { return ResetSmoothedPosition(Vector3.Zero); }
+		
+		public function ResetSmoothedPosition (val:Vector3):Vector3 { return smoothedPosition = val; }
 
 		// set a random "2D" heading: set local Up to global Y, then effectively
 		// rotate about it by a random angle (pick random forward, derive side).
 		public function RandomizeHeadingOnXZPlane ():void
 		{
 			Up=Vector3.Up;
-			Forward=VHelper.RandomUnitVectorOnXZPlane();
+			Forward = VHelper.RandomUnitVectorOnXZPlane();
 			Side=LocalRotateForwardToSide(Forward);
 		}
 
@@ -351,10 +292,10 @@ package tabinda.papersteer
 		{
 			if (elapsedTime > 0)
 			{
-				var dP:Vector3=Vector3.VectorSubtraction(lastPosition , Position);
+				var dP:Vector3 = Vector3.VectorSubtraction(lastPosition , Position);
 				var dF:Vector3 = Vector3.ScalarMultiplication(1/dP.Magnitude(),Vector3.VectorSubtraction(lastForward , Forward));
-				var lateral:Vector3=VHelper.PerpendicularComponent(dF,Forward);
-				var sign:Number=lateral.DotProduct(Side) < 0?1.0:-1.0;
+				var lateral:Vector3 = VHelper.PerpendicularComponent(dF, Forward);
+				var sign:Number = (lateral.DotProduct(Side) < 0)?1.0: -1.0;
 				curvature=lateral.Magnitude() * sign;
 				smoothedCurvature = Utilities.BlendIntoAccumulator (elapsedTime * 4.0,curvature,smoothedCurvature);
 				lastForward=Forward;

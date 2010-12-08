@@ -36,36 +36,27 @@ package tabinda.demo.plugins.Ctf
 	
 	public class Globals
 	{
-		public static  const HomeBaseCenter:Vector3=new Vector3(0,0,0);
-		public static const HomeBaseRadius:Number=1.5;
+		public static const HomeBaseCenter:Vector3 = new Vector3(0, 0, 0);
+		public static const HomeBaseRadius:Number = 1.5;
 
-		public static const MinStartRadius:Number=30.0;
-		public static const MaxStartRadius:Number=40.0;
+		public static const MinStartRadius:Number = 30.0;
+		public static const MaxStartRadius:Number = 40.0;
+		
+		public static const BrakingRate:Number = 0.75;
 
-		public static const BrakingRate:Number=0.75;
+		public static const EvadeColor:uint = Colors.RGBToHex(int(255.0 * 0.6), int(255.0 * 0.6), int(255.0 * 0.3));// annotation
+		public static const SeekColor:uint = Colors.RGBToHex(int(255.0 * 0.3), int(255.0 * 0.6), int(255.0 * 0.6));// annotation
+		public static const ClearPathColor:uint = Colors.RGBToHex(int(255.0 * 0.3), int(255.0 * 0.6), int(255.0 * 0.3));// annotation
 
-		public static  const EvadeColor:uint=Colors.RGBToHex(int(255.0 * 0.6),int(255.0 * 0.6),int(255.0 * 0.3));// annotation
-		public static  const SeekColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.6),int(255.0 * 0.6));// annotation
-		public static  const ClearPathColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.6),int(255.0 * 0.3));// annotation
+		public static const AvoidancePredictTimeMin:Number = 0.9;
+		public static const AvoidancePredictTimeMax:Number = 2;
+		public static var AvoidancePredictTime:Number = AvoidancePredictTimeMin;
 
-		public static const AvoidancePredictTimeMin:Number=0.9;
-		public static const AvoidancePredictTimeMax:Number=2;
-		public static  var AvoidancePredictTime:Number=AvoidancePredictTimeMin;
-
-		public static  var EnableAttackSeek:Boolean=true;// for testing (perhaps retain for UI control?)
-		public static  var EnableAttackEvade:Boolean=true;// for testing (perhaps retain for UI control?)
-
-		public static  var Seeker:CtfSeeker=null;
-
+		public static var EnableAttackSeek:Boolean = true;// for testing (perhaps retain for UI control?)
+		public static var EnableAttackEvade:Boolean = true;// for testing (perhaps retain for UI control?)
+		
 		// count the number of times the simulation has reset (e.g. for overnight runs)
-		public static  var ResetCount:int=0;
+		public static var ResetCount:int = 0;
 
-		// state for OpenSteerDemo PlugIn
-		//
-		// XXX consider moving this inside CtfPlugIn
-		// XXX consider using STL (any advantage? consistency?)
-		public static  var ctfSeeker:CtfSeeker=null;
-		public static  var CtfEnemyCount:int=4;
-		public static  var CtfEnemies:Array=new Array(CtfEnemyCount);
 	}
 }

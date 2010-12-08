@@ -45,8 +45,6 @@ package tabinda.demo.plugins.Pedester
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
-	
-	
 
 	public class PedestrianPlugIn extends PlugIn
 	{
@@ -75,7 +73,7 @@ package tabinda.demo.plugins.Pedester
 		private var textFont:Font3D;
 		private var textMat:Letter3DMaterial;
 		
-		public var pluginReset:Boolean;
+		public var ForceRedraw:Boolean;
 		
 		public function PedestrianPlugIn()
 		{			
@@ -113,7 +111,7 @@ package tabinda.demo.plugins.Pedester
 		public override function Open():void
 		{
 			initPV3D();
-			pluginReset = true;
+			ForceRedraw = true;
 			
 			// make the database used to accelerate proximity queries
 			cyclePD = -1;
@@ -163,7 +161,7 @@ package tabinda.demo.plugins.Pedester
 			if (Demo.SelectedVehicle != null) gridCenter = selected.Position;
 			
 			// We do  this because PV3D and AS3 are not Canvas based Drawers
-			if(pluginReset)
+			if(ForceRedraw)
 			{
 				pathAndObsGeometry.geometry.faces = [];
 				pathAndObsGeometry.geometry.vertices = [];
@@ -175,9 +173,10 @@ package tabinda.demo.plugins.Pedester
 				
 				GridMesh.geometry.faces = [];
 				GridMesh.geometry.vertices = [];
+				
 				Grid(gridCenter);
 				
-				pluginReset = false;
+				ForceRedraw = false;
 			}
 			
 			highlightGeometry.geometry.faces = [];
@@ -188,7 +187,6 @@ package tabinda.demo.plugins.Pedester
 			for (var i:int = 0; i < crowd.length; i++) crowd[i].Draw();
 
 			// highlight Pedestrian nearest mouse
-			//Demo.HighlightVehicleUtility(nearMouse);
 			HighlightVehicleUtility(nearMouse);
 			
 			// textual annotation (at the vehicle's screen position)
@@ -272,10 +270,10 @@ package tabinda.demo.plugins.Pedester
 												 Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.LightGray
+			var gray1:uint = Colors.Gray;
 			var gray2:uint = Colors.DarkGray;
 			
-			var size:int = 500;
+			var size:int = 50;
 			var subsquares:int = 50;
 			
 			var half:Number = size / 2;
@@ -292,7 +290,7 @@ package tabinda.demo.plugins.Pedester
 				for (var j:int = 0; j < subsquares; j++)
 				{
 					corner.x = p;
-					corner.y = -1;
+					corner.y = 0;
 					corner.z = q;
 
 					corner = Vector3.VectorAddition(corner, center);
@@ -302,11 +300,13 @@ package tabinda.demo.plugins.Pedester
 					var vertC:Vertex3D = Vector3.VectorAddition(corner, new Vector3(spacing, 0, spacing)).ToVertex3D();
 					var vertD:Vertex3D = Vector3.VectorAddition(corner, new Vector3(0, 0, spacing)).ToVertex3D();
 					
-					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
+					GridMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
+					var colMaterial:ColorMaterial = new ColorMaterial(color, 1);
+					colMaterial.doubleSided = true;
 					
 					var color:uint = flag2 ? gray1 : gray2;
-					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1),uvArr);
-					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1),uvArr);
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], colMaterial);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], colMaterial);
 					
 					GridMesh.geometry.faces.push(t1);
 					GridMesh.geometry.faces.push(t2);
@@ -316,10 +316,6 @@ package tabinda.demo.plugins.Pedester
 				}
 				flag1 = !flag1;
 				p += spacing;
-			}
-			if (Papervision3D.useRIGHTHANDED)
-			{
-				GridMesh.geometry.flipFaces();
 			}
 			GridMesh.geometry.ready = true;
 		}
@@ -359,9 +355,7 @@ package tabinda.demo.plugins.Pedester
 				if (i > 0) DrawLine(path.points[i], path.points[i - 1], Colors.Red);
 				//if (i > 0) Drawing.DrawLine(path.points[i], path.points[i - 1], Colors.Red);
 
-			// draw obstacles
-			//Drawing.DrawXZCircle(Globals.Obstacle1.Radius, Globals.Obstacle1.Center, Colors.White, 40);
-			//Drawing.DrawXZCircle(Globals.Obstacle2.Radius, Globals.Obstacle2.Center, Colors.White, 40);			
+			// draw obstacles			
 			DrawCircleOrDisk(pathAndObsGeometry,Globals.Obstacle1.Radius, Vector3.Zero,Globals.Obstacle1.Center, Colors.White, 7,false,false);
 			DrawCircleOrDisk(pathAndObsGeometry,Globals.Obstacle2.Radius, Vector3.Zero,Globals.Obstacle2.Center, Colors.White, 7,false,false);
 		}
@@ -459,7 +453,7 @@ package tabinda.demo.plugins.Pedester
 			// make camera jump immediately to new position
 			Demo.camera.DoNotSmoothNextMove();
 			
-			pluginReset = true;
+			ForceRedraw = true;
 		}
 
 		public override function HandleFunctionKeys(key:uint):void
@@ -494,8 +488,8 @@ package tabinda.demo.plugins.Pedester
 			var pedestrian:Pedestrian = new Pedestrian(pd);
 			crowd.push(pedestrian);
 			
-			addPV3DObject(pedestrian.objectMesh);
-			addPV3DObject(pedestrian.trail.lines);
+			addPV3DObject(pedestrian.VehicleMesh);
+			pedestrian.removeTrail();
 			addPV3DObject(pedestrian.lines);
 			
 			if (population == 1)
@@ -512,8 +506,7 @@ package tabinda.demo.plugins.Pedester
 				population--;
 				var pedestrian:Pedestrian = crowd[population];
 				
-				destoryPV3DObject(pedestrian.objectMesh);
-				destoryPV3DObject(pedestrian.trail.lines);
+				destoryPV3DObject(pedestrian.VehicleMesh);
 				destoryPV3DObject(pedestrian.lines);
 				
 				crowd.splice(population,1);

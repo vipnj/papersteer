@@ -32,18 +32,14 @@
 
 package tabinda.papersteer
 {
-	/// <summary>
-	/// This structure represents the spatial database.  Typically one of
-	/// these would be created, by a call to lqCreateDatabase, for a given
-	/// application.
-	/// </summary>
+	import flash.accessibility.Accessibility;
+	/**
+	 * This structure represents the spatial database.  Typically one of
+	 * these would be created, by a call to lqCreateDatabase, for a given
+	 * application.
+	 */
 	public class LQDatabase
 	{
-		// type for a pointer to a function used to map over client objects
-		public function LQCallBackFunction(clientObject:Function, distanceSquared:Number, clientQueryState:Object):Function
-		{
-			return null;
-		}
 		// the origin is the super-brick corner minimum coordinates
 		private var Origin:Vector3;
 
@@ -62,14 +58,15 @@ package tabinda.papersteer
 		// extra bin for "everything else" (points outside super-brick)
 		//ClientProxy other;
 
-		/*
+		/**
 		 * Allocate and initialize an LQ database, return a pointer to it.
 		 * The application needs to call this before using the LQ facility.
 		 * The nine parameters define the properties of the "super-brick":
-		 * (1) origin: coordinates of one corner of the super-brick, its
-		 *     minimum x, y and z extent.
-		 * (2) size: the width, height and depth of the super-brick.
-		 * (3) the number of subdivisions (sub-bricks) along each axis.
+		 * 
+		 * @param origin: coordinates of one corner of the super-brick, its minimum x, y and z extent.
+		 * @param size: the width, height and depth of the super-brick.
+		 * @param the number of subdivisions (sub-bricks) along each axis.
+		 * 
 		 * This routine also allocates the bin array, and initialize its
 		 * contents.
 		 */
@@ -90,15 +87,26 @@ package tabinda.papersteer
 			}
 		}
 
-		/* Determine index into linear bin array given 3D bin indices */
+		/**
+		 * Determine index into linear bin array given 3D bin indices
+		 * @param	ix
+		 * @param	iy
+		 * @param	iz
+		 * @return
+		 */
 		public function BinCoordsToBinIndex(ix:int, iy:int, iz:int):int
 		{
 			return ((ix * DivY * DivZ) + (iy * DivZ) + iz);
 		}
 
-		/* Call for each client obj every time its location changes.  For
-		   example, in an animation application, this would be called each
-		   frame for every moving obj.  */
+		/**
+		 * Call for each client obj every time its location changes.  For
+		 * example, in an animation application, this would be called each
+		 * frame for every moving obj.
+		 *  
+		 * @param	obj
+		 * @param	position
+		 */  
 		public function UpdateForNewLocation(obj:ClientProxy, position:Vector3):ClientProxy
 		{
 			/* find bin for new location */
@@ -110,16 +118,20 @@ package tabinda.papersteer
 			/* has obj moved into a new bin? */
 			if (newBin != obj.Bin)
 			{
-				RemoveFromBin(obj);
-				AddToBin(obj, newBin);
+				obj = RemoveFromBin(obj);
+				obj = AddToBin(obj, newBin);
 			}
-			
 			return obj;
 		}
 
-		/* Adds a given client obj to a given bin, linking it into the bin
-		   contents list. */
-		public function AddToBin(obj:ClientProxy, binIndex:int):void
+		/**
+		 * Adds a given client obj to a given bin, linking it into the bin
+		 *  contents list.
+		 *  
+		 * @param	obj
+		 * @param	binIndex
+		 */
+		public function AddToBin(obj:ClientProxy, binIndex:int):ClientProxy
 		{
 			/* if bin is currently empty */
 			if (bins[binIndex] == null)
@@ -138,6 +150,7 @@ package tabinda.papersteer
 
 			/* record bin ID in proxy obj */
 			obj.Bin = binIndex;
+			return obj;
 		}
 
 		/* Find the bin ID for a location in space.  The location is given in
@@ -196,7 +209,7 @@ package tabinda.papersteer
 			/* is the sphere completely outside the "super brick"? */
 			if (completelyOutside)
 			{
-				MapOverAllOutsideObjects(center, radius, clientQueryState);
+				MapOverAllOutsideObjects(center, radius,func, clientQueryState);
 				return;
 			}
 
@@ -218,7 +231,7 @@ package tabinda.papersteer
 
 			/* map function over outside objects if necessary (if clipped) */
 			if (partlyOut != 0)
-				MapOverAllOutsideObjects(center, radius, clientQueryState);
+				MapOverAllOutsideObjects(center, radius,func, clientQueryState);
 
 			/* map function over objects in bins */
 			MapOverAllObjectsInLocalityClipped(
@@ -232,7 +245,7 @@ package tabinda.papersteer
 		/* Given a bin's list of client proxies, traverse the list and invoke
 		the given lqCallBackFunction on each obj that falls within the
 		search radius.  */
-		public function TraverseBinClientObjectList(co:ClientProxy, radiusSquared:Number, state:Object,position:Vector3):ClientProxy
+		public function TraverseBinClientObjectList(co:ClientProxy, radiusSquared:Number,func:Function, state:Object,position:Vector3):ClientProxy
 		{
 			while (co != null)
 			{
@@ -243,7 +256,7 @@ package tabinda.papersteer
 
 				// apply function if client obj within sphere
 				if (distanceSquared < radiusSquared)
-					LQProximityDatabase.CounterCallBackFunction(co.Obj, distanceSquared, state);
+					func.call(null,{clientObject:co.Obj, objectDistanceSquared: distanceSquared,objectState: state});
 
 				// consider next client obj in bin list
 				co = co.Next;
@@ -290,6 +303,7 @@ package tabinda.papersteer
 						/* traverse current bin's client obj list */
 						co = TraverseBinClientObjectList(co,
 							radiusSquared,
+							func,
 							clientQueryState,
 							center);
 						kindex += 1;
@@ -303,40 +317,40 @@ package tabinda.papersteer
 		/* If the query region (sphere) extends outside of the "super-brick"
 		   we need to check for objects in the catch-all "other" bin which
 		   holds any object which are not inside the regular sub-bricks  */
-		public function MapOverAllOutsideObjects(center:Vector3, radius:Number, clientQueryState:Object):void
+		public function MapOverAllOutsideObjects(center:Vector3, radius:Number,func:Function, clientQueryState:Object):void
 		{
 			var co:ClientProxy = bins[bins.length - 1];
 			var radiusSquared:Number = radius * radius+0.0;
 
 			// traverse the "other" bin's client object list
-			co = TraverseBinClientObjectList(co, radiusSquared, clientQueryState, center);
+			co = TraverseBinClientObjectList(co, radiusSquared,func, clientQueryState, center);
 		}
 
 		/* public helper function */
-		public function MapOverAllObjectsInBin(binProxyList:ClientProxy, clientQueryState:Object):void
+		public function MapOverAllObjectsInBin(binProxyList:ClientProxy,func:Function, clientQueryState:Object):void
 		{
 			// walk down proxy list, applying call-back function to each one
 			while (binProxyList != null)
 			{
-				LQProximityDatabase.CounterCallBackFunction(binProxyList.Obj, 0, clientQueryState);
+				func.call(null,{clientObject:binProxyList.Obj, objectDistanceSquared:0, objectState:clientQueryState});
 				binProxyList = binProxyList.Next;
 			}
 		}
 
 		/* Apply a user-supplied function to all objects in the database,
 		   regardless of locality (cf lqMapOverAllObjectsInLocality) */
-		public function MapOverAllObjects(clientQueryState:Object):void
+		public function MapOverAllObjects(func:Function,clientQueryState:Object):void
 		{
 			for (var i:int = 0; i < bins.length; i++)
 			{
-				MapOverAllObjectsInBin(bins[i], clientQueryState);
+				MapOverAllObjectsInBin(bins[i],func, clientQueryState);
 			}
 			//MapOverAllObjectsInBin(other, func, clientQueryState);
 		}
 
 		/* Removes a given client obj from its current bin, unlinking it
 		   from the bin contents list. */
-		public function RemoveFromBin(obj:ClientProxy):void
+		public function RemoveFromBin(obj:ClientProxy):ClientProxy
 		{
 			/* adjust pointers if obj is currently in a bin */
 			if (obj.Bin != 0)
@@ -361,6 +375,7 @@ package tabinda.papersteer
 			obj.Prev = null;
 			obj.Next = null;
 			obj.Bin = 0;
+			return obj;
 		}
 
 		/* Removes (all proxies for) all objects from all bins */
@@ -368,18 +383,19 @@ package tabinda.papersteer
 		{
 			for (var i:int = 0; i < bins.length; i++)
 			{
-				RemoveAllObjectsInBin(bins[i]);
+				bins[i] = RemoveAllObjectsInBin(bins[i]);
 			}
 			//RemoveAllObjectsInBin(ref other);
 		}
 
 		/* public helper function */
-		private function RemoveAllObjectsInBin(bin:ClientProxy):void
+		private function RemoveAllObjectsInBin(bin:ClientProxy):ClientProxy
 		{
 			while (bin != null)
 			{
-				RemoveFromBin(bin);
+				bin = RemoveFromBin(bin);
 			}
+			return bin;
 		}
 
 		private static function FindNearestHelper(clientObject:Object, distanceSquared:Number,clientQueryState:Object):void
@@ -422,4 +438,12 @@ package tabinda.papersteer
 			return lqFNS.nearestObject;
 		}
 	}
+}
+
+class FindNearestState extends Object
+{
+	public var ignoreObject:Object;
+	public var nearestObject:Object;
+	public var minDistanceSquared:Number;
+
 }

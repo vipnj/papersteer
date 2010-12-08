@@ -58,7 +58,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		private static var startSpeed:Number;
 		
 		// constructor
-		public function LowSpeedTurn ():void
+		public function LowSpeedTurn ()
 		{			
 			initPV3D();
 			
@@ -68,14 +68,14 @@ package tabinda.demo.plugins.LowSpeedTurning
 		public function initPV3D():void
 		{
 			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
-			triangle = new Triangle3D(objectMesh, new Array(), colMat, uvArr);
+			triangle = new Triangle3D(VehicleMesh, new Array(), colMat, uvArr);
 			
 			lines = new Lines3D(new LineMaterial(0x00000, 1));
 			
 			colMat = new ColorMaterial(0x000000, 1);
 			colMat.doubleSided = false;
 			
-			objectMesh = new TriangleMesh3D(colMat , new Array(), new Array());
+			VehicleMesh = new TriangleMesh3D(colMat , new Array(), new Array());
 		}
 
 		// reset state
@@ -103,22 +103,31 @@ package tabinda.demo.plugins.LowSpeedTurning
 			startSpeed += 0.15;
 			
 			// 15 seconds and 150 points along the trail
-			trail = new Trail(15, 150);
+			if (trail == null)
+			{
+				trail = new Trail(15, 150);
+				annotation.AddTrail(trail);
+			}
+		}
+		
+		public function removeTrail():void
+		{
+			annotation.RemoveTrail(trail);
 		}
 
 		// draw into the scene
 		public function Draw ():void
 		{
-			objectMesh.geometry.vertices = [];
-			objectMesh.geometry.faces = [];
+			VehicleMesh.geometry.vertices = [];
+			VehicleMesh.geometry.faces = [];
 			
 			lines.geometry.faces = [];
             lines.geometry.vertices = [];
             lines.removeAllLines();
 			
-			//Drawing.DrawBasic2dCircularVehicle (this,LSTMesh,triArr,uvArr,Colors.Gray);
 			DrawBasic2dCircularVehicle ();
-			trail.Draw ();
+			annotation.DrawAllTrails();
+
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -132,7 +141,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			var p:Vector3 = Position;
 
 			// shape of triangular body
-			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 1, 0)); // slightly up
+			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 0, 0)); // slightly up
 			var f:Vector3 = Vector3.ScalarMultiplication(r,Forward);
 			var s:Vector3 = Vector3.ScalarMultiplication(x * r, Side);
 			var b:Vector3 = Vector3.ScalarMultiplication( -y * r, Forward);
@@ -144,13 +153,13 @@ package tabinda.demo.plugins.LowSpeedTurning
 			colMat.fillColor = Colors.Orange;
 			
 			// draw double-sided triangle (that is: no (back) face culling)
-			objectMesh.geometry.vertices.push(a,d,e);
+			VehicleMesh.geometry.vertices.push(a,d,e);
 			
-			triangle.reset(objectMesh, [a, d, e], colMat, uvArr);
+			triangle.reset(VehicleMesh, [a, d, e], colMat, uvArr);
 			
-			objectMesh.geometry.faces.push(triangle);
+			VehicleMesh.geometry.faces.push(triangle);
 			
-			objectMesh.geometry.ready = true;
+			VehicleMesh.geometry.ready = true;
 			
 			// draw the circular collision boundary
 			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
@@ -228,9 +237,6 @@ package tabinda.demo.plugins.LowSpeedTurning
 		}
 
 		// constant steering force
-		public function get Steering ():Vector3
-		{
-			return new Vector3(1,0,-1);
-		}
+		public function get Steering ():Vector3	{ return new Vector3(1, 0, -1); }
 	}
 }

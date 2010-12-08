@@ -79,7 +79,7 @@ package tabinda.papersteer
 		public var PovOffset:Vector3;
 		
 		//PV3D Camera
-		public var pv3dcamera:Camera3D;
+		public var PV3DCamera:Camera3D;
 		
 		//[internal-use] Temporary PV3D Target Object used for Aligning the Camera
 		private var lookAtTarget:DisplayObject3D;
@@ -97,12 +97,12 @@ package tabinda.papersteer
 		/**
 		 * Constructor
 		 */
-		public function PSCamera ():void
+		public function PSCamera ()
 		{
-			pv3dcamera = new Camera3D();
-			pv3dcamera.focus = 30;
-			pv3dcamera.zoom = -20;
-			pv3dcamera.update(Demo.viewport.sizeRectangle);
+			PV3DCamera = new Camera3D();
+			PV3DCamera.focus = 30;
+			PV3DCamera.zoom = -20;
+			PV3DCamera.update(Demo.viewport.sizeRectangle);
 			lookAtTarget = new DisplayObject3D();
 			Reset ();
 		}
@@ -232,7 +232,7 @@ package tabinda.papersteer
 						newTarget=Vector3.VectorAddition(newPosition,Vector3.ScalarMultiplication(L, v.Forward));
 						break;
 
-					};
+					}
 				default :
 					break;
 			}
@@ -241,7 +241,7 @@ package tabinda.papersteer
 			SmoothCameraMove (newPosition,newTarget,newUp,elapsedTime);
 
 			//HACK: Hijack OpenSteer Camera to fix for PV3D display
-			if(SimpleVehicle(VehicleToTrack).objectMesh)
+			if(SimpleVehicle(VehicleToTrack).VehicleMesh)
 			{
 				drawCameraLookAtCheck(Position, Target, Up);
 				if (Mode == CameraMode.StraightDown)
@@ -249,12 +249,12 @@ package tabinda.papersteer
 					var tempPos:Number3D = Position.ToNumber3D();
 					tempPos.y = 1;
 					lookAtTarget.position = tempPos;
-					pv3dcamera.lookAt(lookAtTarget,Up.ToNumber3D());
+					PV3DCamera.lookAt(lookAtTarget,Up.ToNumber3D());
 				}
 				else
 				{
 					lookAtTarget.position = Target.ToNumber3D();
-					pv3dcamera.lookAt(lookAtTarget, Up.ToNumber3D());
+					PV3DCamera.lookAt(lookAtTarget, Up.ToNumber3D());
 				}
 			}
 		}
@@ -314,7 +314,7 @@ package tabinda.papersteer
 
 				// new offset of length XXX
 				//var xxxDistance:Number = Number(Math.Sqrt(Utilities.Square(FixedDistanceDistance) - Utilities.Square(FixedDistanceVerticalOffset)));
-				var xxxDistance:Number=Number(Math.sqrt(Utilities.Square(FixedDistanceDistance) - Utilities.Square(FixedDistanceVerticalOffset)))+0.0;
+				var xxxDistance:Number=Number(Math.sqrt((FixedDistanceDistance * FixedDistanceDistance) - (FixedDistanceVerticalOffset * FixedDistanceVerticalOffset)))+0.0;
 				var newOffset:Vector3=Vector3.ScalarMultiplication(xxxDistance,unitOffset);
 
 				// return new camera position: adjust distance to target
@@ -363,9 +363,9 @@ package tabinda.papersteer
 				Target = newTarget;
 				Up=newUp;
 			}
-			if(SimpleVehicle(VehicleToTrack).objectMesh)
+			if(SimpleVehicle(VehicleToTrack).VehicleMesh)
 			{
-				pv3dcamera.position = Position.ToNumber3D();
+				PV3DCamera.position = Position.ToNumber3D();
 			}
 		}
 
@@ -393,7 +393,7 @@ package tabinda.papersteer
 						FixedPosition=Vector3.VectorAddition(FixedTarget, adjusted);
 						break;
 
-					};
+					}
 				case CameraMode.FixedDistanceOffset :
 					{
 						// XXX this is the oddball case, adjusting "position" instead
@@ -420,7 +420,7 @@ package tabinda.papersteer
 						// XXX --------------------------------------------------
 						break;
 
-					};
+					}
 				case CameraMode.StraightDown :
 					{
 						offset=new Vector3(0,0,LookDownDistance);
@@ -428,7 +428,7 @@ package tabinda.papersteer
 						LookDownDistance=adjusted.z;
 						break;
 
-					};
+					}
 				case CameraMode.FixedLocalOffset :
 					{
 						offset=v.GlobalizeDirection(FixedLocalOffset);
@@ -436,7 +436,7 @@ package tabinda.papersteer
 						FixedLocalOffset=v.LocalizeDirection(adjusted);
 						break;
 
-					};
+					}
 				case CameraMode.OffsetPOV :
 					{
 						// XXX this might work better as a translation control, it is
@@ -447,7 +447,7 @@ package tabinda.papersteer
 						PovOffset=v.LocalizeDirection(adjusted);
 						break;
 
-					};
+					}
 				default :
 					break;
 			}

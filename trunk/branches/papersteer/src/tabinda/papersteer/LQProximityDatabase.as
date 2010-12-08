@@ -30,75 +30,77 @@
 //
 // ----------------------------------------------------------------------------
 
-/* ------------------------------------------------------------------ */
-/*                                                                    */
-/*                   Locality Query (LQ) Facility                     */
-/*                                                                    */
-/* ------------------------------------------------------------------ */
-/*
-
-	This utility is a spatial database which stores objects each of
-	which is associated with a 3d point (a location in a 3d space).
-	The points serve as the "search key" for the associated object.
-	It is intended to efficiently answer "sphere inclusion" queries,
-	also known as range queries: basically questions like:
-
-		Which objects are within a radius R of the location L?
-
-	In this context, "efficiently" means significantly faster than the
-	naive, brute force O(n) testing of all known points.  Additionally
-	it is assumed that the objects move along unpredictable paths, so
-	that extensive preprocessing (for example, constructing a Delaunay
-	triangulation of the point set) may not be practical.
-
-	The implementation is a "bin lattice": a 3d rectangular array of
-	brick-shaped (rectangular parallelepipeds) regions of space.  Each
-	region is represented by a pointer to a (possibly empty) doubly-
-	linked list of objects.  All of these sub-bricks are the same
-	size.  All bricks are aligned with the global coordinate axes.
-
-	Terminology used here: the region of space associated with a bin
-	is called a sub-brick.  The collection of all sub-bricks is called
-	the super-brick.  The super-brick should be specified to surround
-	the region of space in which (almost) all the key-points will
-	exist.  If key-points move outside the super-brick everything will
-	continue to work, but without the speed advantage provided by the
-	spatial subdivision.  For more details about how to specify the
-	super-brick's position, size and subdivisions see lqCreateDatabase
-	below.
-
-	Overview of usage: an application using this facility would first
-	create a database with lqCreateDatabase.  For each client object
-	the application wants to put in the database it creates a
-	lqClientProxy and initializes it with lqInitClientProxy.  When a
-	client object moves, the application calls lqUpdateForNewLocation.
-	To perform a query lqMapOverAllObjectsInLocality is passed an
-	application-supplied call-back function to be applied to all
-	client objects in the locality.  See lqCallBackFunction below for
-	more detail.  The lqFindNearestNeighborWithinRadius function can
-	be used to find a single nearest neighbor using the database.
-
-	Note that "locality query" is also known as neighborhood query,
-	neighborhood search, near neighbor search, and range query.  For
-	additional information on this and related topics see:
-	http://www.red3d.com/cwr/boids/ips.html
-
-	For some description and illustrations of this database in use,
-	see this paper: http://www.red3d.com/cwr/papers/2000/pip.html
-
-*/
-
 package tabinda.papersteer
 {
-	/// <summary>
-	/// A AbstractProximityDatabase-style wrapper for the LQ bin lattice system
-	/// </summary>
+	/**
+	 * @author Mohammad Haseeb
+	 * @author Craig Reynolds
+	 * 
+	 * Location Query (LQ) Facility
+	 * 
+	 * A AbstractProximityDatabase-style wrapper for the LQ bin lattice system
+	 * 
+	 * <p>This utility is a spatial database which stores objects each of
+	 * which is associated with a 3d point (a location in a 3d space).
+	 * The points serve as the "search key" for the associated object.
+	 * It is intended to efficiently answer "sphere inclusion" queries,
+	 * also known as range queries: basically questions like:
+     *
+	 * Which objects are within a radius R of the location L?
+     *
+	 * In this context, "efficiently" means significantly faster than the
+	 * naive, brute force O(n) testing of all known points.  Additionally
+	 * it is assumed that the objects move along unpredictable paths, so
+	 * that extensive preprocessing (for example, constructing a Delaunay
+	 * triangulation of the point set) may not be practical.
+     *
+	 * The implementation is a "bin lattice": a 3d rectangular array of
+	 * brick-shaped (rectangular parallelepipeds) regions of space.  Each
+	 * region is represented by a pointer to a (possibly empty) doubly-
+	 * linked list of objects.  All of these sub-bricks are the same
+	 * size.  All bricks are aligned with the global coordinate axes.
+     *
+	 * Terminology used here: the region of space associated with a bin
+	 * is called a sub-brick.  The collection of all sub-bricks is called
+	 * the super-brick.  The super-brick should be specified to surround
+	 * the region of space in which (almost) all the key-points will
+	 * exist.  If key-points move outside the super-brick everything will
+	 * continue to work, but without the speed advantage provided by the
+	 * spatial subdivision.  For more details about how to specify the
+	 * super-brick's position, size and subdivisions see lqCreateDatabase
+	 * below.
+     * 
+	 * Overview of usage: an application using this facility would first
+	 * create a database with lqCreateDatabase.  For each client object
+	 * the application wants to put in the database it creates a
+	 * lqClientProxy and initializes it with lqInitClientProxy.  When a
+	 * client object moves, the application calls lqUpdateForNewLocation.
+	 * To perform a query lqMapOverAllObjectsInLocality is passed an
+	 * application-supplied call-back function to be applied to all
+	 * client objects in the locality.  See lqCallBackFunction below for
+	 * more detail.  The lqFindNearestNeighborWithinRadius function can
+	 * be used to find a single nearest neighbor using the database.
+     * 
+	 * Note that "locality query" is also known as neighborhood query,
+	 * neighborhood search, near neighbor search, and range query.  For
+	 * additional information on this and related topics 
+	 * http://www.red3d.com/cwr/boids/ips.html
+     *
+	 * For some description and illustrations of this database in use,
+	 * this paper: http://www.red3d.com/cwr/papers/2000/pip.html
+	 * </p>
+	 */
 	public class LQProximityDatabase implements IProximityDatabase
 	{
 		private var _lq:LQDatabase;
 
-		// constructor
-        public function LQProximityDatabase(center:Vector3, dimensions:Vector3, divisions:Vector3):void
+		/**
+		 * Constructor
+		 * @param	center
+		 * @param	dimensions
+		 * @param	divisions
+		 */
+        public function LQProximityDatabase(center:Vector3, dimensions:Vector3, divisions:Vector3)
 		{
 			var halfsize:Vector3 = Vector3.ScalarMultiplication(0.5,dimensions);
 			var origin:Vector3 = Vector3.VectorSubtraction(center, halfsize);
@@ -106,79 +108,111 @@ package tabinda.papersteer
 			_lq = new LQDatabase(origin, dimensions, int(Math.round(divisions.x)), int(Math.round(divisions.y)), int(Math.round(divisions.z)));
 		}
 
-		// allocate a token to represent a given client obj in this database
+		/**
+		 * Allocate a token to represent a given client obj in this database
+		 * @param	parentObject
+		 * @return
+		 */
 		public function AllocateToken(parentObject:Object):ITokenForProximityDatabase
 		{
-			return new TokenType2(parentObject, this);
+			return new TokenType(parentObject, this);
 		}
 
-		// count the number of tokens currently in the database
+		/**
+		 * Count the number of tokens currently in the database
+		 */
 		public function get Count():int
 		{
 			var count:int = 0;
-			lq.MapOverAllObjects(count);
+			lq.MapOverAllObjects(CounterCallBackFunction,count);
 			return count;
 		}
 		
-		public function get lq():LQDatabase { return _lq; }
-		
-		public function set lq(value:LQDatabase):void 
+		/**
+		 * Counter Call Back function to increase the Counter
+		 * @param clientObject
+		 * @param distanceSquared
+		 * @param clientQueryState
+		 */
+		public static function CounterCallBackFunction(params:Object):void
 		{
-			_lq = value;
-		}
-
-		public static function CounterCallBackFunction(clientObject:Object,  distanceSquared:Number,clientQueryState:Object):void
-		{
-			var counter:int = int(clientQueryState);
+			var counter:int = int(params.objectState);
 			counter++;
 		}
+		
+		/******************************************************************************************
+		* Getters and Setters
+		* ****************************************************************************************/
+		
+		public function get lq():LQDatabase { return _lq; }
+		public function set lq(value:LQDatabase):void { _lq = value; }
+		
 	}
 }
+
 import flash.system.System;
 import tabinda.papersteer.*;
 
-class TokenType2 implements ITokenForProximityDatabase
+class TokenType implements ITokenForProximityDatabase
 {
 	private var proxy:ClientProxy;
 	private var lq:LQDatabase;
 
-	// constructor
-	public function TokenType2(parentObject:Object, lqsd:LQProximityDatabase):void
+	/**
+	 * Constructor
+	 * @param	parentObject
+	 * @param	lqsd
+	 */
+	public function TokenType(parentObject:Object, lqsd:LQProximityDatabase):void
 	{
 		proxy = new ClientProxy(parentObject);
 		lq = lqsd.lq;
 	}
 
+	/**
+	 * Destroy the object forcefully.
+	 */
 	public function Dispose():void
 	{
 		if (proxy != null)
 		{
 			// remove this token from the database's vector
-			lq.RemoveFromBin(proxy);
+			proxy = lq.RemoveFromBin(proxy);
 			proxy = null;
 		}
 		System.gc();
 	}
 
-	// the client obj calls this each time its position changes
+	/**
+	 * The client obj calls this each time its position changes
+	 * @param	p Position Vector
+	 */
 	public function UpdateForNewPosition(p:Vector3):void
 	{
 		proxy = lq.UpdateForNewLocation(proxy, p);
 	}
 
-	// find all neighbors within the given sphere (as center and radius)
+	/**
+	 * Find all neighbors within the given sphere (as center and radius)
+	 */ 
 	public function FindNeighbors(center:Vector3, radius:Number, results:Vector.<IVehicle>):Vector.<IVehicle> 
 	{
 		lq.MapOverAllObjectsInLocality(center, radius, perNeighborCallBackFunction, results);
 		return results;
 	}
 
-	// called by LQ for each clientObject in the specified neighborhood:
-	// push that clientObject onto the ContentType vector in void*
-	// clientQueryState
-	public static function perNeighborCallBackFunction(clientObject:Object, distanceSquared:Number, clientQueryState:Object):void
+	/**
+	 * Called by LQ for each clientObject in the specified neighborhood:
+	 * push that clientObject onto the ContentType vector in void*
+	 * clientQueryState
+	 * 
+	 * @param clientObject
+	 * @param distanceSquared
+	 * @param clientQueryState
+	 */
+	public static function perNeighborCallBackFunction(params:*):void
 	{
-		var results:Vector = clientQueryState as Vector;
-		results.push(Object(clientObject));
+		var results:* = params.objectState;
+		results.push(params.clientObject);
 	}
 }

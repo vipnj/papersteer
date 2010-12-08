@@ -45,9 +45,10 @@ package tabinda.papersteer
 		// velocity of vehicle
 		function get Velocity ():Vector3;
 
-		/// <summary>
-		/// Gets the acceleration of the vehicle.
-		/// </summary>
+		/**
+		 * Gets the acceleration of the vehicle
+		 * @return Vector3
+		 */
 		function get Acceleration ():Vector3;
 
 		// speed of vehicle (may be faster than taking magnitude of velocity)
@@ -59,7 +60,7 @@ package tabinda.papersteer
 		function PredictFuturePosition (predictionTime:Number):Vector3;
 
 		// ----------------------------------------------------------------------
-		// XXX this vehicle-model-specific functionality functionality seems out
+		// XXX this vehicle-model-specific functionality seems out
 		// XXX of place on the abstract base class, but for now it is expedient
 
 		// the maximum steering force this vehicle can apply

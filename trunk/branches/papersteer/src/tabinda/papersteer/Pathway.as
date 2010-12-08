@@ -46,13 +46,13 @@ package tabinda.papersteer
 		// that a negative distance indicates A is inside the Pathway.
 		public function MapPointToPath (point:Vector3, tangent:Vector3, outside:Number):Array
 		{
-			return new Array(new Vector3(),tangent,outside);
+			return new Array();
 		}
 
 		// given a distance along the path, convert it to a point on the path
 		public function MapPathDistanceToPoint (pathDistance:Number):Vector3
 		{
-			return new Vector3(0, 0, 0);
+			return new Vector3();
 		}
 
 		// Given an arbitrary point, convert it to a distance along the path.

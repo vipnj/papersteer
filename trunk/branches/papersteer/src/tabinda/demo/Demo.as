@@ -39,6 +39,7 @@ package tabinda.demo
 	import flash.system.*;
 	import flash.text.*;
 	import flash.ui.*;
+	import org.papervision3d.Papervision3D;
 	
 	// Papervision3D Imports
 	import org.papervision3d.core.clipping.*;
@@ -49,7 +50,7 @@ package tabinda.demo
 	import org.papervision3d.render.*;
 	import org.papervision3d.scenes.*;
 	import org.papervision3d.view.*;
-	import org.papervision3d.core.render.data.RenderHitData;
+	import org.papervision3d.core.render.data.*;
 	
 	// PaperSteer Imports
 	import tabinda.demo.plugins.Boids.*;
@@ -70,8 +71,8 @@ package tabinda.demo
 	public class Demo extends Sprite
 	{
 		// Used to get Display Window Width and Height
-		public static var WindowWidth:int = 1024;
-		public static var WindowHeight:int = 640;
+		public static const WindowWidth:int = 1024;
+		public static const WindowHeight:int = 640;
 		
 		// Papervision3D essential vars
 		public static var viewport:Viewport3D;
@@ -132,21 +133,25 @@ package tabinda.demo
 		public static var clock:Clock = new Clock();
 		private static var delayedResetPlugInXXX:Boolean = false;
 		
-		// some camera-related default constants
+		// Some camera-related default constants
 		public static const Camera2dElevation:Number = 8.0;
 		public static const CameraTargetDistance:Number = 13.0;
 		public static var CameraTargetOffset:Vector3 = new Vector3(0, Camera2dElevation, 0);
 
+		// Pretty Useless but here anyway
 		public static var localSpace:LocalSpace = new LocalSpace();
-		
-		// Our ActionScript 3 Stage
+
+		// Our ActionScript 3 Stage - Just in case you ever need it
 		public static var stg:Stage;
 		
 		public function Demo()
 		{
+			Papervision3D.AUTHOR = "Mohammad Haseeb";
+			Papervision3D.useRIGHTHANDED = true;
+			
 			stg = stage;
 			
-			viewport = new Viewport3D(WindowWidth, WindowHeight, true, false);
+			viewport = new Viewport3D(0, 0, true, false);
 			viewport.containerSprite.cacheAsBitmap = false;
 			addChild(viewport);
 		
@@ -155,7 +160,7 @@ package tabinda.demo
 			camera = new PSCamera();
 			container = new DisplayObject3D();
 			scene.addChild(container);
-			
+		
 			stats = new StatsView(renderer);
 			stats.x = WindowWidth - 180;
 			addChild(stats);
@@ -189,7 +194,7 @@ package tabinda.demo
 
 			init();
 			//renderer.clipping = new FrustumClipping(FrustumClipping.NEAR);
-			renderer.renderScene(scene,camera.pv3dcamera,viewport);
+			renderer.renderScene(scene,camera.PV3DCamera,viewport);
 		}
 		
 		/** Allows the game to perform any initialization it needs to before starting to run.
@@ -200,7 +205,7 @@ package tabinda.demo
 		public function init():void
 		{
 			// TODO: Any further initialization logic should rest here
-            //stage.scaleMode = StageScaleMode.NO_SCALE;
+            stage.scaleMode = StageScaleMode.NO_SCALE;
             //stage.quality = StageQuality.LOW;
 			
 			SelectDefaultPlugIn();
@@ -287,51 +292,55 @@ package tabinda.demo
 		}
 
 		/**
+		 * TTT - Not used anymore, handled natively by Plugins
 		 * Ground plane grid-drawing utility used by several plug-ins
 		 * @param	gridTarget
 		 */
-		public static function GridUtility(gridTarget:Vector3,GridMesh:TriangleMesh3D):void
+		public static function GridUtility(gridTarget:Vector3):void
 		{			
 			// Math.Round off target to the nearest multiple of 2 (because the
 			// checkboard grid with a pitch of 1 tiles with a period of 2)
 			// then lower the grid a bit to put it under 2d annotation lines
-			var gridCenter:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
-								   Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
-								   Number(Math.round(gridTarget.z * 0.5) * 2));
+			//var gridCenter:Vector3 = new Vector3(Number(Math.round(gridTarget.x * 0.5) * 2),
+			//					   Number(Math.round(gridTarget.y * 0.5) * 2) - .05,
+			//					   Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.VectorToHex(new Vector3(0.27,0.27,0.27));
-			var gray2:uint = Colors.VectorToHex(new Vector3(0.30,0.30,0.30));
+			//var gray1:uint = Colors.VectorToHex(new Vector3(0.27,0.27,0.27));
+			//var gray2:uint = Colors.VectorToHex(new Vector3(0.30,0.30,0.30));
 
 			// draw 50x50 checkerboard grid with 50 squares along each side
 			//Drawing.DrawXZCheckerboardGrid(GridMesh,50, 5, gridCenter, gray1, gray2);
 		}
 
 		/**
+		 * TTT - Not used anymore, handled natively by Plugins
 		 * Draws a gray disk on the XZ plane under a given vehicle
 		 * @param	vehicle
 		 */
 		public static function HighlightVehicleUtility(vehicle:IVehicle):void
 		{
-			if (vehicle != null)
-			{
+			//if (vehicle != null)
+			//{
 				//Drawing.DrawXZDisk(vehicle.Radius, vehicle.Position, Colors.LightGray, 20);
-			}
+			//}
 		}
 
 		/**
+		 * TTT - Not used anymore, handled natively by Plugins
 		 * Draws a gray circle on the XZ plane under a given vehicle
 		 * @param	vehicle
 		 */
 		public static function CircleHighlightVehicleUtility(vehicle:IVehicle):void
 		{
-			if (vehicle != null)
-			{
+			//if (vehicle != null)
+			//{
 				//Drawing.DrawXZCircle(vehicle.Radius * 1.1, vehicle.Position, Colors.LightGray, 20);
-			}
+			//}
 		}
 
 		/**
+		 * TTT - Not used anymore, handled natively by Plugins
 		 * Draw a box around a vehicle aligned with its local space
 		 * xxx not used as of 11-20-02
 		 * @param	v
@@ -339,15 +348,16 @@ package tabinda.demo
 		 */
 		public static function DrawBoxHighlightOnVehicle(v:IVehicle, color:uint):void
 		{
-			if (v != null)
-			{
-				var diameter:Number = v.Radius * 2;
-				var size:Vector3 = new Vector3(diameter, diameter, diameter);
+			//if (v != null)
+			//{
+			//	var diameter:Number = v.Radius * 2;
+			//	var size:Vector3 = new Vector3(diameter, diameter, diameter);
 				//Drawing.DrawBoxOutline(v, size, color);
-			}
+			//}
 		}
 
 		/**
+		 * TTT - Not used anymore, handled natively by Plugins
 		 * Draws a colored circle (perpendicular to view axis) around the center
 		 * of a given vehicle.  The circle's radius is the vehicle's radius times
 		 * radiusMultiplier.
@@ -357,16 +367,16 @@ package tabinda.demo
 		 */
 		public static function DrawCircleHighlightOnVehicle(v:IVehicle, radiusMultiplier:Number, color:uint):void
 		{
-			if (v != null)
-			{
-				var cPosition:Vector3 = camera.Position;
+			//if (v != null)
+			//{
+			//	var cPosition:Vector3 = camera.Position;
 				//Drawing.Draw3dCircle(
 				//	v.Radius * radiusMultiplier,  // adjusted radius
 				//	v.Position,                   // center
 				//	Vector3.VectorSubtraction(v.Position , cPosition),       // view axis
 				//	color,                        // drawing color
 				//	20);                          // circle segments
-			}
+			//}
 		}
 
 		/**
@@ -524,6 +534,7 @@ package tabinda.demo
 			if (SelectedVehicle == null)
 			{
 				var all:Vector.<IVehicle> = AllVehiclesOfSelectedPlugIn();
+				
 				if (all.length >= 0)
 				{
 					SelectedVehicle = all[0];
@@ -592,8 +603,6 @@ package tabinda.demo
 			SelectedPlugIn.Redraw(currentTime, elapsedTime);
 
 			// draw any annotation queued up during selected PlugIn's Update method
-			//Drawing.AllDeferredLines();
-			//Drawing.AllDeferredCirclesOrDisks();
 			DeferredCircle.DrawAll();
 			DeferredLine.DrawAll();
 			
@@ -729,9 +738,7 @@ package tabinda.demo
 
 			// run selected PlugIn (with simulation's current time and step size)
 			UpdateSelectedPlugIn(clock.TotalSimulationTime, clock.ElapsedSimulationTime);
-			
-			SteerLibrary.annotation.Redraw();
-			
+
 			Draw();
 		}
 
@@ -740,6 +747,10 @@ package tabinda.demo
 		 */
 		protected function Draw():void
 		{
+			// A hack to clear up annotation every redraw
+			// TODO: Should be called using a Service instead.
+			SteerLibrary.annotation.Redraw();
+			
 			// redraw selected PlugIn (based on real time)
 			RedrawSelectedPlugIn(clock.TotalRealTime, clock.ElapsedRealTime);
 
@@ -770,8 +781,8 @@ package tabinda.demo
 			strCam.alpha = 1.0;
 			strCam.selectable = false;
 			strCam.defaultTextFormat = strFormat;
-			strCam.text = String("PV3D Camera Info:\nX: " + Math.round(camera.pv3dcamera.x) + " Y: " + Math.round(camera.pv3dcamera.y) + " Z: " + Math.round(camera.pv3dcamera.z)
-								+" RotX: " + Math.round(camera.pv3dcamera.rotationX) + " RotY: " + Math.round(camera.pv3dcamera.rotationY) + " RotZ: " + Math.round(camera.pv3dcamera.rotationZ));
+			strCam.text = String("PV3D Camera Info:\nX: " + Math.round(camera.PV3DCamera.x) + " Y: " + Math.round(camera.PV3DCamera.y) + " Z: " + Math.round(camera.PV3DCamera.z)
+								+" RotX: " + Math.round(camera.PV3DCamera.rotationX) + " RotY: " + Math.round(camera.PV3DCamera.rotationY) + " RotZ: " + Math.round(camera.PV3DCamera.rotationZ));
 			
 			cameraMode.x = screenLocation.x;
 			cameraMode.y = screenLocation.y;
@@ -870,10 +881,10 @@ package tabinda.demo
 					clockInfo.x = xp;
 					clockInfo.y = screenLocation.y;
 					clockInfo.text = sb;
-					}
+				}
 			}
 			clockInfo.text = sb;
-			renderer.renderScene(scene,camera.pv3dcamera,viewport);
+			renderer.renderScene(scene,camera.PV3DCamera,viewport);
 		}
 
 		private static function GetPhaseTimerFps(phaseTimer:Number):String 
@@ -897,20 +908,14 @@ package tabinda.demo
 			return phase == Phase.Draw;
 		}
 
-		public function get PhaseTimerDraw():Number
-		{
-			return phaseTimers[Phase.Draw];
-		}
-		public function get PhaseTimerUpdate():Number
-		{
-			return phaseTimers[Phase.Update];
-		}
+		public function get PhaseTimerDraw():Number	{return phaseTimers[Phase.Draw];}
+		public function get PhaseTimerUpdate():Number{return phaseTimers[Phase.Update];}
 		
 		/**
 		 * Get around shortcomings in current implementation, see note
 		 * in updateSimulationAndRedraw
 		 */
-		public function get PhaseTimerOverhead():Number
+		public function get PhaseTimerOverhead():Number 
 		{
 			return clock.ElapsedRealTime - (PhaseTimerDraw + PhaseTimerUpdate)+0.0;
 		}
@@ -930,17 +935,23 @@ package tabinda.demo
 			phaseTimerBase = currentRealTime;
 		}
 		
+		/**
+		 * Used to update Plugin textual information
+		 * @param	text Text to update
+		 * @param	location Position of the text on screen
+		 * @param	color Color of the text
+		 */
 		public static function Draw2dTextAt2dLocation(text:String, location:Vector3, color:uint):void
 		{
 			// set text color and raster position
-			var strFormat:TextFormat = new TextFormat();
-			strFormat.align = "left";
-			strFormat.size=12;
-			strFormat.kerning = true;
-			strFormat.font = "Arial";
-			strFormat.color = color;
+			var strFormat2:TextFormat = new TextFormat();
+			strFormat2.align = "left";
+			strFormat2.size=12;
+			strFormat2.kerning = true;
+			strFormat2.font = "Arial";
+			strFormat2.color = color;
 			
-			pluginOptions.defaultTextFormat = strFormat;
+			pluginOptions.defaultTextFormat = strFormat2;
 			pluginOptions.selectable = false;
 			pluginOptions.x = location.x;
 			pluginOptions.y = location.y;

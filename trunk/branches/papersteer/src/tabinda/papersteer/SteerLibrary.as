@@ -199,7 +199,7 @@ package tabinda.papersteer
 			// XXX more annotation modularity problems (assumes spherical obstacle)
 			if (Vector3.isNotEqual(avoidance, Vector3.Zero))
 			{
-				annotation.AvoidObstacle(minTimeToCollision * this.Speed);
+				annotation.AvoidObstacle(this,minTimeToCollision * this.Speed);
 			}
 			return avoidance;
 		}
@@ -220,7 +220,7 @@ package tabinda.papersteer
 			for each (var o:IObstacle in obstacles)
 			{
 				//FIXME: this should be a generic call on Obstacle, rather than this code which presumes the obstacle is spherical
-				FindNextIntersectionWithSphere(o as SphericalObstacle, next);
+				next = FindNextIntersectionWithSphere(o as SphericalObstacle, next);
 
 				if (nearest.intersect == false || (next.intersect != false && next.distance < nearest.distance))
 					nearest = next;
@@ -230,7 +230,7 @@ package tabinda.papersteer
 			if ((nearest.intersect != false) && (nearest.distance < minDistanceToCollision))
 			{
 				// show the corridor that was checked for collisions
-				annotation.AvoidObstacle(minDistanceToCollision);
+				annotation.AvoidObstacle(this,minDistanceToCollision);
 
 				// compute avoidance steering force: take offset from obstacle to me,
 				// take the component of that which is lateral (perpendicular to my
@@ -723,7 +723,7 @@ package tabinda.papersteer
 		}
 
 		// xxx experiment cwr 9-6-02
-		protected function FindNextIntersectionWithSphere(obs:SphericalObstacle ,intersection:PathIntersection ):void
+		protected function FindNextIntersectionWithSphere(obs:SphericalObstacle ,intersection:PathIntersection ):PathIntersection
 		{
 			// This routine is based on the Paul Bourke's derivation in:
 			//   Intersection of a Line and a Sphere (or circle)
@@ -741,14 +741,14 @@ package tabinda.papersteer
 
 			// computer line-sphere intersection parameters
 			b = -2 * lc.z;
-			c = Utilities.Square(lc.x) + Utilities.Square(lc.y) + Utilities.Square(lc.z) -
-				Utilities.Square(obs.Radius + this.Radius);
+			c = ((lc.x * lc.x) + (lc.y * lc.y) + (lc.z * lc.z)) -
+				((obs.Radius + this.Radius) * (obs.Radius + this.Radius));
 			d = (b * b) - (4 * c);
-
+			
 			// when the path does not intersect the sphere
 			if (d < 0)
 			{
-				return;
+				return intersection;
 			}
 
 			// otherwise, the path intersects the sphere in two points with
@@ -761,7 +761,7 @@ package tabinda.papersteer
 			// both intersections are behind us, so no potential collisions
 			if ((p < 0) && (q < 0))
 			{
-				return;
+				return intersection;
 			}
 
 			// at least one intersection is in front of us
@@ -772,6 +772,8 @@ package tabinda.papersteer
 				((p < q) ? p : q) :
 				// otherwise only one intersections is in front, select it
 				((p > 0) ? p : q);
+		
+			return intersection;
 		}
 	}
 }

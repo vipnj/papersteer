@@ -38,6 +38,7 @@ package tabinda.papersteer
 	import org.papervision3d.materials.special.LineMaterial;
 	
 	import tabinda.demo.*;
+	
 	/** 
 	 *  This class adds OpenSteerDemo-based graphical annotation functionality to a 
 	 *  given base class, which is typically something that supports the AbstractVehicle interface.
@@ -49,11 +50,8 @@ package tabinda.papersteer
 		private var isenabled:Boolean;
 		
 		//PV3D Render Variables
-		public var lines:Lines3D;
-		public var lineMat:LineMaterial;
-
-		//HACK: change the IDraw to a IDrawService
-		//public static  var drawer:IDraw;
+		public var LineList:Lines3D;
+		public var LineTexture:LineMaterial;
 
 		/** 
 		 * constructor
@@ -63,40 +61,36 @@ package tabinda.papersteer
 			isenabled = false;
 			trails = new Vector.<Trail>();
 			
-			lineMat = new LineMaterial(0x000000, 1);
-			lines = new Lines3D(lineMat, "Lines");
-			Demo.scene.addChild(lines);
+			LineTexture = new LineMaterial(0x000000, 1);
+			LineList = new Lines3D(LineTexture, "Lines");
+			Demo.scene.addChild(LineList);
 		}
 
 		/** 
 		 * Indicates whether annotation is enabled.
 		 * @return Boolean
 		 */
-		public function get IsEnabled ():Boolean
-		{
-			return isenabled;
-		}
-		public function set IsEnabled (val:Boolean):void
-		{
-			isenabled=val;
-		}
+		public function get IsEnabled ():Boolean { return isenabled; }
+		public function set IsEnabled (val:Boolean):void { isenabled = val; }
 		
 		public function Redraw():void
 		{
-			lines.geometry.faces = [];
-            lines.geometry.vertices = [];
-            lines.removeAllLines();
+			LineList.geometry.faces = [];
+            LineList.geometry.vertices = [];
+            LineList.removeAllLines();
 		}
 
-		/** Adds a Trail.
-		* @param trail The trail to add
-		*/ 
+		/**
+		 * @inheritDoc
+		 * 
+		 */ 
 		public function AddTrail (trail:Trail):void
 		{
 			trails.push(trail);
 		}
 
 		/** Removes the specified Trail.
+		 * @inheritDoc
 		* @param trail The trail to remove
 		*/ 
 		public function RemoveTrail (trail:Trail):void
@@ -105,14 +99,50 @@ package tabinda.papersteer
 		}
 
 		/** Draws all registered Trails.
-		 * @param drawer An IDraw Object
-		*/
-		public function DrawTrails ():void
+		 * @inheritDoc
+		 */
+		public function DrawAllTrails ():void
 		{
-			for (var i:int=0; i < trails.length; i++)
+			if(isenabled)
 			{
-				trails[i].Draw();
+				for (var i:int=0; i < trails.length; i++)
+				{
+					trails[i].Draw(LineList);
+				}
 			}
+		}
+		
+		/**
+		 * Draw the given registered Trail
+		 */
+		public function DrawTrail(trail:Trail):void
+		{
+			if(isenabled)
+			{
+				trails[trails.indexOf(trail)].Draw(LineList);
+			}
+		}
+		
+		/** Clears all registered Trails.
+		 *
+		 */
+		public function ClearAllTrails ():void
+		{
+			if(isenabled)
+			{
+				for (var i:int=0; i < trails.length; i++)
+				{
+					trails[i].Clear();
+				}
+			}
+		}		
+		
+		/** Clear a registered Trail.
+		 *
+		 */
+		public function ClearTrail (trail:Trail):void
+		{
+			trail.Clear();
 		}
 
 		/** ------------------------------------------------------------------------
@@ -139,13 +169,13 @@ package tabinda.papersteer
 		{
 			if (isenabled)
 			{
-				if (Demo.IsDrawPhase == true)
+				if (Demo.IsDrawPhase())
 				{
-					lines.addLine(new Line3D(lines, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
+					LineList.addLine(new Line3D(LineList, new LineMaterial(color,1),1,new Vertex3D(startPoint.x,startPoint.y,startPoint.z),new Vertex3D(endPoint.x,endPoint.y,endPoint.z)));
 				}	
 				else
 				{
-					DeferredLine.AddToBuffer(lines,startPoint, endPoint, color);
+					DeferredLine.AddToBuffer(LineList,startPoint, endPoint, color);
 				}
 			}
 		}
@@ -272,14 +302,14 @@ package tabinda.papersteer
 
 					for(i = 0; i < segments ;i++)
 					{
-						var line:Line3D = new Line3D(lines, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+						var line:Line3D = new Line3D(LineList, new LineMaterial(color), 2, vertices[i], vertices[(i+1)%vertices.length]);	
 						line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
-						lines.addLine(line);
+						LineList.addLine(line);
 					}
 				}
 				else
 				{
-					DeferredCircle.AddToBuffer(lines,radius, axis, center, color, segments, filled, in3d);
+					DeferredCircle.AddToBuffer(LineList,radius, axis, center, color, segments, filled, in3d);
 				}
 			}
 		}
@@ -287,8 +317,18 @@ package tabinda.papersteer
 		/** Called when steerToAvoidObstacles decides steering is required
 		* (default action is to do nothing, layered classes can overload it)
 		*/ 
-		public function AvoidObstacle (minDistanceToCollision:Number):void
+		public function AvoidObstacle (vehicle:IVehicle,minDistanceToCollision:Number):void
 		{
+			var boxSide:Vector3=Vector3.ScalarMultiplication(vehicle.Radius,vehicle.Side);
+			var boxFront:Vector3=Vector3.ScalarMultiplication(minDistanceToCollision,vehicle.Forward);
+			var FR:Vector3=Vector3.VectorAddition(vehicle.Position , Vector3.VectorSubtraction(boxFront, boxSide));
+			var FL:Vector3=Vector3.VectorAddition(vehicle.Position , Vector3.VectorAddition(boxFront , boxSide));
+			var BR:Vector3=Vector3.VectorSubtraction(vehicle.Position , boxSide);
+			var BL:Vector3=Vector3.VectorAddition(vehicle.Position , boxSide);
+			Line (FR,FL,Colors.White);
+			Line (FL,BL,Colors.White);
+			Line (BL,BR,Colors.White);
+			Line (BR,FR,Colors.White);
 		}
 
 		/** called when steerToFollowPath decides steering is required

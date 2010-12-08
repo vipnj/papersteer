@@ -48,7 +48,7 @@ package tabinda.demo.plugins.Ctf
 		
 		protected static var obstacleCount:int=-1;
 		protected static const maxObstacleCount:int=100;
-		public static var AllObstacles:Array = new Array();
+		public static var AllObstacles:Vector.<SphericalObstacle> = new Vector.<SphericalObstacle>();
 		
 		// for draw method
 		public var BodyColor:uint;
@@ -57,10 +57,10 @@ package tabinda.demo.plugins.Ctf
 		public var Avoiding:Boolean;
 		
 		// PV3D variables
-		public var colMat:ColorMaterial;
-		public var uvArr:Array;
-		public var triangle:Triangle3D;
-		public var lines:Lines3D;
+		public var ColorTexture:ColorMaterial;
+		public var UVCoord:Array;
+		public var VehicleFace:Triangle3D;
+		public var LineList:Lines3D;
 
 		// constructor
 		public function CtfBase ()
@@ -72,17 +72,17 @@ package tabinda.demo.plugins.Ctf
 		
 		public function initPV3D():void
 		{
-			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+			UVCoord = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
 			
-			lines = new Lines3D(new LineMaterial(0x000000, 1));
+			LineList = new Lines3D(new LineMaterial(0x000000, 1));
 			
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			colMat.interactive = false;
+			ColorTexture = new ColorMaterial(0x000000, 1);
+			ColorTexture.doubleSided = false;
+			ColorTexture.interactive = false;
 
-			triangle = new Triangle3D(objectMesh, new Array, colMat, uvArr);
+			VehicleFace = new Triangle3D(VehicleMesh, new Array, ColorTexture, UVCoord);
 			
-			objectMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			VehicleMesh = new TriangleMesh3D(ColorTexture , new Array(), new Array(), null);
 		}
 
 		// reset state
@@ -98,9 +98,16 @@ package tabinda.demo.plugins.Ctf
 
 			RandomizeStartingPositionAndHeading ();			// new starting position
 			if ( trail == null)
+			{
 				trail = new Trail();
-			
-			trail.Clear ();								// prevent long streaks due to teleportation
+				annotation.AddTrail(trail);
+			}
+			annotation.ClearTrail(trail);					// prevent long streaks due to teleportation
+		}
+		
+		public function removeTrail():void
+		{
+			annotation.RemoveTrail(trail);
 		}
 		
 		private function DrawBasic2dCircularVehicle():void
@@ -114,7 +121,7 @@ package tabinda.demo.plugins.Ctf
 			var p:Vector3 = Position;
 
 			// shape of triangular body
-			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 1, 0)); // slightly up
+			var u:Vector3 = Vector3.ScalarMultiplication((r * 0.05),new Vector3(0, 0, 0)); // slightly up
 			var f:Vector3 = Vector3.ScalarMultiplication(r,Forward);
 			var s:Vector3 = Vector3.ScalarMultiplication(x * r, Side);
 			var b:Vector3 = Vector3.ScalarMultiplication(-y*r,Forward);
@@ -123,16 +130,16 @@ package tabinda.demo.plugins.Ctf
 			var d:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			var e:Vertex3D = Vector3.VectorAddition( Vector3.VectorAddition(p , b) , Vector3.VectorAddition(s , u)).ToVertex3D();
 			
-			colMat.fillColor = BodyColor;
+			ColorTexture.fillColor = BodyColor;
 			
 			// draw double-sided triangle (that is: no (back) face culling)
-			objectMesh.geometry.vertices.push(a,d,e);
+			VehicleMesh.geometry.vertices.push(a,d,e);
 			
-			triangle.reset(objectMesh, [a, d, e], colMat, uvArr);
+			VehicleFace.reset(VehicleMesh, [a, d, e], ColorTexture, UVCoord);
 			
-			objectMesh.geometry.faces.push(triangle);
+			VehicleMesh.geometry.faces.push(VehicleFace);
 			
-			objectMesh.geometry.ready = true;
+			VehicleMesh.geometry.ready = true;
 						
 			// draw the circular collision boundary
 			DrawCircleOrDisk(r, Vector3.Zero,Vector3.VectorAddition(p , u), Colors.White, 7,false,false);
@@ -142,7 +149,7 @@ package tabinda.demo.plugins.Ctf
 		{
 			if (Demo.IsDrawPhase())
 			{
-				var temp : Number3D = new Number3D(Radius,0,0);
+				var temp : Number3D = new Number3D(radius,0,0);
 				var tempcurve:Number3D = new Number3D(0,0,0);
 				var joinends : Boolean;
 				var i:int;
@@ -180,33 +187,33 @@ package tabinda.demo.plugins.Ctf
 
 				for(i = 0; i < segments ;i++)
 				{
-					var line:Line3D = new Line3D(lines, new LineMaterial(Colors.White), 2, vertices[i], vertices[(i+1)%vertices.length]);	
+					var line:Line3D = new Line3D(LineList, new LineMaterial(Colors.White), 2, vertices[i], vertices[(i+1)%vertices.length]);	
 					line.addControlVertex(curvepoints[i].x, curvepoints[i].y, curvepoints[i].z );
-					lines.addLine(line);
+					LineList.addLine(line);
 				}
 			}
 			else
 			{
-				DeferredCircle.AddToBuffer(lines,Radius, axis, center, color, segments, filled, in3d);
+				DeferredCircle.AddToBuffer(LineList,Radius, axis, center, color, segments, filled, in3d);
 			}
 		}
 
 		// draw this character/vehicle into the scene
 		public function Draw ():void
 		{
-			objectMesh.geometry.vertices = [];
-			objectMesh.geometry.faces = [];
+			VehicleMesh.geometry.vertices = [];
+			VehicleMesh.geometry.faces = [];
 			
-			lines.geometry.faces = [];
-            lines.geometry.vertices = [];
-            lines.removeAllLines();
+			LineList.geometry.faces = [];
+            LineList.geometry.vertices = [];
+            LineList.removeAllLines();
 
-			//Drawing.DrawBasic2dCircularVehicle (this, objectMesh, triArr,uvArr, BodyColor);
 			DrawBasic2dCircularVehicle();
 
-			trail.Draw ();
+			annotation.DrawAllTrails();
 		}
 
+		// TTT - Handled by Annotation now.
 		// annotate when actively avoiding obstacles
 		// xxx perhaps this should be a call to a general purpose annotation
 		// xxx for "local xxx axis aligned box in XZ plane" -- same code in in
@@ -230,13 +237,11 @@ package tabinda.demo.plugins.Ctf
 			var up:Vector3=new Vector3(0,0.01,0);
 			var atColor:uint=Colors.RGBToHex(int(255.0 * 0.3),int(255.0 * 0.3),int(255.0 * 0.5));
 			var noColor:uint=Colors.Gray;
-			var reached:Boolean=Globals.ctfSeeker.State == SeekerState.AtGoal;
+			var reached:Boolean=CtfPlugIn.Seeker.State == SeekerState.AtGoal;
 			var baseColor:uint = reached?atColor:noColor;
 			
 			DrawCircleOrDisk (Globals.HomeBaseRadius,Vector3.Zero,Globals.HomeBaseCenter,baseColor,40,true,false);
 			DrawCircleOrDisk (Globals.HomeBaseRadius / 15,Vector3.Zero,Vector3.VectorAddition(Globals.HomeBaseCenter , up),Colors.Black,20,true,false);
-			//Drawing.DrawXZDisk (Globals.HomeBaseRadius,Globals.HomeBaseCenter,baseColor,40);
-			//Drawing.DrawXZDisk (Globals.HomeBaseRadius / 15,Vector3.VectorAddition(Globals.HomeBaseCenter , up),Colors.Black,20);
 		}
 
 		public function RandomizeStartingPositionAndHeading ():void
@@ -284,7 +289,7 @@ package tabinda.demo.plugins.Ctf
 				var r:Number;
 				var c:Vector3;
 				var minClearance:Number;
-				var requiredClearance:Number=Globals.Seeker.Radius * 4;// 2 x diameter
+				var requiredClearance:Number=CtfPlugIn.Seeker.Radius * 4;// 2 x diameter
 				do
 				{
 					r=Utilities.random(1.5,4);

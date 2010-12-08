@@ -35,19 +35,17 @@ package tabinda.demo.plugins.Boids
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
 	import org.papervision3d.core.math.*;
-	import org.papervision3d.events.InteractiveScene3DEvent;
 	import org.papervision3d.materials.ColorMaterial;
 	import org.papervision3d.objects.*;
 	
 	import tabinda.demo.*;
 	import tabinda.papersteer.*;
-	
 
 	public class Boid extends SimpleVehicle
 	{		
-		public var uvArr:Array;							// UV Array to assign texture
-		public var triArr:Vector.<Triangle3D>;			// Triangle Array for the Mesh
-		public var colArr:Vector.<ColorMaterial>;		// Used to assign a color Material to the Mesh
+		public var UVCoords:Array;							// UV Array to assign texture, if any
+		public var Triangles:Vector.<Triangle3D>;			// Triangle Array for the Mesh, helps speed up redrawing
+		public var ColorTextures:Vector.<ColorMaterial>;	// Used to assign a color Material to the Mesh
 		
 		// a pointer to this boid's interface object for the proximity database
 		public var proximityToken:ITokenForProximityDatabase;
@@ -58,7 +56,10 @@ package tabinda.demo.plugins.Boids
 		public static  var boundaryCondition:int=0;
 		public static const worldRadius:Number=50.0;
 
-		// constructor
+		/**
+		 * Constructor
+		 * @param	pd Proximity Database Type for the Boids
+		 */
 		public function Boid (pd:IProximityDatabase)
 		{
 			// allocate a token for this boid in the proximity database
@@ -72,20 +73,21 @@ package tabinda.demo.plugins.Boids
 			Reset ();
 		}
 		
+		// Initialize PV3D objects
 		public function initPV3D():void
 		{
-			uvArr = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
-			triArr = new Vector.<Triangle3D>(6);
-			colArr = new Vector.<ColorMaterial>(6);
+			UVCoords = new Array(new NumberUV(0, 0), new NumberUV(1, 0), new NumberUV(0, 1));
+			Triangles = new Vector.<Triangle3D>(6);
+			ColorTextures = new Vector.<ColorMaterial>(6);
 			
 			for (var i:int = 0; i < 6; i++)
 			{
-				colArr[i] = new ColorMaterial(0x000000, 1, false);
-				colArr[i].doubleSided = false;
-				triArr[i] = new Triangle3D(objectMesh, new Array(), colArr[i]);
+				ColorTextures[i] = new ColorMaterial(0x000000, 1, false);
+				ColorTextures[i].doubleSided = false;
+				Triangles[i] = new Triangle3D(VehicleMesh, new Array(), ColorTextures[i]);
 			}
 			
-			objectMesh = new TriangleMesh3D(colArr[0] , new Array(), new Array(), null);
+			VehicleMesh = new TriangleMesh3D(ColorTextures[0] , new Array(), new Array(), null);
 		}
 
 		// reset state
@@ -119,8 +121,8 @@ package tabinda.demo.plugins.Boids
 		// draw this boid into the scene
 		public function Draw ():void
 		{
-			objectMesh.geometry.vertices =[];
-			objectMesh.geometry.faces = [];
+			VehicleMesh.geometry.vertices =[];
+			VehicleMesh.geometry.faces = [];
 			
 			DrawBasic3dSphericalVehicle();
 		}
@@ -148,35 +150,35 @@ package tabinda.demo.plugins.Boids
 			var side1:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , s).ToVertex3D();
 			var side2:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , s).ToVertex3D();
 			var top:Vertex3D = Vector3.VectorAddition(Vector3.VectorAddition(p , b) , u).ToVertex3D();
-			var bottom:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u).ToVertex3D();;
+			var bottom:Vertex3D = Vector3.VectorSubtraction(Vector3.VectorAddition(p , b) , u).ToVertex3D();
 	
 			// colors
 			const j:Number = +0.05;
 			const k:Number = -0.05;
 			
-			colArr[0].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
-			colArr[1].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
-			colArr[2].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
-			colArr[3].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
-			colArr[4].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
+			ColorTextures[0].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(j, j, k)));
+			ColorTextures[1].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(j, k, j)));
+			ColorTextures[2].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, j, j)));
+			ColorTextures[3].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, j, k)));
+			ColorTextures[4].fillColor = Colors.VectorToHex(Vector3.VectorAddition(vColor , new Vector3(k, k, j)));
 			
-			objectMesh.geometry.vertices.push(nose,top,side1,side2,bottom);
+			VehicleMesh.geometry.vertices.push(nose,top,side1,side2,bottom);
 			
-			triArr[0].reset(objectMesh, [nose, side1, top], colArr[0],uvArr);
-			triArr[1].reset(objectMesh, [nose, top, side2], colArr[1], uvArr);
-			triArr[2].reset(objectMesh, [nose, bottom, side1], colArr[2], uvArr);
-			triArr[3].reset(objectMesh, [nose, side2, bottom], colArr[3], uvArr);
-			triArr[4].reset(objectMesh, [side1, side2, top], colArr[4], uvArr);
-			triArr[5].reset(objectMesh, [side2, side1, bottom], colArr[4], uvArr);
+			Triangles[0].reset(VehicleMesh, [nose, side1, top], ColorTextures[0],UVCoords);
+			Triangles[1].reset(VehicleMesh, [nose, top, side2], ColorTextures[1], UVCoords);
+			Triangles[2].reset(VehicleMesh, [nose, bottom, side1], ColorTextures[2], UVCoords);
+			Triangles[3].reset(VehicleMesh, [nose, side2, bottom], ColorTextures[3], UVCoords);
+			Triangles[4].reset(VehicleMesh, [side1, side2, top], ColorTextures[4], UVCoords);
+			Triangles[5].reset(VehicleMesh, [side2, side1, bottom], ColorTextures[4], UVCoords);
 			
-			objectMesh.geometry.faces.push(triArr[0]);
-			objectMesh.geometry.faces.push(triArr[1]);
-			objectMesh.geometry.faces.push(triArr[2]);
-			objectMesh.geometry.faces.push(triArr[3]);
-			objectMesh.geometry.faces.push(triArr[4]);
-			objectMesh.geometry.faces.push(triArr[5]);
+			VehicleMesh.geometry.faces.push(Triangles[0]);
+			VehicleMesh.geometry.faces.push(Triangles[1]);
+			VehicleMesh.geometry.faces.push(Triangles[2]);
+			VehicleMesh.geometry.faces.push(Triangles[3]);
+			VehicleMesh.geometry.faces.push(Triangles[4]);
+			VehicleMesh.geometry.faces.push(Triangles[5]);
 
-			objectMesh.geometry.ready = true;
+			VehicleMesh.geometry.ready = true;
 		}
 
 		// per frame simulation update
@@ -184,7 +186,7 @@ package tabinda.demo.plugins.Boids
 		{
 			// steer to flock and perhaps to stay within the spherical boundary
 			ApplySteeringForce (Vector3.VectorAddition(SteerToFlock() , HandleBoundary()), elapsedTime);
-
+			trace(Position);
 			// notify proximity database that our position has changed
 			proximityToken.UpdateForNewPosition (Position);
 		}

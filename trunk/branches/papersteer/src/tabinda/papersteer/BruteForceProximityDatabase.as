@@ -50,17 +50,11 @@ package tabinda.papersteer
 		}
 
 		// return the number of tokens currently in the database
-		public function get Count():int
-		{
-			return group.length;
-		}
+		public function get Count():int{return group.length;}
 		
 		public function get group():Vector.<TokenType> { return _group; }
 		
-		public function set group(value:Vector.<TokenType>):void 
-		{
-			_group = value;
-		}
+		public function set group(value:Vector.<TokenType>):void {_group = value;}
 	}
 }
 

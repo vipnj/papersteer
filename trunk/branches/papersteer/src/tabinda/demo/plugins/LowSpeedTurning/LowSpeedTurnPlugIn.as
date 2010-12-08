@@ -63,7 +63,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		private var textFont:Font3D;
 		private var textMat:Letter3DMaterial;
 		
-		public var pluginReset:Boolean;
+		public var ForceRedraw:Boolean;
 
 		public function LowSpeedTurnPlugIn ()
 		{			
@@ -71,21 +71,14 @@ package tabinda.demo.plugins.LowSpeedTurning
 			all = new Vector.<LowSpeedTurn>();
 		}
 
-		public override  function get Name ():String
-		{
-			return "Low Speed Turn";
-		}
+		public override  function get Name ():String{return "Low Speed Turn";}
 
-		public override  function get SelectionOrderSortKey ():Number
-		{
-			return 0.05;
-		}
+		public override  function get SelectionOrderSortKey ():Number {	return 0.05; }
 		
 		public function initPV3D():void
 		{
 			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = false;
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
+			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array());
 			
 			lines = new Lines3D(new LineMaterial(0x000000, 1));
 			
@@ -104,7 +97,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 		{
 			initPV3D();
 			
-			pluginReset = true;
+			ForceRedraw = true;
 			
 			// create a given number of agents with stepped inital parameters,
 			// store pointers to them in an array.
@@ -114,13 +107,12 @@ package tabinda.demo.plugins.LowSpeedTurning
 			{
 				var lst:LowSpeedTurn =new LowSpeedTurn();
 				all.push (lst);
-				addPV3DObject(lst.objectMesh);
-				addPV3DObject(lst.trail.lines);
+				addPV3DObject(lst.VehicleMesh);
 				addPV3DObject(lst.lines);
 			}
 
 			// initial selected vehicle
-			Demo.SelectedVehicle=all[0];
+			Demo.SelectedVehicle=all[1];
 
 			// initialize camera
 			Demo.camera.Mode=CameraMode.Fixed;
@@ -155,7 +147,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			// update camera
 			Demo.UpdateCamera (currentTime,elapsedTime,selected);
 
-			if(pluginReset)
+			if(ForceRedraw)
 			{
 				GridMesh.geometry.faces = [];
 				GridMesh.geometry.vertices = [];
@@ -163,7 +155,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 				// draw "ground plane"
 				//Demo.GridUtility (selected.Position,GridMesh);
 				Grid (selected.Position);
-				pluginReset = false;
+				ForceRedraw = false;
 			}
 			
 			lines.geometry.faces = [];
@@ -200,10 +192,10 @@ package tabinda.demo.plugins.LowSpeedTurning
 												 Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.LightGray
+			var gray1:uint = Colors.Gray
 			var gray2:uint = Colors.DarkGray;
 			
-			var size:int = 500;
+			var size:int = 100;
 			var subsquares:int = 50;
 			
 			var half:Number = size / 2;
@@ -233,8 +225,11 @@ package tabinda.demo.plugins.LowSpeedTurning
 					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
 					
 					var color:uint = flag2 ? gray1 : gray2;
-					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					var colMaterial:ColorMaterial = new ColorMaterial(color, 1);
+					colMaterial.doubleSided = true;
+					
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], colMaterial);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], colMaterial);
 					
 					GridMesh.geometry.faces.push(t1);
 					GridMesh.geometry.faces.push(t2);
@@ -244,10 +239,6 @@ package tabinda.demo.plugins.LowSpeedTurning
 				}
 				flag1 = !flag1;
 				p += spacing;
-			}
-			if (Papervision3D.useRIGHTHANDED)
-			{
-				GridMesh.geometry.flipFaces();
 			}
 			GridMesh.geometry.ready = true;
 		}
@@ -325,8 +316,9 @@ package tabinda.demo.plugins.LowSpeedTurning
 		{
 			for (var i:int = 0; i < all.length; i++)
 			{
-				destoryPV3DObject(all[i].objectMesh);
-				destoryPV3DObject(all[i].trail.lines);
+				destoryPV3DObject(all[i].VehicleMesh);
+				//destoryPV3DObject(all[i].trail.lines);
+				all[i].removeTrail();
 				destoryPV3DObject(all[i].lines);
 			}
 			
@@ -356,7 +348,7 @@ package tabinda.demo.plugins.LowSpeedTurning
 			{
 				all[i].Reset ();
 			}
-			pluginReset = true;
+			ForceRedraw = true;
 		}
 
 		public override  function get Vehicles ():Vector.<IVehicle>

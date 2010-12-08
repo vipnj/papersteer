@@ -56,16 +56,14 @@ package tabinda.demo.plugins.Soccer
 		private var redScore:int;
 		private var blueScore:int;
 		
-		// Triangle Mesh used to create a Grid - Look in Demo.GridUtility
-		public var GridMesh:TriangleMesh3D;
-		public var lines:Lines3D;
-		public var colMat:ColorMaterial;
-		
-		public var pluginReset:Boolean;
-		
+		// PV3D Variables
+		public var GridMesh:TriangleMesh3D;						// Mesh used to create a Grid - Look at Grid Function
+		public var LineList:Lines3D;
 		private var text3D:Text3D;
-		private var textFont:Font3D;
-		private var textMat:Letter3DMaterial;
+
+		// TTT - Used to perform selective rendering in Plugins
+		// Affects - Grids and Large redrawn objects
+		public var ForceRedraw:Boolean;
 		
 		public function SoccerPlugIn()
 		{
@@ -77,15 +75,11 @@ package tabinda.demo.plugins.Soccer
 		}
 		
 		public function initPV3D():void
-		{
-			colMat = new ColorMaterial(0x000000, 1);
-			colMat.doubleSided = true;
-			colMat.interactive = false;
+		{		
+			GridMesh = new TriangleMesh3D(new ColorMaterial(0x000000,1) , new Array(), new Array());
+			LineList = new Lines3D(new LineMaterial(0x000000, 1));
 			
-			GridMesh = new TriangleMesh3D(colMat , new Array(), new Array(), null);
-			lines = new Lines3D(new LineMaterial(0x000000, 1));
-			
-			addPV3DObject(lines);
+			addPV3DObject(LineList);
 			addPV3DObject(GridMesh);
 		}
 
@@ -93,63 +87,75 @@ package tabinda.demo.plugins.Soccer
 
 		public override function Open():void
 		{
+			// Initialize PV3D objects
 			initPV3D();
 			
-			pluginReset = true;
+			// Set to true for first render
+			ForceRedraw = true;
 			
 			// Make a field
 			bbox = new AABBox(new Vector3( -20, 0, -10), new Vector3(20, 0, 10));
-			addPV3DObject(bbox.lines);
+			addPV3DObject(bbox.LineList);
+			
 			// Red goal
 			teamAGoal = new AABBox(new Vector3( -21, 0, -7), new Vector3( -19, 0, 7));
-			addPV3DObject(teamAGoal.lines);
+			addPV3DObject(teamAGoal.LineList);
+			
 			// Blue Goal
 			teamBGoal = new AABBox(new Vector3(19, 0, -7), new Vector3(21, 0, 7));
-			addPV3DObject(teamBGoal.lines);
+			addPV3DObject(teamBGoal.LineList);
+			
 			// Make a ball
 			ball = new Ball(bbox);
-			addPV3DObject(ball.objectMesh);
-			addPV3DObject(ball.trail.lines);
-			addPV3DObject(ball.lines);
+			
+			addPV3DObject(ball.VehicleMesh);
+			addPV3DObject(ball.LineList);
 			
 			// Build team A
 			const PlayerCountA:int = 8;
+			
 			for (var i:int = 0; i < PlayerCountA; i++)
 			{
 				var pMicTest:Player = new Player(teamA, allPlayers, ball, true, i);
 				Demo.SelectedVehicle = pMicTest;
 				teamA.push(pMicTest);
 				
-				addPV3DObject(pMicTest.objectMesh);
-				addPV3DObject(pMicTest.trail.lines);
-				addPV3DObject(pMicTest.lines);
+				addPV3DObject(pMicTest.VehicleMesh);
+				addPV3DObject(pMicTest.LineList);
 				
 				allPlayers.push(pMicTest);
 			}
+			
 			// Build Team B
 			const  PlayerCountB:int = 8;
+			
 			for (i = 0; i < PlayerCountB; i++)
 			{
 				pMicTest = new Player(teamB, allPlayers, ball, false, i);
 				Demo.SelectedVehicle = pMicTest;
 				teamB.push(pMicTest);
 				
-				addPV3DObject(pMicTest.objectMesh);
-				addPV3DObject(pMicTest.trail.lines);
-				addPV3DObject(pMicTest.lines);
+				addPV3DObject(pMicTest.VehicleMesh);
+				addPV3DObject(pMicTest.LineList);
 				
 				allPlayers.push(pMicTest);
 			}
+			
 			// initialize camera
 			Demo.Init2dCamera(ball);
 			Demo.camera.SetPosition(10, Demo.Camera2dElevation, 10);
 			Demo.camera.FixedPosition = new Vector3(40,40,40);
 			Demo.camera.Mode = CameraMode.Fixed;
+			
 			Demo.Draw2dTextAt2dLocation("", new Vector3(20, 50, 0), Colors.Black);
+			
 			redScore = 0;
 			blueScore = 0;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public override function Update(currentTime:Number, elapsedTime:Number):void
 		{
 			// update simulation of test vehicle
@@ -157,10 +163,12 @@ package tabinda.demo.plugins.Soccer
 			{
 				teamA[i].Update(currentTime, elapsedTime);
 			}
+			
 			for (i = 0; i < teamB.length; i++)
 			{
 				teamB[i].Update(currentTime, elapsedTime);
 			}
+			
 			ball.Update(currentTime, elapsedTime);
 
 			if (teamAGoal.IsInsideX(ball.Position) && teamAGoal.IsInsideZ(ball.Position))
@@ -168,6 +176,7 @@ package tabinda.demo.plugins.Soccer
 				ball.Reset();	// Ball in blue teams goal, red scores
 				redScore++;
 			}
+			
 			if (teamBGoal.IsInsideX(ball.Position) && teamBGoal.IsInsideZ(ball.Position))
 			{
 				ball.Reset();	// Ball in red teams goal, blue scores
@@ -182,10 +191,10 @@ package tabinda.demo.plugins.Soccer
 												 Number(Math.round(gridTarget.z * 0.5) * 2));
 
 			// colors for checkboard
-			var gray1:uint = Colors.LightGray
+			var gray1:uint = Colors.Gray
 			var gray2:uint = Colors.DarkGray;
 			
-			var size:int = 500;
+			var size:int = 100;
 			var subsquares:int = 50;
 			
 			var half:Number = size / 2;
@@ -215,8 +224,11 @@ package tabinda.demo.plugins.Soccer
 					GridMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
 					
 					var color:uint = flag2 ? gray1 : gray2;
-					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], new ColorMaterial(color, 1));
-					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], new ColorMaterial(color, 1));
+					var colorMaterial:ColorMaterial = new ColorMaterial(color, 1);
+					colorMaterial.doubleSided = true;
+					
+					var t1:Triangle3D = new Triangle3D(GridMesh, [vertA,vertB,vertC], colorMaterial);
+					var t2:Triangle3D = new Triangle3D(GridMesh, [vertD,vertA,vertC], colorMaterial);
 					
 					GridMesh.geometry.faces.push(t1);
 					GridMesh.geometry.faces.push(t2);
@@ -227,32 +239,29 @@ package tabinda.demo.plugins.Soccer
 				flag1 = !flag1;
 				p += spacing;
 			}
-			if (Papervision3D.useRIGHTHANDED)
-			{
-				GridMesh.geometry.flipFaces();
-			}
 			GridMesh.geometry.ready = true;
 		}
 		
 		public override function Redraw(currentTime:Number, elapsedTime:Number):void
 		{
-			// We do  this because PV3D and AS3 are not Canvas based Drawers
-			if(pluginReset)
+			// We do this because AS3 uses a Display List
+			// and constant redrawing bogs the CPU down
+			if(ForceRedraw)
 			{
-				lines.geometry.faces = [];
-				lines.geometry.vertices = [];
-				lines.removeAllLines();
+				LineList.geometry.faces = [];
+				LineList.geometry.vertices = [];
+				LineList.removeAllLines();
 				
 				GridMesh.geometry.faces = [];
 				GridMesh.geometry.vertices = [];
-				//Demo.GridUtility(gridCenter,GridMesh);
+				
 				Grid(Vector3.Zero);
 				
 				bbox.Draw();
 				teamAGoal.Draw();
 				teamBGoal.Draw();
 				
-				pluginReset = false;
+				ForceRedraw = false;
 			}
 
 			// draw test vehicle
@@ -260,10 +269,12 @@ package tabinda.demo.plugins.Soccer
 			{
 				teamA[i].Draw();
 			}
+			
 			for (i = 0; i < teamB.length; i++)
 			{
 				teamB[i].Draw();
 			}
+			
 			ball.Draw();
 
 			var annote:String = new String();
@@ -284,21 +295,20 @@ package tabinda.demo.plugins.Soccer
 		{
 			//TODO: Remove scene object once the plugin closes
 			destoryPV3DObject(GridMesh);
-			destoryPV3DObject(lines);
+			destoryPV3DObject(LineList);
 			
-			destoryPV3DObject(ball.objectMesh);
-			destoryPV3DObject(ball.trail.lines);
-			destoryPV3DObject(ball.lines);
+			destoryPV3DObject(ball.VehicleMesh);
+			destoryPV3DObject(ball.LineList);
+			ball.removeTrail();
 			
-			destoryPV3DObject(bbox.lines);
-			destoryPV3DObject(teamAGoal.lines);
-			destoryPV3DObject(teamBGoal.lines);
+			destoryPV3DObject(bbox.LineList);
+			destoryPV3DObject(teamAGoal.LineList);
+			destoryPV3DObject(teamBGoal.LineList);
 			
 			for (var i:int = 0; i < allPlayers.length; i++)
 			{
-				destoryPV3DObject(allPlayers[i].objectMesh);
-				destoryPV3DObject(allPlayers[i].trail.lines);
-				destoryPV3DObject(allPlayers[i].lines);
+				destoryPV3DObject(allPlayers[i].VehicleMesh);
+				destoryPV3DObject(allPlayers[i].LineList);
 			}
 			
 			teamA.splice(0,teamA.length);
@@ -331,10 +341,9 @@ package tabinda.demo.plugins.Soccer
 			}
 			ball.Reset();
 			
-			pluginReset = true;
+			ForceRedraw = true;
 		}
 
-		//const AVGroup& allVehicles () {return (const AVGroup&) TeamA;}
 		public override function get Vehicles():Vector.<IVehicle>
 		{
 			var vehicles:Vector.<IVehicle> = Vector.<IVehicle>(allPlayers);

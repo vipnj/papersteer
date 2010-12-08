@@ -37,71 +37,96 @@ package tabinda.papersteer
 	{
 		// This array stores a list of all PlugIns.  It is manipulated by the
 		// constructor and destructor, and used in findByName and applyToAll.
+		private static var registry:Vector.<PlugIn> = new Vector.<PlugIn>(totalSizeOfRegistry);
 		private static const totalSizeOfRegistry:int = 1000;
 		private static var itemsInRegistry:int = 0;
-		private static var registry:Vector.<PlugIn> = new Vector.<PlugIn>(totalSizeOfRegistry);
 		private var name:String;
 		
-		public function Open():void
-		{}
-		public function Update(currentTime:Number, elapsedTime:Number):void
-		{}
-		public function Redraw(currentTime:Number, elapsedTime:Number):void
-		{}
-		public function Close():void
-		{}
-		public function get Name():String
-		{
-			return name;
-		}
-		//public function List<IVehicle> Vehicles { get; }
-		public function get Vehicles():Vector.<IVehicle>
-		{
-			return new Vector.<IVehicle>();
-		}
+		/**
+		 * Open Plugins and intialize any variables
+		 */
+		public function Open():void	{ }
+		
+		/**
+		 * Updates the plugin and objects related to it
+		 * @param	currentTime Current RealTime Clock Tick
+		 * @param	elapsedTime Elapsed Time since last Tick
+		 */
+		public function Update(currentTime:Number, elapsedTime:Number):void	{ }
+		
+		/**
+		 * Redraw the plugin and objects related to it
+		 * @param	currentTime Current RealTime Clock Tick
+		 * @param	elapsedTime Elapsed Time since last Tick
+		 */
+		public function Redraw(currentTime:Number, elapsedTime:Number):void	{ }
+		
+		/**
+		 * Close the plugin and destroy objects
+		 */
+		public function Close():void { }
+		
+		/**
+		 * Return the name of the plugin
+		 */
+		public function get Name():String { return name; }
+		
+		/**
+		 * Return all Vehicles of the selected Plugin
+		 */
+		public function get Vehicles():Vector.<IVehicle> { return new Vector.<IVehicle>(); }
 
-		// prototypes for function pointers used with PlugIns
-		public function PlugInCallBackFunction(clientObject:PlugIn):void
-		{}
+		/**
+		 * Prototypes for function pointers used with PlugIns
+		 * @param	clientObject 
+		 */
+		public function PlugInCallBackFunction(...args):void { }
+		public function VoidCallBackFunction():void { }
+		public function TimestepCallBackFunction(currentTime:Number, elapsedTime:Number):void { }
 
-		public function VoidCallBackFunction():void
-		{}
-		public function TimestepCallBackFunction(currentTime:Number, elapsedTime:Number):void
-		{}
-
-		// constructor
+		/**
+		 * Constructor
+		 */
 		public function PlugIn()
 		{
 			// save this new instance in the registry
 			AddToRegistry();
 		}
 
-		// default reset method is to do a close then an open
+		/**
+		 * Default reset method is to do a close then an open
+		 */
 		public function Reset():void
 		{
 			Close();
 			Open();
 		}
 
-		// default sort key (after the "built ins")
-		public function get SelectionOrderSortKey():Number
-		{
-			return 1.0;
-		}
+		/**
+		 * Default sort key (after the "built ins")
+		 */
+		public function get SelectionOrderSortKey():Number { return 1.0; }
 
-		// default is to NOT request to be initially selected
-		public function get RequestInitialSelection():Boolean
-		{
-			return false;
-		}
+		/**
+		 * Default is to NOT request to be initially selected
+		 */
+		public function get RequestInitialSelection():Boolean { return false; }
 
-		// default function key handler: ignore all
+		/**
+		 * Default function key handler: ignore all
+		 * @param	key
+		 */
 		public function HandleFunctionKeys(key:uint):void { }
 
-		// default "mini help": print nothing
+		/**
+		 * Default "mini help": print nothing
+		 */ 
 		public function PrintMiniHelpForFunctionKeys():void { }
 
-		// returns pointer to the next PlugIn in "selection order"
+		/**
+		 * Returns pointer to the next PlugIn in "selection order"
+		 * @return Plugin Instance
+		 */ 
 		public function Next():PlugIn
 		{
 			for (var i:int = 0; i < itemsInRegistry; i++)
@@ -115,7 +140,10 @@ package tabinda.papersteer
 			return null;
 		}
 
-		// format instance to characters for printing to stream
+		/**
+		 * Format instance to characters for printing to stream
+		 * @return Plugin Name
+		 */
 		public function ToString():String
 		{
 			return String("<PlugIn \""+Name+"\">");
@@ -123,16 +151,20 @@ package tabinda.papersteer
 
 		// CLASS FUNCTIONS
 
-		// search the class registry for a Plugin with the given name
+		/**
+		 * Search the class registry for a Plugin with the given name
+		 * @param	Name Fint plugin by Name
+		 * @return  Plugin instance
+		 */
 		public static function FindByName(Name:String):IPlugIn
 		{
-			if (Name.length <= 0)
+			if (Name == null || Name == "")
 			{
 				for (var i:int = 0; i < itemsInRegistry; i++)
 				{
 					var pi:PlugIn = registry[i];
 					var s:String = pi.Name;
-					if (s.length <=0 && Name == s)
+					if ((s == null || s=="") && Name == s)
 					{
 						return pi;
 					}
@@ -141,16 +173,21 @@ package tabinda.papersteer
 			return null;
 		}
 
-		// apply a given function to all PlugIns in the class registry
-		public static function ApplyToAll(f:Function):void
+		/**
+		 * Apply a given function to all PlugIns in the class registry
+		 * @param	f Function to apply to all Items
+		 */
+		public static function ApplyToAll(func:Function):void
 		{
 			for (var i:int = 0; i < itemsInRegistry; i++)
 			{
-				f.apply(registry[i]);
+				func.call(null,{plugin:registry[i]});
 			}
 		}
 
-		// sort PlugIn registry by "selection order"
+		/**
+		 * Sort PlugIn registry by "selection order"
+		 */
 		public static function SortBySelectionOrder():void
 		{
 			// I know, I know, just what the world needs:
@@ -175,7 +212,10 @@ package tabinda.papersteer
 			}
 		}
 
-		// returns pointer to default PlugIn (currently, first in registry)
+		/**
+		 * Returns pointer to default PlugIn (currently, first in registry)
+		 * @return Pointer to default PlugIn
+		 */
 		public static function FindDefault():PlugIn
 		{
 			// return NULL if no PlugIns exist
@@ -197,7 +237,9 @@ package tabinda.papersteer
 			return registry[0];
 		}
 
-		// save this instance in the class's registry of instances
+		/**
+		 * Save this instance in the class's registry of instances
+		 */
 		private function AddToRegistry():void
 		{
 			// save this instance in the registry

@@ -31,6 +31,7 @@
 // ----------------------------------------------------------------------------
 package tabinda.demo.plugins.MapDrive
 {
+	import flash.filters.ColorMatrixFilter;
 	import flash.ui.Keyboard;
 	
 	import org.papervision3d.core.geom.*;
@@ -57,7 +58,7 @@ package tabinda.demo.plugins.MapDrive
 		public var lines:Lines3D;
 		public var colMat:ColorMaterial;
 		
-		public var pluginReset:Boolean;
+		public var ForceRedraw:Boolean;
 		
 		public function MapDrivePlugIn ()
 		{
@@ -68,9 +69,10 @@ package tabinda.demo.plugins.MapDrive
 		public function initPV3D():void
 		{
 			colMat = new ColorMaterial(0x000000, 1);
+
 			lines = new Lines3D(new LineMaterial(0x000000, 1));
 			SandMesh = new TriangleMesh3D(colMat, new Array(), new Array());
-			
+
 			Demo.container.addChild(SandMesh);
 			Demo.container.addChild(lines);
 		}
@@ -89,14 +91,14 @@ package tabinda.demo.plugins.MapDrive
 		{
 			initPV3D();
 			
-			pluginReset = true;
+			ForceRedraw = true;
 			
 			// make new MapDriver
 			vehicle=new MapDriver();
 			vehicles.push (vehicle);
 			
-			addPV3DObject(vehicle.objectMesh);
-			addPV3DObject(vehicle.trail.lines);
+			addPV3DObject(vehicle.VehicleMesh);
+			addPV3DObject(vehicle.lines);
 			addPV3DObject(vehicle.MapMesh);
 			addPV3DObject(vehicle.PathMesh);
 			
@@ -138,13 +140,12 @@ package tabinda.demo.plugins.MapDrive
 			}
 
 			// QQQ first pass at detecting "stuck" state
-			if (vehicle.stuck && vehicle.RelativeSpeed() < 0.001)
+			if (vehicle.stuck && (vehicle.RelativeSpeed() < 0.001))
 			{
 				vehicle.stuckCount++;
 				Reset ();
 			}
 		}
-
 
 		public override  function Redraw (currentTime:Number,elapsedTime:Number):void
 		{
@@ -152,7 +153,7 @@ package tabinda.demo.plugins.MapDrive
 			Demo.UpdateCamera (currentTime,elapsedTime,vehicle);
 
 			// We do  this because PV3D and AS3 are not Canvas based Drawers
-			if(pluginReset)
+			if(ForceRedraw)
 			{
 				SandMesh.geometry.faces = [];
 				SandMesh.geometry.vertices = [];
@@ -161,42 +162,33 @@ package tabinda.demo.plugins.MapDrive
 				var s:Number=MapDriver.worldSize * 2;
 				var u:Number=-0.2;
 
-				/*DrawQuadrangle (new Vector3( + s, u, + s),
-										new Vector3( + s, u, - s),
-										new Vector3( - s, u, - s),
-										new Vector3( - s, u, + s),
-										Colors.toHex((255.0 * 0.8),
-										int(255.0 * 0.7), int(255.0 * 0.5)));// "sand"*/
-										
 				var vertA:Vertex3D = new Vertex3D( +s, u, +s);
 				var vertB:Vertex3D = new Vertex3D( +s, u, -s);
 				var vertC:Vertex3D = new Vertex3D( -s, u, -s);
 				var vertD:Vertex3D = new Vertex3D( -s, u, +s);
 				
-				SandMesh.geometry.vertices.push(vertA, vertB,vertC, vertD);
-					
-				var color2:uint = Colors.RGBToHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
+				SandMesh.geometry.vertices.push(vertA, vertB, vertC, vertD);
 				
-				var t1:Triangle3D = new Triangle3D(SandMesh, [vertA,vertB,vertC], new ColorMaterial(color2, 1));
-				var t2:Triangle3D = new Triangle3D(SandMesh, [vertD,vertA,vertC], new ColorMaterial(color2, 1));
-					
+				var color2:uint = Colors.RGBToHex((255.0 * 0.8), int(255.0 * 0.7), int(255.0 * 0.5));
+				colMat.fillColor = color2;
+				colMat.doubleSided = true;
+				
+				var t1:Triangle3D = new Triangle3D(SandMesh, [vertA, vertB, vertC], colMat);
+				var t2:Triangle3D = new Triangle3D(SandMesh, [vertD, vertA, vertC], colMat);
+				
 				SandMesh.geometry.faces.push(t1);
 				SandMesh.geometry.faces.push(t2);
-					
-				if (Papervision3D.useRIGHTHANDED)
-				{
-					SandMesh.geometry.flipFaces();
-				}
+				
 				SandMesh.geometry.ready = true;
-
+				
+				vehicle.DrawMap ();
+				
 				// draw map and path
 				if (MapDriver.demoSelect == 2)
 				{
-					vehicle.DrawPath ();	
+					vehicle.DrawPath ();
 				}
-				
-				vehicle.DrawMap ();
-				pluginReset = false;
+				ForceRedraw = false;
 			}
 			
 			lines.geometry.faces = [];
@@ -298,8 +290,7 @@ package tabinda.demo.plugins.MapDrive
 			var color:Vector3 = new Vector3(0.15, 0.15, 0.5);
 			
 			//Drawing.Draw2dTextAt2dLocation (status,screenLocation,Colors.toHex(0.15,0.15,0.5));
-			Demo.Draw2dTextAt2dLocation (status, screenLocation, Colors.RGBToHex(0.15, 0.15, 0.5));
-			
+			Demo.Draw2dTextAt2dLocation (status, screenLocation, Colors.AntiqueWhite);
 			{
 				var v:Number=Demo.WindowHeight - 5.0;
 				var m:Number=10.0;
@@ -356,11 +347,12 @@ package tabinda.demo.plugins.MapDrive
 			//TODO: Remove scene object once the plugin closes
 			destoryPV3DObject(SandMesh);
 			destoryPV3DObject(lines);
-			destoryPV3DObject(vehicle.objectMesh);
-			destoryPV3DObject(vehicle.trail.lines);
+			
+			destoryPV3DObject(vehicle.VehicleMesh);
 			destoryPV3DObject(vehicle.MapMesh);
 			destoryPV3DObject(vehicle.PathMesh);
 			destoryPV3DObject(vehicle.lines);
+			vehicle.removeTrail();
 
 			vehicles.splice(0,vehicles.length);
 		}
@@ -390,7 +382,7 @@ package tabinda.demo.plugins.MapDrive
 			// reset camera position
 			Demo.Position2dCamera (vehicle, initCamDist, initCamElev);
 			
-			pluginReset = true;
+			ForceRedraw = true;
 		}
 
 		public override  function HandleFunctionKeys (key:uint):void
@@ -414,7 +406,6 @@ package tabinda.demo.plugins.MapDrive
 					break;
 
 				case Keyboard.F6 :// QQQ draw an enclosed "pen" of obstacles to test cycle-stuck
-					{
 						var m:Number=MapDriver.worldSize * 0.4;// main diamond size
 						var n:Number=MapDriver.worldSize / 8.0;// notch size
 						var q:Vector3=new Vector3(0,0,m - n);
@@ -422,15 +413,17 @@ package tabinda.demo.plugins.MapDrive
 						var c:Vector3=Vector3.VectorSubtraction(s , q);
 						var d:Vector3=Vector3.VectorAddition(s , q);
 						var pathPointCount:int=2;
-						var pathRadii:Vector.<Number>=new Vector.<Number>(10,10);
-						var pathPoints:Vector.<Vector3>=new Vector.<Vector3>(c,d);
+						var pathRadii:Vector.<Number> = new Vector.<Number>();
+						pathRadii[0] = 10;
+						pathRadii[1] = 10;
+						var pathPoints:Vector.<Vector3> = new Vector.<Vector3>();
+						pathPoints[0] = c;
+						pathPoints[1] = d;
 						var r:GCRoute=new GCRoute(pathPointCount,pathPoints,pathRadii,false);
 						DrawPathFencesOnMap (vehicle.map,r);
 						break;
-
-				}
 			}
-		};
+		}
 
 		public override  function PrintMiniHelpForFunctionKeys ():void
 		{    
@@ -447,7 +440,7 @@ package tabinda.demo.plugins.MapDrive
 
 		private function ReversePathFollowDirection ():void
 		{
-			vehicle.pathFollowDirection=vehicle.pathFollowDirection > 0?-1:+1;
+			vehicle.pathFollowDirection = (vehicle.pathFollowDirection > 0)? -1: +1;
 		}
 
 		private function TogglePathFences ():void
@@ -492,6 +485,7 @@ package tabinda.demo.plugins.MapDrive
 					Reset ();
 					break;
 			}
+			ForceRedraw = true;
 			Demo.printMessage (message);
 		}
 		
@@ -513,8 +507,8 @@ package tabinda.demo.plugins.MapDrive
 			{
 				var count:int=vehicle.path.pointCount;
 				var upstream:Boolean=vehicle.pathFollowDirection > 0;
-				var entryIndex:int=upstream?1:count - 1;
-				var exitIndex:int=upstream?count - 1:1;
+				var entryIndex:int = upstream?1:count - 1;
+				var exitIndex:int = upstream?count - 1:1;
 				var lastExitRadius:Number=vehicle.path.radii[exitIndex];
 				for (var i:int=1; i < count; i++)
 				{
@@ -525,7 +519,7 @@ package tabinda.demo.plugins.MapDrive
 
 			// mark path-boundary map cells as obstacles
 			// (when in path following demo and appropriate mode is set)
-			if (usePathFences && MapDriver.demoSelect == 2)
+			if (usePathFences && (MapDriver.demoSelect == 2))
 			{
 				DrawPathFencesOnMap (vehicle.map,vehicle.path);
 			}
@@ -568,15 +562,15 @@ package tabinda.demo.plugins.MapDrive
 			var a:int=cw >> 3;
 			var b:int=cw - a;
 			var o:int=cw >> 4;
-			var p:int=cw - o >> 1;
-			var q:int=cw + o >> 1;
+			var p:int=(cw - o) >> 1;
+			var q:int=(cw + o) >> 1;
 
 			for (var i:int=0; i < cw; i++)
 			{
 				for (var j:int=0; j < ch; j++)
 				{
-					var c:Boolean=i > a && i < b && i < p || i > q;
-					if (i == 0 || j == 0 || i == r || j == r || c && i == j || i + j == r)
+					var c:Boolean=(i > a && i < b) && (i < p || i > q);
+					if (i == 0 || j == 0 || i == r || j == r || (c && (i == j || i + j == r)))
 					{
 						map.SetMapBit (i,j,true);
 					}
@@ -587,8 +581,8 @@ package tabinda.demo.plugins.MapDrive
 		private function ClearCenterOfMap (map:TerrainMap):void
 		{
 			var o:int=map.Cellwidth() >> 4;
-			var p:int=map.Cellwidth() - o >> 1;
-			var q:int=map.Cellwidth() + o >> 1;
+			var p:int=(map.Cellwidth() - o) >> 1;
+			var q:int=(map.Cellwidth() + o) >> 1;
 			for (var i:int=p; i <= q; i++)
 			{
 				for (var j:int=p; j <= q; j++)
@@ -604,7 +598,7 @@ package tabinda.demo.plugins.MapDrive
 			var zs:Number=map.zSize / Number(map.resolution);
 			var alongRow:Vector3=new Vector3(xs,0,0);
 			var nextRow:Vector3=new Vector3(- map.xSize,0,zs);
-			var g:Vector3=new Vector3(map.xSize - xs / -2,0,map.zSize - zs / -2);
+			var g:Vector3=new Vector3((map.xSize - xs) / -2,0,(map.zSize - zs) / -2);
 			for (var j:int=0; j < map.resolution; j++)
 			{
 				for (var i:int=0; i < map.resolution; i++)
@@ -613,7 +607,7 @@ package tabinda.demo.plugins.MapDrive
 					var wallThickness:Number=1.0;
 
 					// set map cells adjacent to the outside edge of the path
-					if (outside > 0 && outside < wallThickness)
+					if ((outside > 0) && (outside < wallThickness))
 					{
 						map.SetMapBit (i,j,true);
 					}
